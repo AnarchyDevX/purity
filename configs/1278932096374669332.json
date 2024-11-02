@@ -1,0 +1,70 @@
+{
+    "ownerlist": [],
+    "whitelist": [],
+    "badwords": [],
+    "lockedvoice": [],
+    "logs": {
+        "modlogs": {
+            "alive": false,
+            "channel": 1300624432879898635
+        },
+        "msglogs": {
+            "alive": false,
+            "channel": 1300624432879898635
+        },
+        "raidlogs": {
+            "alive": false,
+            "channel": 1300624432879898635
+        },
+        "voicelogs": {
+            "alive": false,
+            "channel": 1300624432879898635
+        },
+        "ranklogs": {
+            "alive": false,
+            "channel": 1300624432879898635
+        },
+        "joinleavelogs": {
+            "alive": false,
+            "channel": 1300624432879898635
+        }
+    },
+    "antiraid": {
+        "channels": {
+            "create": false,
+            "edit": false,
+            "delete": false
+        },
+        "roles": {
+            "create": false,
+            "edit": false,
+            "delete": false
+        },
+        "rank": {
+            "up": false,
+            "down": false
+        },
+        "antilien": {
+            "discord": false,
+            "sites": false,
+            "gif": false
+        },
+        "webhook": {
+            "create": false,
+            "edit": false,
+            "delete": false
+        },
+        "badwords": false
+    },
+    "configuration": {
+        "autoreact": {},
+        "rolereact": {},
+        "autorole": [],
+        "tempvoices": {}
+    },
+    "warndb": {
+        "maxwarn": 10,
+        "sanction": "kick",
+        "users": {}
+    }
+}

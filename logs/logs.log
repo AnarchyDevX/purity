@@ -1,0 +1,31 @@
+# logs format
+
+[LOGS] -   [HOUR]   - [COMMAND] - [USERNAME] - [USER ID] - [COMMAND NAME]
+
+--------------------------------------------------------------------------
+[LOGS] - [02:09:23] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - ping 
+[LOGS] - [02:22:20] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - logs-all 
+[LOGS] - [02:22:40] - [COMMAND] - [scarlxrd_zk.] - [1279783854089048228] - music-play 
+[LOGS] - [02:27:53] - [COMMAND] - [scarlxrd_zk.] - [1279783854089048228] - music-play 
+[LOGS] - [02:53:55] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - channel-info 
+[LOGS] - [02:54:04] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - channel-info 
+[LOGS] - [02:54:13] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - channel-info 
+[LOGS] - [03:58:53] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - ping 
+[LOGS] - [11:47:37] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - music-play 
+[LOGS] - [11:49:01] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - music-play 
+[LOGS] - [11:50:08] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - music-play 
+[LOGS] - [11:51:09] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - music-play 
+[LOGS] - [11:59:55] -  [ERROR]  - [scarlxrd_zk] - [940965110443302974] - 404 Not Found (error code: 10011): Unknown Role 
+[LOGS] - [11:59:58] -  [ERROR]  - [scarlxrd_zk] - [940965110443302974] - 403 Forbidden (error code: 50013): Missing Permissions 
+[LOGS] - [12:09:15] -  [ERROR]  - [scarlxrd_zk] - [940965110443302974] - 404 Not Found (error code: 10011): Unknown Role 
+[LOGS] - [12:09:16] -  [ERROR]  - [scarlxrd_zk] - [940965110443302974] - 403 Forbidden (error code: 50013): Missing Permissions 
+[LOGS] - [12:10:07] -  [ERROR]  - [scarlxrd_zk] - [940965110443302974] - 404 Not Found (error code: 10011): Unknown Role 
+[LOGS] - [16:28:02] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - ping 
+[LOGS] - [16:28:09] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - ping 
+[LOGS] - [17:13:12] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - all-bots 
+[LOGS] - [17:13:32] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - all-bots 
+[LOGS] - [18:18:20] - [COMMAND] - [nxrox99] - [558092130455781387] - embed 
+[LOGS] - [18:43:24] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - kick 
+[LOGS] - [15:40:17] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - ping 
+[LOGS] - [15:40:26] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - ping 
+[LOGS] - [21:24:56] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - logs-all 
