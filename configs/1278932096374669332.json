@@ -30,8 +30,11 @@
         }
     },
     "antiraid": {
+        "antibot": true,
+        "antilien": true,
+        "badwords": true,
         "channels": {
-            "create": false,
+            "create": true,
             "edit": false,
             "delete": false
         },
@@ -44,17 +47,7 @@
             "up": false,
             "down": false
         },
-        "antilien": {
-            "discord": false,
-            "sites": false,
-            "gif": false
-        },
-        "webhook": {
-            "create": false,
-            "edit": false,
-            "delete": false
-        },
-        "badwords": false
+        "webhook": true
     },
     "configuration": {
         "autoreact": {},
