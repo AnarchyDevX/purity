@@ -33,6 +33,7 @@ class guildAdd(commands.Cog):
     "ownerlist": [],
     "whitelist": [],
     "badwords": [],
+    "lockedvoice": [],
     "logs": {
         "modlogs": {
             "alive": false,
@@ -60,6 +61,9 @@ class guildAdd(commands.Cog):
         }
     },
     "antiraid": {
+        "antibot": false,
+        "antilien": false,
+        "badwords": false,
         "channels": {
             "create": false,
             "edit": false,
@@ -74,20 +78,18 @@ class guildAdd(commands.Cog):
             "up": false,
             "down": false
         },
-        "antilien": {
-            "discord": false,
-            "sites": false,
-            "gif": false
-        },
-        "webhook": {
-            "create": false,
-            "edit": false,
-            "delete": false
-        },
-        "badwords": false
+        "webhook": false
     },
     "configuration": {
-        "autoreact": {}
+        "autoreact": {},
+        "rolereact": {},
+        "autorole": [],
+        "tempvoices": {}
+    },
+    "warndb": {
+        "maxwarn": 10,
+        "sanction": "kick",
+        "users": {}
     }
 }
 """
