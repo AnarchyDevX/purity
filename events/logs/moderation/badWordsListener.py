@@ -17,7 +17,7 @@ class badWordsListener(commands.Cog):
         badwordsList = badwordsJSON['badwords']
         if badwordsList == []:
             return
-        logsChannel = await check_if_logs(message.guild.id, 'modlogs')
+        logsChannel = await check_if_logs(message.guild, 'modlogs')
         if logsChannel != None:
             for badwords in badwordsList:
                 if badwords in message.content:

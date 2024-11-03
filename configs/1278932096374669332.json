@@ -44,8 +44,8 @@
             "delete": false
         },
         "rank": {
-            "up": false,
-            "down": false
+            "up": true,
+            "down": true
         },
         "webhook": true
     },

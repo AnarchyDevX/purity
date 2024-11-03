@@ -117,3 +117,27 @@ async def err_embed(interaction: discord.Interaction, title: str, description: s
         return await interaction.followup.send(embed=embed, ephemeral=True)
     elif followup == False:
         return await interaction.response.send_message(embed=embed, ephemeral=True)
+    
+
+
+async def check_id_perms(member: discord.Member | discord.User, guild: discord.Guild, number: int) -> bool:
+    config: Dict[str, Any] = load_json()
+    guildConfig: Dict[str, Any] = json.load(open(f"./configs/{guild.id}.json", 'r'))
+    memberId: int = member.id
+    isOwner: bool = memberId in guildConfig['ownerlist']
+    isWhitelist: bool = memberId in guildConfig['whitelist']
+    if number == 1:
+        if memberId not in config['buyer'] and not isOwner and not isWhitelist:
+            return False
+        else:
+            return True
+    elif number == 2:
+        if memberId not in config['buyer'] and not isOwner:
+            return False
+        else:
+            return True
+    elif number == 3:
+        if memberId not in config['buyer']:
+            return False
+        else:
+            return True
