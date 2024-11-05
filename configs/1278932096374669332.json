@@ -30,7 +30,7 @@
         }
     },
     "antiraid": {
-        "antibot": true,
+        "antibot": false,
         "antilien": false,
         "badwords": false,
         "channels": {
