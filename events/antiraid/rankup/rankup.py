@@ -17,7 +17,7 @@ class roleUpAntiraid(commands.Cog):
             if newRole:
                 async for entry in before.guild.audit_logs(limit=1, action=discord.AuditLogAction.member_role_update):
                     if entry.target.id == after.id:
-                        if not await check_id_perms(entry.user, entry.user.guild, 2): return
+                        if await check_id_perms(entry.user, entry.user.guild, 2): return
                         try: await entry.user.ban(reason="Antiraid: Rank Up")
                         except Exception: pass
                         try: await after.remove_roles(newRole)

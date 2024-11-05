@@ -6,35 +6,35 @@
     "logs": {
         "modlogs": {
             "alive": false,
-            "channel": 1300624432879898635
+            "channel": null
         },
         "msglogs": {
             "alive": false,
-            "channel": 1300624432879898635
+            "channel": null
         },
         "raidlogs": {
             "alive": false,
-            "channel": 1300624432879898635
+            "channel": null
         },
         "voicelogs": {
             "alive": false,
-            "channel": 1300624432879898635
+            "channel": null
         },
         "ranklogs": {
             "alive": false,
-            "channel": 1300624432879898635
+            "channel": null
         },
         "joinleavelogs": {
             "alive": false,
-            "channel": 1300624432879898635
+            "channel": null
         }
     },
     "antiraid": {
         "antibot": true,
-        "antilien": true,
-        "badwords": true,
+        "antilien": false,
+        "badwords": false,
         "channels": {
-            "create": true,
+            "create": false,
             "edit": false,
             "delete": false
         },
@@ -44,10 +44,10 @@
             "delete": false
         },
         "rank": {
-            "up": true,
-            "down": true
+            "up": false,
+            "down": false
         },
-        "webhook": true
+        "webhook": false
     },
     "configuration": {
         "autoreact": {},
@@ -59,5 +59,19 @@
         "maxwarn": 10,
         "sanction": "kick",
         "users": {}
-    }
+    },
+    "tickets": {
+        "logs": 101010010101,
+        "transcripts": true,
+        "roles": [],
+        "claim": true,
+        "buttons": {
+            "101010101001": {
+                "category": 101010101010
+            }
+        }
+    },
+    "onlypic": [
+        1300941717821853737
+    ]
 }

@@ -16,7 +16,7 @@ class guildWebhookCreateAntiraid(commands.Cog):
                     if entry.target.channel.id == channel.id:
                         if entry.user.id == self.bot.user.id:
                             return
-                        if not await check_id_perms(entry.user, entry.user.guild, 3): return
+                        if await check_id_perms(entry.user, entry.user.guild, 3): return
                         try: entry.user.ban(reason="Antiraid: Webhook Créé")
                         except Exception: pass
                         try: await entry.target.delete(reason="Antiraid: Webhook")

@@ -17,7 +17,7 @@ class guildChannelDeleteAntiraid(commands.Cog):
                 if entry.target.id == channel.id:
                     if entry.user.id == self.bot.user.id:
                         return
-                    if not await check_id_perms(entry.user, entry.user.guild, 2): return
+                    if await check_id_perms(entry.user, entry.user.guild, 2): return
 
                     try: await entry.user.ban(reason="Antiraid: Salon Supprimé")
                     except Exception: return

@@ -14,8 +14,7 @@ class antilienAntiraid(commands.Cog):
         if not isinstance(message, discord.Message): return
         if message.author.id == self.bot.user.id: return
         guildJSON = load_json_file(f"./configs/{message.guild.id}.json")
-        if not await check_id_perms(message.author, message.guild, 1): return
-
+        if await check_id_perms(message.author, message.guild, 1): return
         if guildJSON['antiraid']['antilien'] == True:
             if bool(re.search(self.linkRegex, message.content)) == True:
                 try: await message.delete()

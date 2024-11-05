@@ -17,7 +17,7 @@ class guildRoleUpdateAntiraid(commands.Cog):
                 if entry.target.id == before.id:
                     if entry.user.id == self.bot.user.id:
                         return
-                    if not await check_id_perms(entry.user, entry.user.guild, 2): return
+                    if await check_id_perms(entry.user, entry.user.guild, 2): return
                     try: await entry.user.ban(reason="Antiraid: Role Modifié")
                     except Exception: pass
                     try:

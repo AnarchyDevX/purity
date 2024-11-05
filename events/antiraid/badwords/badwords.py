@@ -14,7 +14,7 @@ class badwordsAntiraid(commands.Cog):
         if message.author.id == self.bot.user.id:
             return
         guildJSON = load_json_file(f"./configs/{message.guild.id}.json")
-        if not await check_id_perms(message.author, message.guild, 1): return
+        if await check_id_perms(message.author, message.guild, 1): return
 
         if guildJSON['antiraid']['badwords'] == True:
             for element in guildJSON['badwords']:
