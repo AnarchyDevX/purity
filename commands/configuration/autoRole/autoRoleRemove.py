@@ -8,9 +8,9 @@ from core.embedBuilder import embedBuilder
 
 class autoRoleRemove(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
-        self.bot: commands.Bot = bot
+        self.bot: commands.Bot = bot 
 
-    @app_commands.command(name="autorole-remove", description="Ajouter un role a l'arrivée")
+    @app_commands.command(name="autorole-remove", description="Ajouter un rôle à l'arrivée")
     async def autoRoleRemove(self, interaction: discord.Interaction, role: discord.Role):
         check: bool = await check_perms(interaction, 2)
         if check == False:
@@ -23,8 +23,8 @@ class autoRoleRemove(commands.Cog):
         if role.id not in roleList:
             return await err_embed(
                 interaction,
-                title="Role non configurer",
-                description=f"Le role {role.mention} n'est pas présent dans la liste des rôles ajoutés a l'arrivée"
+                title="Rôle non configuré",
+                description=f"Le rôle {role.mention} n'est pas présent dans la liste des rôles ajoutés à l'arrivée"
             )        
         
         roleList.remove(role.id)

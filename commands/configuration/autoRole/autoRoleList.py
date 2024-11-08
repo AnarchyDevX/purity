@@ -8,7 +8,7 @@ class autoRoleList(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot: commands.Bot = bot
     
-    @app_commands.command(name="autorole-list", description="Afficher tout les rôles ajoutés a l'arrivée")
+    @app_commands.command(name="autorole-list", description="Afficher tous les rôles ajoutés à l'arrivée")
     async def autoroleList(self, interaction: discord.Interaction):
         check: bool = await check_perms(interaction, 2)
         if check == False:

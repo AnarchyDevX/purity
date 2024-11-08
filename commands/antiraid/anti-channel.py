@@ -35,6 +35,7 @@ class antiChannelConfig(commands.Cog):
             guildJSON['antiraid']["channels"][option] = status
 
         json.dump(guildJSON, open(f'./configs/{interaction.guild.id}.json', 'w'), indent=4)
+        title = None
         if option == "all":
             title = "all"
         elif option == "create":

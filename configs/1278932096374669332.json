@@ -53,7 +53,10 @@
         "autoreact": {},
         "rolereact": {},
         "autorole": [],
-        "tempvoices": {}
+        "tempvoices": {
+            "active": [],
+            "configs": {}
+        }
     },
     "warndb": {
         "maxwarn": 10,
@@ -71,7 +74,11 @@
             }
         }
     },
-    "onlypic": [
-        1300941717821853737
-    ]
+    "onlypic": [],
+    "greeting": {
+        "active": true,
+        "type": "message",
+        "channel": 1300941717821853737,
+        "mention": true
+    }
 }

@@ -17,6 +17,7 @@ class linkMessage(commands.Cog):
             return
         if message.author.id == self.bot.user.id:
             return
+        if message.content.startswith("https://tenor.com/"): return
 
         logsChannel: discord.abc.GuildChannel | None = await check_if_logs(message.guild, "raidlogs") 
         if logsChannel:

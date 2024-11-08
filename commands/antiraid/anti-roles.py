@@ -36,6 +36,7 @@ class antiRoleCOnfig(commands.Cog):
             guildJSON['antiraid']["roles"][option] = status
 
         json.dump(guildJSON, open(f'./configs/{interaction.guild.id}.json', 'w'), indent=4)
+        title = None
         if option == "all":
             title = "all"
         elif option == "create":

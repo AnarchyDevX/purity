@@ -71,6 +71,14 @@ class gstart(commands.Cog):
             if reaction.emoji == '🎉':
                 users = [user async for user in reaction.users() if user.id != self.bot.user.id]
 
+        if len(user) < gagnants:
+            return await err_embed(
+                interaction,
+                title="Participants insufisants",
+                description="Il n'y a pas assez de participants au giveaway",
+                ephemeral=False
+            )
+        
         winners = []
         for _ in range(gagnants):
             user = random.choice(users)

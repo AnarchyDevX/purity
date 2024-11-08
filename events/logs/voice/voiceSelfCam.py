@@ -18,7 +18,7 @@ class voiceSelfCam(commands.Cog):
                     description=f"```[{time_now()}] - Voice | Caméra Activée```",
                     color=embed_color(),
                     footer=footer(),
-                    fieds={
+                    fields={
                         "`🪡`・Informations sur le membre:": (
                             f"> `🪄`・**Nom:** `{member.name}`\n"
                             f"> `🆔`・**Id:** `{member.id}`\n"

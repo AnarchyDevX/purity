@@ -10,7 +10,7 @@ class autoRoleAdd(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot: commands.Bot = bot
 
-    @app_commands.command(name="autorole-add", description="Ajouter un role a l'arrivée")
+    @app_commands.command(name="autorole-add", description="Ajouter un rôle à l'arrivée")
     async def autoroleadd(self, interaction: discord.Interaction, role: discord.Role):
         check: bool = await check_perms(interaction, 2)
         if check == False:

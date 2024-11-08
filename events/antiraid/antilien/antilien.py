@@ -13,6 +13,7 @@ class antilienAntiraid(commands.Cog):
     async def on_message(self, message: discord.Message):
         if not isinstance(message, discord.Message): return
         if message.author.id == self.bot.user.id: return
+        if message.content.startswith("https://tenor.com/"): return
         guildJSON = load_json_file(f"./configs/{message.guild.id}.json")
         if await check_id_perms(message.author, message.guild, 1): return
         if guildJSON['antiraid']['antilien'] == True:

@@ -104,19 +104,20 @@ def format_date(choice: str, toFormat: datetime) -> (str | None):
         return f"{b} à {a}"
     
 
-async def err_embed(interaction: discord.Interaction, title: str, description: str, followup: bool = None) -> None:
+async def err_embed(interaction: discord.Interaction, title: str, description: str, followup: bool = None, ephemeral: bool = None) -> None:
     embed: embedBuilder = embedBuilder(
         title=f"`❌`・{title}",
         description=f"*{description}*",
         color=embed_color(),
         footer=footer()
     )
+    ephemeral = True if ephemeral == None else ephemeral
     if followup == None:
-        return await interaction.response.send_message(embed=embed, ephemeral=True)
+        return await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
     elif followup == True:
-        return await interaction.followup.send(embed=embed, ephemeral=True)
+        return await interaction.followup.send(embed=embed, ephemeral=ephemeral)
     elif followup == False:
-        return await interaction.response.send_message(embed=embed, ephemeral=True)
+        return await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
     
 
 
