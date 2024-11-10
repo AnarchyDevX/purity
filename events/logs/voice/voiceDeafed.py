@@ -23,7 +23,7 @@ class voiceDeafed(commands.Cog):
                             f"> `🆔`・**Id:** `{member.id}`\n"
                             f"> `✨`・**Mention:** {member.mention}\n"
                             f"> `🔨`・**Créé le:** `{format_date('all', member.created_at)}`\n"
-                            f"> `➕`・**Rejoint le:** `{format_date('all', member.joined_at)}`",
+                            f"> `➕`・**Rejoint le:** `{format_date('all', member.joined_at)}`"
                             f"> `📜`・**Salon de l'action:** {after.channel.mention}",
                             False
                         ),

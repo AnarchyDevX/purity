@@ -1,2 +1,7 @@
 discord.py
 requests
+discord.py
+requests
+google-api-python-client
+discord.py[voice]
+yt-dlp

@@ -1,8 +1,10 @@
 import json
 import discord
+import yt_dlp as youtube_dl
 from typing import Dict, Any
 from datetime import datetime
 from core.embedBuilder import embedBuilder
+from googleapiclient.discovery import build
 
 def load_json() -> Dict[str, Any]:
     config: Dict[str, Any] = json.load(open("config.json", 'r'))
@@ -142,3 +144,29 @@ async def check_id_perms(member: discord.Member | discord.User, guild: discord.G
             return False
         else:
             return True
+        
+def get_audio_url(video_url):
+    ytdl_opts = {
+        'format': 'bestaudio/best',
+        'quiet': True,
+        'skip_download': True,
+        'extract_flat': True, 
+        'force_generic_extractor': True 
+    }
+    with youtube_dl.YoutubeDL(ytdl_opts) as ytdl:
+        info = ytdl.extract_info(video_url, download=False)
+        audio_url = info['url']
+    return audio_url
+
+def search_youtube(query):
+    config = load_json()
+    youtube = build("youtube", "v3", developerKey=config['youtubekey'])
+    request = youtube.search().list(
+        q=query,
+        part="snippet",
+        type="video",
+        maxResults=1
+    )
+    response = request.execute()
+    video_id = response['items'][0]['id']['videoId']
+    return f"https://www.youtube.com/watch?v={video_id}"

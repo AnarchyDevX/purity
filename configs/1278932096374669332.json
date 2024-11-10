@@ -68,11 +68,7 @@
         "transcripts": true,
         "roles": [],
         "claim": true,
-        "buttons": {
-            "101010101001": {
-                "category": 101010101010
-            }
-        }
+        "buttons": {}
     },
     "onlypic": [],
     "greeting": {
@@ -80,5 +76,10 @@
         "type": "message",
         "channel": 1300941717821853737,
         "mention": true
+    },
+    "soutien": {
+        "active": false,
+        "needed": "scarlxrd",
+        "role": 1010101010
     }
 }
