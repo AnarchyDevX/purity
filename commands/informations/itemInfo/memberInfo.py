@@ -16,11 +16,11 @@ class memberInfo(commands.Cog):
         isBot: Literal['oui', 'non'] = "oui" if member.bot else "non"
 
         description: str = f"""
-> `✨`・**Name:** `{member.name}`
+> `✨`・**Nom:** `{member.name}`
 > `🆔`・**Id:** `{member.id}`
 > `🛠️`・**Mention:** {member.mention}
 > `👤`・**Robot:** `{isBot}`
-> `🌍`・**Global Name:** `{member.global_name}`
+> `🌍`・**Nom Global:** `{member.global_name}`
 > `➕`・**Discriminateur:** `{member.discriminator}`
 > `🪄`・**Créer le:** `{format_date('all', member.created_at)}`
 > `🔊`・**En vocal:** {isVoice}

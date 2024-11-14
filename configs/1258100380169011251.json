@@ -1,0 +1,143 @@
+{
+    "ownerlist": [
+        416358583220043796,
+        792081366862790687,
+        491769129318088714,
+        432610292342587392,
+        1242201589889106012,
+        318312854816161792,
+        824119071556763668,
+        736888501026422855,
+        1201673042242326609,
+        441422399976767498,
+        698142678042542101,
+        1114616280138395738
+    ],
+    "whitelist": [
+        1276266007479975938
+    ],
+    "badwords": [
+        "nigger",
+        "nigga",
+        "n\u00e8gre",
+        "n\u00e9gro",
+        "faggot",
+        "Setsuna",
+        "feuj",
+        "Gang-Bang",
+        "Sodomie",
+        "Hentai",
+        "BondageBranlette",
+        "Masturbation",
+        "Gangbang",
+        "fellation",
+        "s3tsvna",
+        "s3tsuna",
+        "setsvna",
+        "s3tsvn4",
+        "S3tsuna",
+        "bougnoule",
+        "n3gro",
+        "n3gre",
+        "nigg3r",
+        "lube",
+        "skibidi",
+        "toilet",
+        "lvbe",
+        "Niggas"
+    ],
+    "lockedvoice": [
+        1281931669263355997,
+        1281929877158629386,
+        1281931773315645444,
+        1281925751146545172,
+        1299954435094483015,
+        1301262106590576754
+    ],
+    "logs": {
+        "modlogs": {
+            "alive": true,
+            "channel": 1303720374416179353
+        },
+        "msglogs": {
+            "alive": true,
+            "channel": 1303718380888522813
+        },
+        "raidlogs": {
+            "alive": true,
+            "channel": 1281035322272256023
+        },
+        "voicelogs": {
+            "alive": true,
+            "channel": 1303716886743093369
+        },
+        "ranklogs": {
+            "alive": true,
+            "channel": 1281035325350871134
+        },
+        "joinleavelogs": {
+            "alive": true,
+            "channel": 1303716904556298311
+        }
+    },
+    "antiraid": {
+        "antibot": true,
+        "antilien": false,
+        "badwords": true,
+        "channels": {
+            "create": true,
+            "edit": false,
+            "delete": true
+        },
+        "roles": {
+            "create": true,
+            "edit": true,
+            "delete": true
+        },
+        "rank": {
+            "up": false,
+            "down": false
+        },
+        "webhook": true
+    },
+    "configuration": {
+        "autoreact": {},
+        "rolereact": {},
+        "autorole": [],
+        "tempvoices": {
+            "active": [
+                1305167888004546580,
+                1305322857932263435
+            ],
+            "configs": {
+                "1304792196968349719": {
+                    "category": 1258100383197171763
+                }
+            }
+        }
+    },
+    "warndb": {
+        "maxwarn": 10,
+        "sanction": "kick",
+        "users": {}
+    },
+    "tickets": {
+        "logs": 101010010101,
+        "transcripts": true,
+        "roles": [],
+        "claim": true,
+        "buttons": {}
+    },
+    "onlypic": [],
+    "greeting": {
+        "active": true,
+        "type": "message",
+        "channel": 1300941717821853737,
+        "mention": true
+    },
+    "soutien": {
+        "active": true,
+        "needed": "/virmo",
+        "role": 1283543358572072972
+    }
+}

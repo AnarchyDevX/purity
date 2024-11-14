@@ -15,6 +15,15 @@ class allBan(commands.Cog):
     async def allbans(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 1): return
         banlist = [member async for member in interaction.guild.bans()]
+        if banlist == []:
+            embed = embedBuilder(
+                title=f"`✨`・Liste des membres bannis",
+                description=f"*Il n'y aucun membre banni sur le serveur.*",
+                color=embed_color(),
+                footer=footer()
+            )
+            return await interaction.response.send_message(embed=embed)
+        
         banlist = [f"***{element.user.name}*** | `{element.user.id}`" for element in banlist]
         pages = [banlist[i:i + 50] for i in range(0, len(banlist), 50)]
 

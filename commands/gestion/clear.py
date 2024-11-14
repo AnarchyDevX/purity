@@ -25,7 +25,7 @@ class clear(commands.Cog):
         await interaction.response.send_message(content=f"`{amount}` vont être supprimés dans le salon {interaction.channel.mention}.", ephemeral=True)
         
         try:
-            await interaction.channel.purge(limit=amount + 1)
+            await interaction.channel.purge(limit=amount)
         except Exception:
             return await err_embed(
                 interaction,

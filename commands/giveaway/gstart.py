@@ -47,7 +47,7 @@ class gstart(commands.Cog):
         
         embed = embedBuilder(
             title=f"`🎉`・{gain}",
-            description=f"*Se termine:* <t:{timestamp}:F>\n*Temps restant:* <t:{timestamp}:R>",
+            description=f"*Se termine:* <t:{timestamp}:F>\n*Temps restant:* <t:{timestamp}:R>\n*Nombre de gagnants:* `{gagnants}`",
             color=embed_color(),
             footer=footer()
         )
@@ -67,11 +67,12 @@ class gstart(commands.Cog):
         await message.add_reaction('🎉')
         await asyncio.sleep(toWait)
         message = await message.channel.fetch_message(message.id)
+        users = 0
         for reaction in message.reactions:
             if reaction.emoji == '🎉':
                 users = [user async for user in reaction.users() if user.id != self.bot.user.id]
 
-        if len(user) < gagnants:
+        if len(users) < gagnants:
             return await err_embed(
                 interaction,
                 title="Participants insufisants",

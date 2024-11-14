@@ -68,11 +68,7 @@
         "transcripts": true,
         "roles": [],
         "claim": true,
-        "buttons": {
-            "101010101001": {
-                "category": 101010101010
-            }
-        }
+        "buttons": {}
     },
     "onlypic": [],
     "greeting": {
@@ -83,7 +79,7 @@
     },
     "soutien": {
         "active": false,
-        "needed": "",
+        "needed": "rien",
         "role": null
     }
 }

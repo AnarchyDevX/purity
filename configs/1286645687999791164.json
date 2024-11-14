@@ -1,6 +1,10 @@
 {
-    "ownerlist": [],
-    "whitelist": [],
+    "ownerlist": [
+        1145849356415684700
+    ],
+    "whitelist": [
+        1085932323041722429
+    ],
     "badwords": [],
     "lockedvoice": [],
     "logs": {
@@ -30,28 +34,33 @@
         }
     },
     "antiraid": {
-        "antibot": false,
-        "antilien": false,
-        "badwords": false,
+        "antibot": true,
+        "antilien": true,
+        "badwords": true,
         "channels": {
-            "create": false,
-            "edit": false,
-            "delete": false
+            "create": true,
+            "edit": true,
+            "delete": true
         },
         "roles": {
-            "create": false,
-            "edit": false,
-            "delete": false
+            "create": true,
+            "edit": true,
+            "delete": true
         },
         "rank": {
             "up": false,
             "down": false
         },
-        "webhook": false
+        "webhook": true
     },
     "configuration": {
         "autoreact": {},
-        "rolereact": {},
+        "rolereact": {
+            "1304786265253740594": {
+                "emojiId": 1286659759583400028,
+                "roleId": 1286646152942456842
+            }
+        },
         "autorole": [],
         "tempvoices": {
             "active": [],
@@ -63,17 +72,7 @@
         "sanction": "kick",
         "users": {}
     },
-    "tickets": {
-        "logs": 101010010101,
-        "transcripts": true,
-        "roles": [],
-        "claim": true,
-        "buttons": {
-            "101010101001": {
-                "category": 101010101010
-            }
-        }
-    },
+    "tickets": {},
     "onlypic": [],
     "greeting": {
         "active": true,
@@ -83,7 +82,7 @@
     },
     "soutien": {
         "active": false,
-        "needed": "",
-        "role": null
+        "needed": "scarlxrd",
+        "role": 1010101010
     }
 }

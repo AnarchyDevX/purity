@@ -84,12 +84,34 @@ class guildAdd(commands.Cog):
         "autoreact": {},
         "rolereact": {},
         "autorole": [],
-        "tempvoices": {}
+        "tempvoices": {
+            "active": [],
+            "configs": {}
+        }
     },
     "warndb": {
         "maxwarn": 10,
         "sanction": "kick",
         "users": {}
+    },
+    "tickets": {
+        "logs": 101010010101,
+        "transcripts": true,
+        "roles": [],
+        "claim": true,
+        "buttons": {}
+    },
+    "onlypic": [],
+    "greeting": {
+        "active": true,
+        "type": "message",
+        "channel": 1300941717821853737,
+        "mention": true
+    },
+    "soutien": {
+        "active": false,
+        "needed": "rien",
+        "role": null
     }
 }
 """

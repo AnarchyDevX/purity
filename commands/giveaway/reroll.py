@@ -22,11 +22,12 @@ class reroll(commands.Cog):
             )
         
         message = await message.channel.fetch_message(message)
+        users = 0
         for reaction in message.reactions:
             if reaction.emoji == '🎉':
                 users = [user async for user in reaction.users() if user.id != self.bot.user.id]
 
-        if len(user) < gagnants:
+        if len(users) < gagnants:
             return await err_embed(
                 interaction,
                 title="Participants insufisants",
