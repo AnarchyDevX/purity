@@ -11,7 +11,7 @@ class soutienDisable(commands.Cog):
     @app_commands.command(name="soutien-disable", description="Désactiver le role soutien")
     async def soutienDisable(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 2): return
-        guildJSON = load_json_file(f"./guilds/{interaction.guild.id}.json")
+        guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         guildJSON['soutien']['active'] = False
         json.dump(guildJSON, open(f'./configs/{interaction.guild.id}.json', 'w'), indent=4)
         embed = embedBuilder(

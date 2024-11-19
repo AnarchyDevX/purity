@@ -17,6 +17,7 @@ class guilds(commands.Cog):
         guildList: list[str] = [
             f'> `🛠️`・**Nom:** `{guild.name}`\n'
             f"> `🆔`・**Id:** `{guild.id}`\n"
+            f"> `💈`・**Membres:** `{guild.member_count}`\n"
             f"> `🪄`・**Crée le:** `{format_date('all', guild.created_at)}`\n"
             f"> `✨`・**Owner:** {guild.owner.mention}`{guild.id}`\n" 
             for guild in self.bot.guilds
