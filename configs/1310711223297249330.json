@@ -1,0 +1,89 @@
+{
+    "ownerlist": [],
+    "whitelist": [],
+    "badwords": [],
+    "lockedvoice": [],
+    "logs": {
+        "modlogs": {
+            "alive": true,
+            "channel": 1310711223758749727
+        },
+        "msglogs": {
+            "alive": true,
+            "channel": 1310711223758749727
+        },
+        "raidlogs": {
+            "alive": true,
+            "channel": 1310711223758749727
+        },
+        "voicelogs": {
+            "alive": true,
+            "channel": 1310711223758749727
+        },
+        "ranklogs": {
+            "alive": true,
+            "channel": 1310711223758749727
+        },
+        "joinleavelogs": {
+            "alive": true,
+            "channel": 1310711223758749727
+        }
+    },
+    "antiraid": {
+        "antibot": false,
+        "antilien": false,
+        "badwords": false,
+        "channels": {
+            "create": false,
+            "edit": false,
+            "delete": false
+        },
+        "roles": {
+            "create": false,
+            "edit": false,
+            "delete": false
+        },
+        "rank": {
+            "up": false,
+            "down": false
+        },
+        "webhook": false
+    },
+    "configuration": {
+        "autoreact": {},
+        "rolereact": {},
+        "autorole": [],
+        "tempvoices": {
+            "active": [],
+            "configs": {
+                "1310711223758749728": {
+                    "category": 1310711223297249332
+                }
+            }
+        }
+    },
+    "warndb": {
+        "maxwarn": 10,
+        "sanction": "kick",
+        "users": {}
+    },
+    "tickets": {
+        "logs": 101010010101,
+        "transcripts": true,
+        "roles": [],
+        "claim": true,
+        "buttons": {}
+    },
+    "onlypic": [],
+    "greeting": {
+        "active": true,
+        "type": "message",
+        "channel": 1300941717821853737,
+        "mention": true
+    },
+    "soutien": {
+        "active": false,
+        "needed": "rien",
+        "role": null
+    }
+}
