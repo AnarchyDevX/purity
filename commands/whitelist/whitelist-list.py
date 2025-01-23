@@ -10,7 +10,7 @@ class whitelistList(commands.Cog):
 
     @app_commands.command(name="whitelist-list", description="Afficher la liste des membre présents dans la whitelist")
     async def ownerlist(self, interaction: discord.Interaction):
-        if not await check_perms(interaction, 3):
+        if not await check_perms(interaction, 2):
             return
         
         guildJSON = load_json_file(f'./configs/{interaction.guild.id}.json')

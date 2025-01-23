@@ -87,5 +87,12 @@
         "active": false,
         "needed": "",
         "role": null
+    },
+    "greetmsg": {
+        "alive": false,
+        "content": ""
+    }, 
+    "jail": {
+        "role": null
     }
 }

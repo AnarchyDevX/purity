@@ -1,3 +1,14 @@
-autologs
-convert -> fr/en
-bawdwords ciblé
+AutoReact - Panel
+GreetMessage - Event + Panel
+Jail - Panel
+OnlyPic - Panel
+RoleReact - Panel
+Giveaway - Remake / Upgrade
+Server Stats - Make
+Server Infos - Make
+Logs - Autologs
+Owner x Whitelist - Panel
+Embed - Ajout Lien
+TempVoc - Panel Gestion
+Ticket - Panel + Config
+GuildLeave - Command

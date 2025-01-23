@@ -1,0 +1,97 @@
+{
+    "ownerlist": [
+        843530825005269002,
+        1130464829036036207,
+        745413629272129637,
+        1070853638152519803
+    ],
+    "whitelist": [],
+    "badwords": [],
+    "lockedvoice": [],
+    "logs": {
+        "modlogs": {
+            "alive": false,
+            "channel": null
+        },
+        "msglogs": {
+            "alive": false,
+            "channel": null
+        },
+        "raidlogs": {
+            "alive": false,
+            "channel": null
+        },
+        "voicelogs": {
+            "alive": false,
+            "channel": null
+        },
+        "ranklogs": {
+            "alive": false,
+            "channel": null
+        },
+        "joinleavelogs": {
+            "alive": false,
+            "channel": null
+        }
+    },
+    "antiraid": {
+        "antibot": true,
+        "antilien": true,
+        "badwords": true,
+        "channels": {
+            "create": true,
+            "edit": true,
+            "delete": true
+        },
+        "roles": {
+            "create": true,
+            "edit": true,
+            "delete": true
+        },
+        "rank": {
+            "up": true,
+            "down": true
+        },
+        "webhook": true
+    },
+    "configuration": {
+        "autoreact": {},
+        "rolereact": {},
+        "autorole": [],
+        "tempvoices": {
+            "active": [],
+            "configs": {}
+        }
+    },
+    "warndb": {
+        "maxwarn": 10,
+        "sanction": "kick",
+        "users": {}
+    },
+    "tickets": {
+        "logs": 101010010101,
+        "transcripts": true,
+        "roles": [],
+        "claim": true,
+        "buttons": {}
+    },
+    "onlypic": [],
+    "greeting": {
+        "active": true,
+        "type": "message",
+        "channel": 1300941717821853737,
+        "mention": true
+    },
+    "soutien": {
+        "active": false,
+        "needed": "rien",
+        "role": null
+    },
+    "greetmsg": {
+        "alive": false,
+        "content": ""
+    }, 
+    "jail": {
+        "role": null
+    }
+}

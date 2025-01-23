@@ -1,20 +1,20 @@
 {
     "ownerlist": [],
     "whitelist": [],
-    "badwords": [],
+    "badwords": true,
     "lockedvoice": [],
     "logs": {
         "modlogs": {
             "alive": false,
-            "channel": null
+            "channel": 1322616404553236563
         },
         "msglogs": {
-            "alive": false,
-            "channel": null
+            "alive": true,
+            "channel": 1278932250087657487
         },
         "raidlogs": {
-            "alive": false,
-            "channel": null
+            "alive": true,
+            "channel": 1278932250087657487
         },
         "voicelogs": {
             "alive": false,
@@ -26,7 +26,7 @@
         },
         "joinleavelogs": {
             "alive": false,
-            "channel": null
+            "channel": 1322616404553236563
         }
     },
     "antiraid": {
@@ -34,20 +34,20 @@
         "antilien": false,
         "badwords": false,
         "channels": {
-            "create": false,
+            "create": true,
             "edit": false,
             "delete": false
         },
         "roles": {
-            "create": false,
-            "edit": false,
+            "create": true,
+            "edit": true,
             "delete": false
         },
         "rank": {
-            "up": false,
-            "down": false
+            "up": true,
+            "down": true
         },
-        "webhook": false
+        "webhook": true
     },
     "configuration": {
         "autoreact": {},
@@ -77,13 +77,20 @@
     "onlypic": [],
     "greeting": {
         "active": true,
-        "type": "message",
-        "channel": 1300941717821853737,
+        "type": "embed",
+        "channel": 1322616404553236563,
         "mention": true
     },
     "soutien": {
         "active": false,
         "needed": "",
+        "role": null
+    },
+    "greetmsg": {
+        "alive": false,
+        "content": ""
+    },
+    "jail": {
         "role": null
     }
 }

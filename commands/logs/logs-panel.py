@@ -3,6 +3,8 @@ from discord import app_commands
 from discord.ext import commands
 from functions.functions import *
 from core.embedBuilder import embedBuilder
+from views.logs.disableButton import disableButtonLogs
+from views.logs.enableButton import enableButtonLogs
 
 class logsPanel(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
@@ -54,7 +56,18 @@ class logsPanel(commands.Cog):
                 ),
             }
         )
-        await interaction.response.send_message(embed=embed)
+        view = discord.ui.View(timeout=None)
+        view.add_item(discord.ui.Button(emoji="⚙️", label="Panel", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(emoji="📂", label="Logs", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(enableButtonLogs(interaction.user.id, "Moderation", "modlogs", self.bot) if modsLogs['alive'] == False else disableButtonLogs(interaction.user.id, "Modslogs", "modlogs", self.bot))
+        view.add_item(enableButtonLogs(interaction.user.id, "Message", "msglogs", self.bot) if msgLogs['alive'] == False else disableButtonLogs(interaction.user.id, "Modslogs", "msglogs", self.bot))
+        view.add_item(enableButtonLogs(interaction.user.id, "Raids", "raidlogs", self.bot) if raidlogs['alive'] == False else disableButtonLogs(interaction.user.id, "Modslogs", "raidlogs", self.bot))
+        view.add_item(discord.ui.Button(emoji="⚙️", label="Panel", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(emoji="📂", label="Logs", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(enableButtonLogs(interaction.user.id, "Vocal", "voicelogs", self.bot) if voicelogs['alive'] == False else disableButtonLogs(interaction.user.id, "Modslogs", "voicelogs", self.bot))
+        view.add_item(enableButtonLogs(interaction.user.id, "Ranks", "ranklogs", self.bot) if ranklogs['alive'] == False else disableButtonLogs(interaction.user.id, "Modslogs", "ranklogs", self.bot))
+        view.add_item(enableButtonLogs(interaction.user.id, "Join & Leave", "joinleavelogs", self.bot) if joinleaveLogs['alive'] == False else disableButtonLogs(interaction.user.id, "Modslogs", "joinleavelogs", self.bot))
+        await interaction.response.send_message(embed=embed, view=view)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(logsPanel(bot))

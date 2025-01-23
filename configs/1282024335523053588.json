@@ -81,5 +81,12 @@
         "active": false,
         "needed": "rien",
         "role": null
+    },
+    "greetmsg": {
+        "alive": false,
+        "content": ""
+    }, 
+    "jail": {
+        "role": null
     }
 }

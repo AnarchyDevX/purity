@@ -3,11 +3,13 @@ from discord import app_commands
 from discord.ext import commands
 from functions.functions import *
 from core.embedBuilder import embedBuilder
+from views.antiraidView.EnableButton import AntiraidEnableButton
+from views.antiraidView.DisableButton import AntiraidDisableButton
 
 class antiraidPanel(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-
+    
     @app_commands.command(name="antiraid-panel", description="Afficher la configuration de l'antiraid")
     async def antiraidPanel(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 2):
@@ -55,7 +57,37 @@ class antiraidPanel(commands.Cog):
                 )
             }
         )
-        await interaction.response.send_message(embed=embed)
+        view = discord.ui.View(timeout=None)
+        view.add_item(discord.ui.Button(label="Antiraid", emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label="Gestion", style=discord.ButtonStyle.gray, disabled=True))
+
+        view.add_item(AntiraidEnableButton("Antibot", interaction.user.id, "antiraid.antibot") if not antiraid['antibot'] else AntiraidDisableButton("Antibot", interaction.user.id, "antiraid.antibot"))
+        view.add_item(AntiraidEnableButton("Antilien", interaction.user.id, "antiraid.antilien") if not antiraid['antilien'] else AntiraidDisableButton("Antilien", interaction.user.id, "antiraid.antilien"))
+        view.add_item(AntiraidEnableButton("Badwords", interaction.user.id, "antiraid.badwords") if not antiraid['badwords'] else AntiraidDisableButton("Badwords", interaction.user.id, "antiraid.badwords"))
+        
+
+        view.add_item(discord.ui.Button(label="Antiraid", emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label="Channels", style=discord.ButtonStyle.gray, disabled=True))
+        
+        view.add_item(AntiraidEnableButton("Crée", interaction.user.id, "antiraid.channels.create") if not antiraid['channels']['create'] else AntiraidDisableButton("Crée", interaction.user.id, "antiraid.channels.create"))
+        view.add_item(AntiraidEnableButton("Modifié", interaction.user.id, "antiraid.channels.edit") if not antiraid['channels']['edit'] else AntiraidDisableButton("Modifié", interaction.user.id, "antiraid.channels.edit"))
+        view.add_item(AntiraidEnableButton("Supprimé", interaction.user.id, "antiraid.channels.delete") if not antiraid['channels']['delete'] else AntiraidDisableButton("Supprimé", interaction.user.id, "antiraid.channels.delete"))
+        
+        view.add_item(discord.ui.Button(label="Antiraid", emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label="Roles", style=discord.ButtonStyle.gray, disabled=True))
+        
+        view.add_item(AntiraidEnableButton("Crée", interaction.user.id, "antiraid.roles.create") if not antiraid['roles']['create'] else AntiraidDisableButton("Crée", interaction.user.id, "antiraid.roles.create"))
+        view.add_item(AntiraidEnableButton("Modifié", interaction.user.id, "antiraid.roles.edit") if not antiraid['roles']['edit'] else AntiraidDisableButton("Modifié", interaction.user.id, "antiraid.roles.edit"))
+        view.add_item(AntiraidEnableButton("Supprimé", interaction.user.id, "antiraid.roles.delete") if not antiraid['roles']['delete'] else AntiraidDisableButton("Supprimé", interaction.user.id, "antiraid.roles.delete"))
+
+        view.add_item(discord.ui.Button(label="Antiraid", emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label="Ranks/Webhook", style=discord.ButtonStyle.gray, disabled=True))
+
+        view.add_item(AntiraidEnableButton("Ajout", interaction.user.id, "antiraid.rank.up") if not antiraid['rank']["up"] else AntiraidDisableButton("Ajout", interaction.user.id, "antiraid.rank.up"))
+        view.add_item(AntiraidEnableButton("Retrait", interaction.user.id, "antiraid.rank.down") if not antiraid['rank']["down"] else AntiraidDisableButton("Retrait", interaction.user.id, "antiraid.rank.down"))
+        view.add_item(AntiraidEnableButton("Webhook", interaction.user.id, "antiraid.webhook") if not antiraid['webhook'] else AntiraidDisableButton("Webhook", interaction.user.id, "antiraid.webhook"))
+        await interaction.response.send_message(embed=embed, view=view)
+
 
 async def setup(bot):
     await bot.add_cog(antiraidPanel(bot))

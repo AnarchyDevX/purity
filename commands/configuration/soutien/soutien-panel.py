@@ -3,6 +3,8 @@ from discord.ext import commands
 from discord import app_commands
 from functions.functions import *
 from core.embedBuilder import embedBuilder
+from views.soutien.enableButton import enableSoutienButton
+from views.soutien.disableButton import disableSoutienButton
 
 class soutienPanel(commands.Cog):
     def __init__(self, bot):
@@ -31,7 +33,10 @@ class soutienPanel(commands.Cog):
                 )
             }
         )
-        await interaction.response.send_message(embed=embed)
+        view = discord.ui.View(timeout=None)
+        view.add_item(enableSoutienButton(interaction.user.id))
+        view.add_item(disableSoutienButton(interaction.user.id))
+        await interaction.response.send_message(embed=embed, view=view)
 
 async def setup(bot):
     await bot.add_cog(soutienPanel(bot))

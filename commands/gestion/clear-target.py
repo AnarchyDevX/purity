@@ -9,18 +9,20 @@ class clearTarget(commands.Cog):
         self.bot = bot
     
     @app_commands.command(name="clear-target", description="Supprimer les messages d'un utilisateur particulier.")
-    async def clearTarget(self, interaction: discord.Interaction, member: discord.Member, number: int):
+    async def clearTarget(self, interaction: discord.Interaction, member: discord.Member, number: int, channel: discord.TextChannel = None):
         if not await check_perms(interaction, 2): return
+        if channel == None:
+            channel = interaction.channel
         await interaction.response.defer(ephemeral=True)
 
         def is_target_message(msg):
             return msg.author == member
         
-        await interaction.channel.purge(limit=number * 2, check=is_target_message)
+        await channel.purge(limit=number * 2, check=is_target_message)
 
         embed = embedBuilder(
             title="`🪄`・Message clear",
-            description=f"*`{number}`* messages de {member.mention} on été supprimés",
+            description=f"*`{number}`* messages de {member.mention} on été supprimés dans le salon {channel.mention}",
             color=embed_color(),
             footer=footer()
         )
