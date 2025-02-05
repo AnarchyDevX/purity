@@ -1,34 +1,32 @@
 {
     "ownerlist": [],
-    "whitelist": [
-        1306596781869502565
-    ],
+    "whitelist": [],
     "badwords": [],
     "lockedvoice": [],
     "logs": {
         "modlogs": {
-            "alive": true,
-            "channel": 1336502826859364424
+            "alive": false,
+            "channel": null
         },
         "msglogs": {
-            "alive": true,
-            "channel": 1336502839383687200
+            "alive": false,
+            "channel": null
         },
         "raidlogs": {
-            "alive": true,
-            "channel": 1336502831091290172
+            "alive": false,
+            "channel": null
         },
         "voicelogs": {
-            "alive": true,
-            "channel": 1336502834656579616
+            "alive": false,
+            "channel": null
         },
         "ranklogs": {
-            "alive": true,
-            "channel": 1336502822149165076
+            "alive": false,
+            "channel": null
         },
         "joinleavelogs": {
-            "alive": true,
-            "channel": 1336502843040993292
+            "alive": false,
+            "channel": null
         }
     },
     "antiraid": {
@@ -66,7 +64,7 @@
         "users": {}
     },
     "tickets": {
-        "logs": 101010010101,
+        "logs": null,
         "transcripts": true,
         "roles": [],
         "claim": true,
@@ -76,9 +74,13 @@
     "greeting": {
         "active": true,
         "type": "message",
-        "channel": 1278932250087657487,
-        "mention": false
+        "channel": null,
+        "mention": true
     },
+    "greetmsg": {
+        "alive": false,
+        "content": ""
+    }, 
     "soutien": {
         "active": false,
         "needed": "rien",

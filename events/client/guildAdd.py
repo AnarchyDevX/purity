@@ -108,6 +108,10 @@ class guildAdd(commands.Cog):
         "channel": 1300941717821853737,
         "mention": true
     },
+    "greetmsg": {
+        "alive": false,
+        "content": ""
+    }, 
     "soutien": {
         "active": false,
         "needed": "rien",

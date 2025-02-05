@@ -1,8 +1,5 @@
 {
-    "ownerlist": [
-        970520429473189928,
-        1021098181154590730
-    ],
+    "ownerlist": [],
     "whitelist": [],
     "badwords": [],
     "lockedvoice": [],
@@ -50,7 +47,7 @@
             "up": false,
             "down": false
         },
-        "webhook": true
+        "webhook": false
     },
     "configuration": {
         "autoreact": {},
@@ -67,7 +64,7 @@
         "users": {}
     },
     "tickets": {
-        "logs": 101010010101,
+        "logs": null,
         "transcripts": true,
         "roles": [],
         "claim": true,
@@ -77,19 +74,16 @@
     "greeting": {
         "active": true,
         "type": "message",
-        "channel": 1300941717821853737,
+        "channel": null,
         "mention": true
-    },
-    "soutien": {
-        "active": false,
-        "needed": "rien",
-        "role": null
     },
     "greetmsg": {
         "alive": false,
         "content": ""
     }, 
-    "jail": {
+    "soutien": {
+        "active": false,
+        "needed": "rien",
         "role": null
     }
 }
