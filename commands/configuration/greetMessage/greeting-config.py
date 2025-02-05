@@ -19,7 +19,7 @@ class greetMeassageConfig(commands.Cog):
     async def greetmessageconfig(self, interaction: discord.Interaction, alive: str):
         if not await check_perms(interaction, 2): return
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
-        alive == True if alive == "on" else False
+        alive = True if alive == "on" else False
         guildJSON['greetmsg']['alive'] == alive
         if alive:
             return await interaction.response.send_modal(greetMessageModal())

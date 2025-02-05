@@ -3,12 +3,14 @@ from discord.ext import commands
 from discord import app_commands
 from functions.functions import *
 from core.embedBuilder import embedBuilder
+from views.ownerlist.add import ownerAddButton
+from views.ownerlist.remove import ownerRemoveButton
 
 class ownerList(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
 
-    @app_commands.command(name="owner-list", description="Afficher la liste des membre présents dans la liste des owners")
+    @app_commands.command(name="owner-panel", description="Gerer les owners bot")
     async def ownerlist(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 3):
             return
@@ -22,7 +24,10 @@ class ownerList(commands.Cog):
             color=embed_color(),
             footer=footer()
         )
-        await interaction.response.send_message(embed=embed)
+        view = discord.ui.View(timeout=None)
+        view.add_item(ownerAddButton(self.bot, interaction.user.id))
+        view.add_item(ownerRemoveButton(self.bot, interaction.user.id))
+        await interaction.response.send_message(embed=embed, view=view)
 
 async def setup(bot):
     await bot.add_cog(ownerList(bot))

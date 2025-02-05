@@ -17,7 +17,8 @@ class componentSelect(Select):
             SelectOption(label="Auteur (text)", value="author-text", description="Modifier l'auteur de l'embed", emoji="✨"),
             SelectOption(label="Auteur (icon)", value="author-url", description="Modifier l'icon de l'auteur de l'embed", emoji="🪄"),
             SelectOption(label="Image", value="image", description="Modifier l'image de l'embed", emoji="📸"),
-            SelectOption(label="Add Field", value="add-field", description="Ajouter un field a l'embed", emoji="➕")
+            SelectOption(label="Add Field", value="add-field", description="Ajouter un field a l'embed", emoji="➕"),
+            SelectOption(label="Lien", value="link", description="Ajouter un lien a l'embed", emoji="🔗")
         ]
         super().__init__(
             placeholder="Choisissez un élement a modifier",
@@ -60,6 +61,8 @@ class componentSelect(Select):
                 embed.set_footer(text=interaction.message.embeds[0].footer.text, icon_url=newElement)
             elif value == "author-url":
                 embed.set_author(name=interaction.message.embeds[0].author.name, icon_url=newElement)
+            elif value == "url":
+                embed.url = newElement
             if value == "image-url":
                 embed.set_image(url=newElement)
             if value == "add-field":
@@ -150,4 +153,11 @@ class componentSelect(Select):
                     "Titre du field",
                     maxChar=256,
                     value="add-field"
+                )
+            case 'link':
+                await self.handler_interaction(
+                    interaction, 
+                    "Lien de l'embed",
+                    maxChar=256,
+                    value="url"
                 )

@@ -170,3 +170,10 @@ def search_youtube(query):
     response = request.execute()
     video_id = response['items'][0]['id']['videoId']
     return f"https://www.youtube.com/watch?v={video_id}"
+
+def lang(element: str) -> str:
+    config = load_json()
+    filename = "fr.json" if config['lang'] == "fr" else "en.json"
+    with open(f"./lang/{filename}", 'r', encoding="utf-8") as f:
+        langfile = json.load(f)
+    return langfile[element]

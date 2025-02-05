@@ -1,32 +1,34 @@
 {
     "ownerlist": [],
-    "whitelist": [],
-    "badwords": true,
+    "whitelist": [
+        1306596781869502565
+    ],
+    "badwords": [],
     "lockedvoice": [],
     "logs": {
         "modlogs": {
-            "alive": false,
-            "channel": 1322616404553236563
+            "alive": true,
+            "channel": 1336502826859364424
         },
         "msglogs": {
             "alive": true,
-            "channel": 1278932250087657487
+            "channel": 1336502839383687200
         },
         "raidlogs": {
             "alive": true,
-            "channel": 1278932250087657487
+            "channel": 1336502831091290172
         },
         "voicelogs": {
-            "alive": false,
-            "channel": null
+            "alive": true,
+            "channel": 1336502834656579616
         },
         "ranklogs": {
-            "alive": false,
-            "channel": null
+            "alive": true,
+            "channel": 1336502822149165076
         },
         "joinleavelogs": {
-            "alive": false,
-            "channel": 1322616404553236563
+            "alive": true,
+            "channel": 1336502843040993292
         }
     },
     "antiraid": {
@@ -34,20 +36,20 @@
         "antilien": false,
         "badwords": false,
         "channels": {
-            "create": true,
+            "create": false,
             "edit": false,
             "delete": false
         },
         "roles": {
-            "create": true,
-            "edit": true,
+            "create": false,
+            "edit": false,
             "delete": false
         },
         "rank": {
-            "up": true,
-            "down": true
+            "up": false,
+            "down": false
         },
-        "webhook": true
+        "webhook": false
     },
     "configuration": {
         "autoreact": {},
@@ -68,29 +70,18 @@
         "transcripts": true,
         "roles": [],
         "claim": true,
-        "buttons": {
-            "101010101001": {
-                "category": 101010101010
-            }
-        }
+        "buttons": {}
     },
     "onlypic": [],
     "greeting": {
         "active": true,
-        "type": "embed",
-        "channel": 1322616404553236563,
-        "mention": true
+        "type": "message",
+        "channel": 1278932250087657487,
+        "mention": false
     },
     "soutien": {
         "active": false,
-        "needed": "",
-        "role": null
-    },
-    "greetmsg": {
-        "alive": false,
-        "content": ""
-    },
-    "jail": {
+        "needed": "rien",
         "role": null
     }
 }

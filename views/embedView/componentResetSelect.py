@@ -16,7 +16,8 @@ class componentResetSelect(Select):
             SelectOption(label="Auteur (text)", value="author-text", description="Réinitialiser l'auteur de l'embed", emoji="✨"),
             SelectOption(label="Auteur (icon)", value="author-url", description="Réinitialiser l'icon de l'auteur de l'embed", emoji="🪄"),
             SelectOption(label="Image", value="image", description="Réinitialiser l'image de l'embed", emoji="📸"),
-            SelectOption(label="Fields", value="fields", description="Réinitialiser les fields de l'embed", emoji="➕")
+            SelectOption(label="Fields", value="fields", description="Réinitialiser les fields de l'embed", emoji="➕"),
+            SelectOption(label="Lien", value="link", description="Réinitialiser le lien de l'embed", emoji="🔗")
         ]
         super().__init__(
             placeholder="Choisissez un élement a réinitialiser",
@@ -63,4 +64,8 @@ class componentResetSelect(Select):
                 embed = interaction.message.embeds[0]
                 for i in range(len(embed.fields)):
                     embed.remove_field(i)
+                await interaction.response.edit_message(embed=embed)
+            case 'link':
+                embed = interaction.message.embeds[0]
+                embed.url = ""
                 await interaction.response.edit_message(embed=embed)

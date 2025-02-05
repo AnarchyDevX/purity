@@ -49,7 +49,7 @@ class roleReactAdd(commands.Cog):
         json.dump(guildJSON, open(f'./configs/{interaction.guild.id}.json', 'w'), indent=4)
         embed: embedBuilder = embedBuilder(
             title="`➕`・Role réaction configuré",
-            description=f"Le role réaction a bin été configurer",
+            description=f"Le role réaction a bien été configurer",
             footer=footer(),
             color=embed_color(),
             fields={

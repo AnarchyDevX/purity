@@ -30,7 +30,7 @@ class leaveGuild(commands.Cog):
                 title="Serveur inconnu",
                 description="L'id du serveur que vous avez fourni est invalide.",
             )
-        await interaction.response.defer()
+        await interaction.response.send_message("Je vais quitter le serveur, vous receverez la confirmation en message privé", ephemeral=True)
 
         try:
             await guild.leave()

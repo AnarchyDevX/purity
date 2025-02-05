@@ -41,67 +41,68 @@ class AntiraidDisableButton(Button):
             footer=footer(),
             fields={
                 "`🛡️`・Antibot": (
-                    '`activé`' if antiraid['antibot'] == True else '`désactivé`',
+                    f'`{lang("antiraid.activer")}`' if antiraid['antibot'] == True else f'`{lang("antiraid.desactiver")}`',
                     True
                 ),
-                "`🛡️`・Antilien": (
-                    '`activé`' if antiraid['antilien'] == True else '`désactivé`',
+                f"`🛡️`・{lang("antiraid.antilien")}": (
+                    f'`{lang("antiraid.activer")}`' if antiraid['antilien'] == True else f'`{lang("antiraid.desactiver")}`',
                     True
                 ),
                 "`🛡️`・Badwords": (
-                    '`activé`' if antiraid['badwords'] == True else '`désactivé`',
+                    f'`{lang("antiraid.activer")}`' if antiraid['badwords'] == True else f'`{lang("antiraid.desactiver")}`',
                     True
                 ),
                 "`🛡️`・Antichannels": (
-                    f"**Créé:** {'`activé`' if antiraid['channels']['create'] == True else '`désactivé`'}\n"
-                    f"**Modifié:** {'`activé`' if antiraid['channels']['edit'] == True else '`désactivé`'}\n"
-                    f"**Supprimé:** {'`activé`' if antiraid['channels']['delete'] == True else '`désactivé`'}\n",
+                    f"**Créé:** {f'`{lang("antiraid.activer")}`' if antiraid['channels']['create'] == True else f'`{lang("antiraid.desactiver")}`'}\n"
+                    f"**Modifié:** {f'`{lang("antiraid.activer")}`' if antiraid['channels']['edit'] == True else f'`{lang("antiraid.desactiver")}`'}\n"
+                    f"**Supprimé:** {f'`{lang("antiraid.activer")}`' if antiraid['channels']['delete'] == True else f'`{lang("antiraid.desactiver")}`'}\n",
                     True
                 ),
                 "`🛡️`・Antirole": (
-                    f"**Créé:** {'`activé`' if antiraid['roles']['create'] == True else '`désactivé`'}\n"
-                    f"**Modifié:** {'`activé`' if antiraid['roles']['edit'] == True else '`désactivé`'}\n"
-                    f"**Supprimé:** {'`activé`' if antiraid['roles']['delete'] == True else '`désactivé`'}\n",
+                    f"**Créé:** {f'`{lang("antiraid.activer")}`' if antiraid['roles']['create'] == True else f'`{lang("antiraid.desactiver")}`'}\n"
+                    f"**Modifié:** {f'`{lang("antiraid.activer")}`' if antiraid['roles']['edit'] == True else f'`{lang("antiraid.desactiver")}`'}\n"
+                    f"**Supprimé:** {f'`{lang("antiraid.activer")}`' if antiraid['roles']['delete'] == True else f'`{lang("antiraid.desactiver")}`'}\n",
                     True
                 ),
                 "`🛡️`・Antiranks": (
-                    f"**Up:** {'`activé`' if antiraid['rank']['up'] == True else '`désactivé`'}\n"
-                    f"**Down:** {'`activé`' if antiraid['rank']['down'] == True else '`désactivé`'}\n",
+                    f"**Up:** {f'`{lang("antiraid.activer")}`' if antiraid['rank']['up'] == True else f'`{lang("antiraid.desactiver")}`'}\n"
+                    f"**Down:** {f'`{lang("antiraid.activer")}`' if antiraid['rank']['down'] == True else f'`{lang("antiraid.desactiver")}`'}\n",
                     True
                 ),
                 "`🛡️`・Antiwebhook": (
-                    '`activé`' if antiraid['webhook'] == True else '`désactivé`',
+                    f'`{lang("antiraid.activer")}`' if antiraid['webhook'] == True else f'`{lang("antiraid.desactiver")}`',
                     True
                 )
             }
         )
         view = discord.ui.View(timeout=None)
-        view.add_item(discord.ui.Button(label="Antiraid", emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
-        view.add_item(discord.ui.Button(label="Gestion", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.name"), emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.gestion"), style=discord.ButtonStyle.gray, disabled=True))
 
-        view.add_item(AntiraidEnableButton("Antibot", self.userId, "antiraid.antibot") if not antiraid['antibot'] else AntiraidDisableButton("Antibot", self.userId, "antiraid.antibot"))
-        view.add_item(AntiraidEnableButton("Antilien", self.userId, "antiraid.antilien") if not antiraid['antilien'] else AntiraidDisableButton("Antilien", self.userId, "antiraid.antilien"))
-        view.add_item(AntiraidEnableButton("Badwords", self.userId, "antiraid.badwords") if not antiraid['badwords'] else AntiraidDisableButton("Badwords", self.userId, "antiraid.badwords"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.antibot"), self.userId, "antiraid.antibot") if not antiraid['antibot'] else AntiraidDisableButton(lang("antiraid.antibot"), self.userId, "antiraid.antibot"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.antilien"), self.userId, "antiraid.antilien") if not antiraid['antilien'] else AntiraidDisableButton(lang("antiraid.antilien"), self.userId, "antiraid.antilien"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.badwords"), self.userId, "antiraid.badwords") if not antiraid['badwords'] else AntiraidDisableButton(lang("antiraid.badwords"), self.userId, "antiraid.badwords"))
         
 
-        view.add_item(discord.ui.Button(label="Antiraid", emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
-        view.add_item(discord.ui.Button(label="Channels", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.name"), emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.channels"), style=discord.ButtonStyle.gray, disabled=True))
         
-        view.add_item(AntiraidEnableButton("Crée", self.userId, "antiraid.channels.create") if not antiraid['channels']['create'] else AntiraidDisableButton("Crée", self.userId, "antiraid.channels.create"))
-        view.add_item(AntiraidEnableButton("Modifié", self.userId, "antiraid.channels.edit") if not antiraid['channels']['edit'] else AntiraidDisableButton("Modifié", self.userId, "antiraid.channels.edit"))
-        view.add_item(AntiraidEnableButton("Supprimé", self.userId, "antiraid.channels.delete") if not antiraid['channels']['delete'] else AntiraidDisableButton("Supprimé", self.userId, "antiraid.channels.delete"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.create"), self.userId, "antiraid.channels.create") if not antiraid['channels']['create'] else AntiraidDisableButton(lang("antiraid.create"), self.userId, "antiraid.channels.create"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.edit"), self.userId, "antiraid.channels.edit") if not antiraid['channels']['edit'] else AntiraidDisableButton(lang("antiraid.edit"), self.userId, "antiraid.channels.edit"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.delete"), self.userId, "antiraid.channels.delete") if not antiraid['channels']['delete'] else AntiraidDisableButton(lang("antiraid.delete"), self.userId, "antiraid.channels.delete"))
         
-        view.add_item(discord.ui.Button(label="Antiraid", emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
-        view.add_item(discord.ui.Button(label="Roles", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.name"), emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.role"), style=discord.ButtonStyle.gray, disabled=True))
         
-        view.add_item(AntiraidEnableButton("Crée", self.userId, "antiraid.roles.create") if not antiraid['roles']['create'] else AntiraidDisableButton("Crée", self.userId, "antiraid.roles.create"))
-        view.add_item(AntiraidEnableButton("Modifié", self.userId, "antiraid.roles.edit") if not antiraid['roles']['edit'] else AntiraidDisableButton("Modifié", self.userId, "antiraid.roles.edit"))
-        view.add_item(AntiraidEnableButton("Supprimé", self.userId, "antiraid.roles.delete") if not antiraid['roles']['delete'] else AntiraidDisableButton("Supprimé", self.userId, "antiraid.roles.delete"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.create"), self.userId, "antiraid.roles.create") if not antiraid['roles']['create'] else AntiraidDisableButton(lang("antiraid.create"), self.userId, "antiraid.roles.create"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.edit"), self.userId, "antiraid.roles.edit") if not antiraid['roles']['edit'] else AntiraidDisableButton(lang("antiraid.edit"), self.userId, "antiraid.roles.edit"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.delete"), self.userId, "antiraid.roles.delete") if not antiraid['roles']['delete'] else AntiraidDisableButton(lang("antiraid.delete"), self.userId, "antiraid.roles.delete"))
 
-        view.add_item(discord.ui.Button(label="Antiraid", emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
-        view.add_item(discord.ui.Button(label="Ranks/Webhook", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.name"), emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.rankswebhooks"), style=discord.ButtonStyle.gray, disabled=True))
 
-        view.add_item(AntiraidEnableButton("Ajout", self.userId, "antiraid.rank.up") if not antiraid['rank']["up"] else AntiraidDisableButton("Ajout", self.userId, "antiraid.rank.up"))
-        view.add_item(AntiraidEnableButton("Retrait", self.userId, "antiraid.rank.down") if not antiraid['rank']["down"] else AntiraidDisableButton("Retrait", self.userId, "antiraid.rank.down"))
-        view.add_item(AntiraidEnableButton("Webhook", self.userId, "antiraid.webhook") if not antiraid['webhook'] else AntiraidDisableButton("Webhook", self.userId, "antiraid.webhook"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.add"), self.userId, "antiraid.rank.up") if not antiraid['rank']["up"] else AntiraidDisableButton(lang("antiraid.add"), self.userId, "antiraid.rank.up"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.remove"), self.userId, "antiraid.rank.down") if not antiraid['rank']["down"] else AntiraidDisableButton(lang("antiraid.remove"), self.userId, "antiraid.rank.down"))
+        view.add_item(AntiraidEnableButton(lang("antiraid.webhook"), self.userId, "antiraid.webhook") if not antiraid['webhook'] else AntiraidDisableButton(lang("antiraid.webhook"), self.userId, "antiraid.webhook"))
+        
         return await interaction.response.edit_message(embed=embed, view=view)

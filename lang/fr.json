@@ -1,0 +1,19 @@
+{
+    "antiraid.activer": "activé",
+    "antiraid.desactiver": "désactivé",
+    "antiraid.name": "Antiraid",
+    "antiraid.gestion": "Gestion",
+    "antiraid.antibot": "Antibot",
+    "antiraid.antilien": "Antilien",
+    "antiraid.badwords": "Badwords",
+    "antiraid.channels": "Salons",
+    "antiraid.create": "Crée",
+    "antiraid.edit": "Modifié",
+    "antiraid.delete": "Supprimé",
+    "antiraid.role": "Roles",
+    "antiraid.rankswebhooks": "Ranks/Webhook",
+    "antiraid.add": "Ajout",
+    "antiraid.remove": "Retrait",
+    "antiraid.webhook": "Webhook",
+    "logs.autoTitle": "Logs automatiques"
+}
