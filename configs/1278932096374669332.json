@@ -54,8 +54,16 @@
         "rolereact": {},
         "autorole": [],
         "tempvoices": {
-            "active": [],
-            "configs": {}
+            "active": [
+                1336737973466562622,
+                1336755921975513089,
+                1336756569756401705
+            ],
+            "configs": {
+                "1336732814711722125": {
+                    "category": 1336502818059587604
+                }
+            }
         }
     },
     "warndb": {
@@ -80,7 +88,7 @@
     "greetmsg": {
         "alive": false,
         "content": ""
-    }, 
+    },
     "soutien": {
         "active": false,
         "needed": "rien",

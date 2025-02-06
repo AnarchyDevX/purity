@@ -2,6 +2,13 @@ import json
 import discord
 from discord.ext import commands
 from functions.functions import *
+from core.embedBuilder import embedBuilder
+from views.tempVoc.lock import lockTempVoice
+from views.tempVoc.unlock import unlockTempVoice
+from views.tempVoc.hide import hideTempVoice
+from views.tempVoc.unhide import unhideTempVoice
+from views.tempVoc.name import nameTempVoice
+from views.tempVoc.delete import deleteTempVoice
 
 class createVoice(commands.Cog):
     def __init__(self, bot: commands.Cog) -> None:
@@ -16,14 +23,30 @@ class createVoice(commands.Cog):
                     category = discord.utils.get(member.guild.categories, id=guildJSON['configuration']['tempvoices']['configs'][element]['category'])
                     if category:
                         try:
-                            toMoveChannel = await category.create_voice_channel(name=f"vocal-de-{member.name}")
-                        except Exception: return
+                            toMoveChannel = await category.create_voice_channel(name=f"{member.name}")
+                        except Exception as e: return print(e)
                         try:
+                            embed = embedBuilder(
+                                title="`⚙️`・Salon vocal temporaire",
+                                description=f"*Te voici dans ton salon vocal temporaire, tu peux le gerer via cet embed.*",
+                                color=embed_color(),
+                                footer=footer()
+                            )
+                            view = discord.ui.View(timeout=None)
+                            view.add_item(nameTempVoice(member.id, toMoveChannel))
+                            view.add_item(lockTempVoice(member.id, toMoveChannel))
+                            view.add_item(unlockTempVoice(member.id, toMoveChannel))
+                            view.add_item(hideTempVoice(member.id, toMoveChannel))
+                            view.add_item(unhideTempVoice(member.id, toMoveChannel))
+                            view.add_item(deleteTempVoice(member.id, toMoveChannel))
+
+                            await toMoveChannel.send(embed=embed, view=view, content=member.mention)
                             await member.move_to(toMoveChannel)
                             activeList = guildJSON['configuration']['tempvoices']['active']
                             activeList.append(toMoveChannel.id)
                             json.dump(guildJSON, open(f'./configs/{member.guild.id}.json', 'w'), indent=4)
-                        except Exception: return
+                            
+                        except Exception as e: return print(e)
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(createVoice(bot))
