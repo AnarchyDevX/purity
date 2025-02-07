@@ -4,11 +4,12 @@
 ✅ Logs - Autologs 
 ✅ Owner x Whitelist - Panel
 ✅ Embed - Ajout Lien
+✅ TempVoc - Panel Gestion
+✅ Server Infos - Make
 ❌ AutoReact - Panel
 ❌ Jail - Panel
 ❌ OnlyPic - Panel
 ❌ RoleReact - Panel
 ❌ Giveaway - Remake / Upgrade
-❌ Server Infos - Make
-❌ TempVoc - Panel Gestion
 ❌ Ticket - Panel + Config
+❌ Ghostping

@@ -37,3 +37,5 @@
 [LOGS] - [03:33:32] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - embed 
 [LOGS] - [03:33:36] -  [VIEWS]  - [scarlxrd_zk] - [940965110443302974] - select embed edit 
 [LOGS] - [03:33:49] -  [VIEWS]  - [scarlxrd_zk] - [940965110443302974] - select embed reset 
+[LOGS] - [10:13:21] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - ping 
+[LOGS] - [11:21:20] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - ping 
