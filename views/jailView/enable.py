@@ -55,4 +55,4 @@ class enableButtonView(Button):
                 return await message.delete()
             
         except asyncio.TimeoutError:
-            return await interaction.response.send_message("Vous avez dépassé le delais de réponse", ephemeral=True)
+            pass
