@@ -52,7 +52,9 @@
     "configuration": {
         "autoreact": {},
         "rolereact": {},
-        "autorole": [],
+        "autorole": [
+            1301622389360164977
+        ],
         "tempvoices": {
             "active": [
                 1336737973466562622,

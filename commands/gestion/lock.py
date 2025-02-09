@@ -8,7 +8,7 @@ class lockChannel(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.command(name="channel-lock", description="Verrouiller un salon textuel")
+    @app_commands.command(name="lock", description="Verrouiller un salon textuel")
     async def channelLock(self, interaction: discord.Interaction, channel: discord.TextChannel = None):
         if not await check_perms(interaction, 2): return
         if channel == None:
