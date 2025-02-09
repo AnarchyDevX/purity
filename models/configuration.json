@@ -85,5 +85,9 @@
         "active": false,
         "needed": "rien",
         "role": null
+    }, 
+    "jail": {
+        "active": false,
+        "role": null
     }
 }

@@ -93,5 +93,9 @@
         "active": false,
         "needed": "rien",
         "role": null
+    },
+    "jail": {
+        "active": true,
+        "role": 1301622389360164977
     }
 }

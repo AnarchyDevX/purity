@@ -30,7 +30,7 @@ class logsAuto(commands.Cog):
         json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
 
         embed = embedBuilder(
-            title=f"`📂`・{lang("logs.autoTitle")}",
+            title=f"`📂`・{lang('logs.autoTitle')}",
             description=f"*La configuration des logs automatiques est terminée.*",
             color=embed_color(),
             footer=footer()
