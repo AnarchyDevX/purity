@@ -63,15 +63,19 @@ class disableButtonLogs(Button):
                 ),
             }
         )
+
+        def createbutton(params, params2, element, userId, bot):
+            return enableButtonLogs(userId, params, params2, bot) if not element else disableButtonLogs(userId, params, params2, bot)
+
         view = discord.ui.View(timeout=None)
         view.add_item(discord.ui.Button(emoji="⚙️", label="Panel", style=discord.ButtonStyle.gray, disabled=True))
         view.add_item(discord.ui.Button(emoji="📂", label="Logs", style=discord.ButtonStyle.gray, disabled=True))
-        view.add_item(enableButtonLogs(self.userId, "Moderation", "modlogs", self.bot) if modsLogs['alive'] == False else disableButtonLogs(self.userId, "Moderation", "modlogs", self.bot))
-        view.add_item(enableButtonLogs(self.userId, "Message", "msglogs", self.bot) if msgLogs['alive'] == False else disableButtonLogs(self.userId, "Message", "msglogs", self.bot))
-        view.add_item(enableButtonLogs(self.userId, "Raids", "raidlogs", self.bot) if raidlogs['alive'] == False else disableButtonLogs(self.userId, "Raids", "raidlogs", self.bot))
+        view.add_item(createbutton(lang("logs.moderation"), "modlogs", modsLogs['alive'], self.userId, self.bot))
+        view.add_item(createbutton(lang("logs.message"), "msglogs", msgLogs['alive'], self.userId, self.bot))
+        view.add_item(createbutton(lang("logs.raids"), "raidlogs", raidlogs['alive'], self.userId, self.bot))
         view.add_item(discord.ui.Button(emoji="⚙️", label="Panel", style=discord.ButtonStyle.gray, disabled=True))
         view.add_item(discord.ui.Button(emoji="📂", label="Logs", style=discord.ButtonStyle.gray, disabled=True))
-        view.add_item(enableButtonLogs(self.userId, "Vocal", "voicelogs", self.bot) if voicelogs['alive'] == False else disableButtonLogs(self.userId, "Vocal", "voicelogs", self.bot))
-        view.add_item(enableButtonLogs(self.userId, "Ranks", "ranklogs", self.bot) if ranklogs['alive'] == False else disableButtonLogs(self.userId, "Ranks", "ranklogs", self.bot))
-        view.add_item(enableButtonLogs(self.userId, "Join & Leave", "joinleavelogs", self.bot) if joinleaveLogs['alive'] == False else disableButtonLogs(self.userId, "Join & Leave", "joinleavelogs", self.bot))
+        view.add_item(createbutton(lang("logs.voice"), "voicelogs", voicelogs['alive'], self.userId, self.bot))
+        view.add_item(createbutton(lang("logs.ranks"), "ranklogs", ranklogs['alive'], self.userId, self.bot))
+        view.add_item(createbutton(lang("logs.joinleave"), "joinleavelogs", joinleaveLogs['alive'], self.userId, self.bot))
         await interaction.response.edit_message(embed=embed, view=view)

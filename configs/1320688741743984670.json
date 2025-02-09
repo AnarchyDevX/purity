@@ -72,20 +72,20 @@
     },
     "onlypic": [],
     "greeting": {
-        "active": true,
+        "active": false,
         "type": "message",
         "channel": null,
-        "mention": true
+        "mention": false
     },
     "greetmsg": {
         "alive": false,
         "content": ""
-    }, 
+    },
     "soutien": {
         "active": false,
         "needed": "rien",
         "role": null
-    }, 
+    },
     "jail": {
         "active": false,
         "role": null

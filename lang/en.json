@@ -15,5 +15,11 @@
     "antiraid.add": "Add",
     "antiraid.remove": "Remove",
     "antiraid.webhook": "Webhook",
-    "logs.autoTitle": "Automatic log"
+    "logs.autoTitle": "Automatic log",
+    "logs.moderation": "Moderation",
+    "logs.message": "Message",
+    "logs.raids": "Raids",
+    "logs.voice": "Voice",
+    "logs.ranks": "Ranks",
+    "logs.joinleave": "Join & Leave"
 }

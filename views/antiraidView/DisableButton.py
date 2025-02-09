@@ -41,49 +41,63 @@ class AntiraidDisableButton(Button):
             footer=footer(),
             fields={
                 "`🛡️`・Antibot": (
-                    f'`{lang("antiraid.activer")}`' if antiraid['antibot'] == True else f'`{lang("antiraid.desactiver")}`',
+                    f"`{lang('antiraid.activer')}`" if antiraid['antibot'] else f"`{lang('antiraid.desactiver')}`",
                     True
                 ),
                 f"`🛡️`・{lang('antiraid.antilien')}": (
-                    f'`{lang("antiraid.activer")}`' if antiraid['antilien'] == True else f'`{lang("antiraid.desactiver")}`',
+                    f"`{lang('antiraid.activer')}`" if antiraid['antilien'] else f"`{lang('antiraid.desactiver')}`",
                     True
                 ),
                 "`🛡️`・Badwords": (
-                    f'`{lang("antiraid.activer")}`' if antiraid['badwords'] == True else f'`{lang("antiraid.desactiver")}`',
+                    f"`{lang('antiraid.activer')}`" if antiraid['badwords'] else f"`{lang('antiraid.desactiver')}`",
                     True
                 ),
                 "`🛡️`・Antichannels": (
-                    f"**Créé:** {f'`{lang('antiraid.activer')}`' if antiraid['channels']['create'] == True else f'`{lang('antiraid.desactiver')}`'}\n"
-                    f"**Modifié:** {f'`{lang("antiraid.activer")}`' if antiraid['channels']['edit'] == True else f'`{lang('antiraid.desactiver')}`'}\n"
-                    f"**Supprimé:** {f'`{lang("antiraid.activer")}`' if antiraid['channels']['delete'] == True else f'`{lang('antiraid.desactiver')}`'}\n",
+                    f"**Créé:** `{lang('antiraid.activer') if antiraid['channels']['create'] else lang('antiraid.desactiver')}`\n"
+                    f"**Modifié:** `{lang('antiraid.activer') if antiraid['channels']['edit'] else lang('antiraid.desactiver')}`\n"
+                    f"**Supprimé:** `{lang('antiraid.activer') if antiraid['channels']['delete'] else lang('antiraid.desactiver')}`",
                     True
                 ),
                 "`🛡️`・Antirole": (
-                    f"**Créé:** {f'`{lang('antiraid.activer')}`' if antiraid['roles']['create'] == True else f'`{lang('antiraid.desactiver')}`'}\n"
-                    f"**Modifié:** {f'`{lang('antiraid.activer')}`' if antiraid['roles']['edit'] == True else f'`{lang('antiraid.desactiver')}`'}\n"
-                    f"**Supprimé:** {f'`{lang('antiraid.activer')}`' if antiraid['roles']['delete'] == True else f'`{lang('antiraid.desactiver')}`'}\n",
+                    f"**Créé:** `{lang('antiraid.activer') if antiraid['roles']['create'] else lang('antiraid.desactiver')}`\n"
+                    f"**Modifié:** `{lang('antiraid.activer') if antiraid['roles']['edit'] else lang('antiraid.desactiver')}`\n"
+                    f"**Supprimé:** `{lang('antiraid.activer') if antiraid['roles']['delete'] else lang('antiraid.desactiver')}`",
                     True
                 ),
                 "`🛡️`・Antiranks": (
-                    f"**Up:** {f'`{lang("antiraid.activer")}`' if antiraid['rank']['up'] == True else f'`{lang("antiraid.desactiver")}`'}\n"
-                    f"**Down:** {f'`{lang("antiraid.activer")}`' if antiraid['rank']['down'] == True else f'`{lang("antiraid.desactiver")}`'}\n",
+                    f"**Up:** `{lang('antiraid.activer') if antiraid['rank']['up'] else lang('antiraid.desactiver')}`\n"
+                    f"**Down:** `{lang('antiraid.activer') if antiraid['rank']['down'] else lang('antiraid.desactiver')}`",
                     True
                 ),
                 "`🛡️`・Antiwebhook": (
-                    f'`{lang("antiraid.activer")}`' if antiraid['webhook'] == True else f'`{lang("antiraid.desactiver")}`',
+                    f"`{lang('antiraid.activer')}`" if antiraid['webhook'] else f"`{lang('antiraid.desactiver')}`",
                     True
                 )
             }
         )
+        def createbutton(params, params2, element, userId):
+            return AntiraidEnableButton(params, userId, params2) if not element else AntiraidDisableButton(params, userId, params2)
+
         view = discord.ui.View(timeout=None)
         view.add_item(discord.ui.Button(label=lang("antiraid.name"), emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
         view.add_item(discord.ui.Button(label=lang("antiraid.gestion"), style=discord.ButtonStyle.gray, disabled=True))
-
-        for key in ['antibot', 'antilien', 'badwords']:
-            view.add_item(
-                AntiraidEnableButton(lang(f"antiraid.{key}"), self.userId, f"antiraid.{key}")
-                if not antiraid[key] else
-                AntiraidDisableButton(lang(f"antiraid.{key}"), self.userId, f"antiraid.{key}")
-            )
-
+        view.add_item(createbutton(lang("antiraid.antibot"), "antiraid.antibot", antiraid['antibot'], self.userId))
+        view.add_item(createbutton(lang("antiraid.antilien"), "antiraid.antilien", antiraid['antilien'], self.userId))
+        view.add_item(createbutton(lang("antiraid.badwords"), "antiraid.badwords", antiraid['badwords'], self.userId))
+        view.add_item(discord.ui.Button(label=lang("antiraid.name"), emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.channels"), style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(createbutton(lang("antiraid.create"), "antiraid.channels.create", antiraid['channels']['create'], self.userId))
+        view.add_item(createbutton(lang("antiraid.edit"), "antiraid.channels.edit", antiraid['channels']['edit'], self.userId))
+        view.add_item(createbutton(lang("antiraid.delete"), "antiraid.channels.delete", antiraid['channels']['delete'], self.userId))
+        view.add_item(discord.ui.Button(label=lang("antiraid.name"), emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.role"), style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(createbutton(lang("antiraid.create"), "antiraid.roles.create", antiraid['roles']['create'], self.userId))
+        view.add_item(createbutton(lang("antiraid.edit"), "antiraid.roles.edit", antiraid['roles']['edit'], self.userId))
+        view.add_item(createbutton(lang("antiraid.delete"), "antiraid.roles.delete", antiraid['roles']['delete'], self.userId))
+        view.add_item(discord.ui.Button(label=lang("antiraid.name"), emoji="🛡️", style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(discord.ui.Button(label=lang("antiraid.rankswebhooks"), style=discord.ButtonStyle.gray, disabled=True))
+        view.add_item(createbutton(lang("antiraid.add"), "antiraid.rank.up", antiraid['rank']['up'], self.userId))
+        view.add_item(createbutton(lang("antiraid.remove"), "antiraid.rank.down", antiraid['rank']['down'], self.userId))
+        view.add_item(createbutton(lang("antiraid.webhook"), "antiraid.webhook", antiraid['webhook'], self.userId))
+                
         return await interaction.response.edit_message(embed=embed, view=view)

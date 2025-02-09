@@ -6,15 +6,15 @@
     "logs": {
         "modlogs": {
             "alive": false,
-            "channel": null
+            "channel": 1278932250087657487
         },
         "msglogs": {
             "alive": false,
-            "channel": null
+            "channel": 1322616404553236563
         },
         "raidlogs": {
             "alive": false,
-            "channel": null
+            "channel": 1322616404553236563
         },
         "voicelogs": {
             "alive": false,
@@ -30,24 +30,24 @@
         }
     },
     "antiraid": {
-        "antibot": false,
-        "antilien": false,
-        "badwords": false,
+        "antibot": true,
+        "antilien": true,
+        "badwords": true,
         "channels": {
             "create": false,
-            "edit": false,
-            "delete": false
+            "edit": true,
+            "delete": true
         },
         "roles": {
             "create": false,
-            "edit": false,
-            "delete": false
+            "edit": true,
+            "delete": true
         },
         "rank": {
-            "up": false,
+            "up": true,
             "down": false
         },
-        "webhook": false
+        "webhook": true
     },
     "configuration": {
         "autoreact": {},

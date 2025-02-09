@@ -16,7 +16,7 @@ def embed_color() -> int:
 
 def footer() -> str:
     now: str = datetime.now().strftime('%H:%M:%S')
-    return f"[{now}] - slash-mutlti-options Bot"
+    return f"[{now}] - Purity Beta"
 
 def load_json_file(filePath: str) -> Dict[str, Any]:
     file: Dict[str, Any] = json.load(open(filePath, 'r'))
