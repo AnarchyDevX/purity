@@ -10,7 +10,7 @@ class onlyPicList(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @app_commands.command(name="onlypic-list", description="Afficher tout les salons ou l'onlypic est activé")
+    @app_commands.command(name="onlypic-config", description="Afficher tout les salons ou l'onlypic est activé")
     async def onlypiclist(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 2): return
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")

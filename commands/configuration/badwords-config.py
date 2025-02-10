@@ -10,7 +10,7 @@ class badwordList(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot: commands.Bot = bot
 
-    @app_commands.command(name="badwords-panel", description="Afficher tout les badwords configurés")
+    @app_commands.command(name="badwords-config", description="Afficher tout les badwords configurés")
     async def badwordsList(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 2):
             return

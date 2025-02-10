@@ -10,7 +10,7 @@ class soutienPanel(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
 
-    @app_commands.command(name="soutien-panel", description="Affiche la configuration du role soutien")
+    @app_commands.command(name="soutien-config", description="Affiche la configuration du role soutien")
     async def soutienPanel(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 2): return
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")

@@ -14,7 +14,7 @@ class tempVoiceList(commands.Cog):
         category: discord.CategoryChannel | None = discord.utils.get(interaction.guild.categories, id=id)
         return category.name
     
-    @app_commands.command(name="tempvoice-panel", description="Configurer les salon vocaux temporaires.")
+    @app_commands.command(name="tempvoice-config", description="Configurer les salon vocaux temporaires.")
     async def tempvoiceList(self, interaction: discord.Interaction):
         check: bool = await check_perms(interaction, 2)
         if check == False:

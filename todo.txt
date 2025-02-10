@@ -1,0 +1,15 @@
+✅ GuildLeave - Command
+✅ GreetMessage - Event + Panel
+✅ Server Stats - Make
+✅ Logs - Autologs 
+✅ Owner x Whitelist - Panel
+✅ Embed - Ajout Lien
+✅ TempVoc - Panel Gestion
+✅ Server Infos - Make
+✅ Jail - Panel
+✅ RoleReact - Panel
+✅ OnlyPic - Panel
+❌ Giveaway - Remake / Upgrade
+❌ Ticket - Panel + Config
+❌ Ghostping - make
+antispam

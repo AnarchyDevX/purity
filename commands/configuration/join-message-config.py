@@ -15,7 +15,7 @@ class joinMessagePanel(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
 
-    @app_commands.command(name="join-message-panel", description="Afficher la configuration du message d'arrivée")
+    @app_commands.command(name="join-message-config", description="Afficher la configuration du message d'arrivée")
     async def joinMessagePanel(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 2): return
 

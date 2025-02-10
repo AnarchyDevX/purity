@@ -10,7 +10,6 @@ class PingCommand(commands.Cog):
     
     @app_commands.command(name="ping", description="show bot latency")
     async def ping(self, interaction: discord.Interaction) -> None:
-        await logs("ping", 1, interaction)
         embed: embedBuilder = embedBuilder(
             title="`🪄`・Latence du bot",
             description=f"La latence du bot est de `{round(self.bot.latency * 1000)} ms`",
