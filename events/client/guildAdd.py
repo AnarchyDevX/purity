@@ -27,7 +27,7 @@ class guildAdd(commands.Cog):
                         try:
                             await owner.send(embed=embed)
                         except Exception:
-                            pass
+                            continue
                     return await guild.leave()
         else:
             with open(f"./configs/{guild.id}.json", 'w', encoding='utf-8') as f:
@@ -47,7 +47,7 @@ class guildAdd(commands.Cog):
                             await owner.send(embed=embed)
                         except Exception as e:
                             print(e)
-                            pass
+                            continue
 
 async def setup(bot):
     await bot.add_cog(guildAdd(bot))

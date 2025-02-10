@@ -6,15 +6,15 @@
     "logs": {
         "modlogs": {
             "alive": false,
-            "channel": 1278932250087657487
+            "channel": null
         },
         "msglogs": {
             "alive": false,
-            "channel": 1322616404553236563
+            "channel": null
         },
         "raidlogs": {
             "alive": false,
-            "channel": 1322616404553236563
+            "channel": null
         },
         "voicelogs": {
             "alive": false,
@@ -30,42 +30,32 @@
         }
     },
     "antiraid": {
-        "antibot": true,
-        "antilien": true,
-        "badwords": true,
+        "antibot": false,
+        "antilien": false,
+        "badwords": false,
         "channels": {
             "create": false,
-            "edit": true,
-            "delete": true
+            "edit": false,
+            "delete": false
         },
         "roles": {
             "create": false,
-            "edit": true,
-            "delete": true
+            "edit": false,
+            "delete": false
         },
         "rank": {
-            "up": true,
+            "up": false,
             "down": false
         },
-        "webhook": true
+        "webhook": false
     },
     "configuration": {
         "autoreact": {},
         "rolereact": {},
-        "autorole": [
-            1301622389360164977
-        ],
+        "autorole": [],
         "tempvoices": {
-            "active": [
-                1336737973466562622,
-                1336755921975513089,
-                1336756569756401705
-            ],
-            "configs": {
-                "1336732814711722125": {
-                    "category": 1336502818059587604
-                }
-            }
+            "active": [],
+            "configs": {}
         }
     },
     "warndb": {
@@ -82,10 +72,10 @@
     },
     "onlypic": [],
     "greeting": {
-        "active": true,
+        "active": false,
         "type": "message",
         "channel": null,
-        "mention": true
+        "mention": false
     },
     "greetmsg": {
         "alive": false,
@@ -98,6 +88,11 @@
     },
     "jail": {
         "active": false,
-        "role": 1301622389360164977
-    }
+        "role": null
+    },
+    "ghostping": [
+        1322616404553236563,
+        1278932250087657487,
+        1300941717821853737
+    ]
 }
