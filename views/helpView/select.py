@@ -90,6 +90,10 @@ class selectHelp(Select):
                             f"*Afficher l'embed de configuration des mots interdits*",
                             False
                         ),
+                        "`/ghostping-config`": (
+                            f"*Afficher l'embed de configuration des pings à l'arrivée*",
+                            False
+                        ),
                         "`/greet-message-config`": (
                             "*Configurer le message privé envoyé à l'arrivée*\n-# /greet-message-config [option]",
                             False

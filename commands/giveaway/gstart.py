@@ -88,9 +88,9 @@ class gstart(commands.Cog):
 
         if gagnants == 1:
             winner = winners[0]
-            return await interaction.followup.send(f"Le gagnant est {winner.mention} ! Il remporte donc ***{gain}***")
+            return await message.channel.send(f"Le gagnant est {winner.mention} ! Il remporte donc ***{gain}***")
         else:
-            return await interaction.followup.send(f"Les gagnants sont {','.join(winner.mention for winner in winners)} ! Ils remportent donc ***{gain}***")
+            return await message.channel.send(f"Les gagnants sont {','.join(winner.mention for winner in winners)} ! Ils remportent donc ***{gain}***")
 
 async def setup(bot):
     await bot.add_cog(gstart(bot))
