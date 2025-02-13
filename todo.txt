@@ -11,8 +11,9 @@
 ✅ OnlyPic - Panel
 ✅ Ghostping - make
 ✅ Giveaway - Remake / Upgrade
+✅ Captcha - Make (functions + command)
 ❌ Ticket - Panel + Config
 ❌ Antispam - Antiraid
 ❌ Anti Mass Mention - Antiraid
-❌ Captcha - Make (functions + command)
 ❌ All Config - Panel
+❌ Lock Url - Make
