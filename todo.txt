@@ -12,4 +12,7 @@
 ✅ Ghostping - make
 ✅ Giveaway - Remake / Upgrade
 ❌ Ticket - Panel + Config
-antispam
+❌ Antispam - Antiraid
+❌ Anti Mass Mention - Antiraid
+❌ Captcha - Make (functions + command)
+❌ All Config - Panel

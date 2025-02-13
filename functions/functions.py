@@ -1,10 +1,13 @@
+import io
 import json
+import random
 import discord
 import yt_dlp as youtube_dl
 from typing import Dict, Any
 from datetime import datetime
 from core.embedBuilder import embedBuilder
 from googleapiclient.discovery import build
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 def load_json() -> Dict[str, Any]:
     config: Dict[str, Any] = json.load(open("config.json", 'r'))
@@ -145,35 +148,38 @@ async def check_id_perms(member: discord.Member | discord.User, guild: discord.G
         else:
             return True
         
-def get_audio_url(video_url):
-    ytdl_opts = {
-        'format': 'bestaudio/best',
-        'quiet': True,
-        'skip_download': True,
-        'extract_flat': True, 
-        'force_generic_extractor': True 
-    }
-    with youtube_dl.YoutubeDL(ytdl_opts) as ytdl:
-        info = ytdl.extract_info(video_url, download=False)
-        audio_url = info['url']
-    return audio_url
-
-def search_youtube(query):
-    config = load_json()
-    youtube = build("youtube", "v3", developerKey=config['youtubekey'])
-    request = youtube.search().list(
-        q=query,
-        part="snippet",
-        type="video",
-        maxResults=1
-    )
-    response = request.execute()
-    video_id = response['items'][0]['id']['videoId']
-    return f"https://www.youtube.com/watch?v={video_id}"
 
 def lang(element: str) -> str:
     config = load_json()
-    filename = "fr.json" if config['lang'] == "fr" else "en.json"
-    with open(f"./lang/{filename}", 'r', encoding="utf-8") as f:
+    with open(f"./lang/{config['lang']}", 'r', encoding="utf-8") as f:
         langfile = json.load(f)
     return langfile[element]
+
+
+def gen_captcha(code):
+    img = Image.new('RGB', (600, 200), color=(255, 255, 255))  
+    d = ImageDraw.Draw(img)
+    try:
+        font = ImageFont.truetype("arial.ttf", 50)  
+    except IOError:
+        font = ImageFont.load_default()  
+    x_start = 20
+    for char in code:
+        angle = random.randint(-30, 30)
+        char_font_size = random.randint(40, 70)
+        font = ImageFont.truetype("arial.ttf", char_font_size)
+        char_img = Image.new('RGBA', (80, 80), color=(255, 255, 255, 0)) 
+        char_draw = ImageDraw.Draw(char_img)
+        char_draw.text((10, 10), char, font=font, fill=(0, 0, 0))
+        char_img = char_img.rotate(angle, expand=1)
+        img.paste(char_img, (x_start, random.randint(30, 70)), char_img)  
+        x_start += char_font_size + random.randint(5, 15)
+    for _ in range(5):
+        start_point = (random.randint(0, 600), random.randint(0, 200))
+        end_point = (random.randint(0, 600), random.randint(0, 200))
+        d.line([start_point, end_point], fill=(0, 0, 0), width=2)
+    img = img.filter(ImageFilter.GaussianBlur(1))
+    buf = io.BytesIO()
+    img.save(buf, format='PNG')
+    buf.seek(0)
+    return buf

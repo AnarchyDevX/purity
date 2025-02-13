@@ -89,5 +89,6 @@ configuration = {
     "jail": {
         "active": False,
         "role": None
-    }
+    },
+    "ghostping": []
 }
