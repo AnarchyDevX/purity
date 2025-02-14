@@ -12,8 +12,11 @@
 ✅ Ghostping - make
 ✅ Giveaway - Remake / Upgrade
 ✅ Captcha - Make (functions + command)
-❌ Ticket - Panel + Config
+✅ Ticket - Panel + Config
+✅ Api Latency Updater
 ❌ Antispam - Antiraid
 ❌ Anti Mass Mention - Antiraid
 ❌ All Config - Panel
 ❌ Lock Url - Make
+❌ Status - Bot Serveur Main
+❌ Status rotate - Make

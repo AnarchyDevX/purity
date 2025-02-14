@@ -7,5 +7,6 @@
     ],
     "blacklist": [],
     "guildjoin": true, 
-    "lang": "fr.json"
+    "lang": "fr.json",
+    "apichannel": 1339783428316463105
 }

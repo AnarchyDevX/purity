@@ -1,8 +1,7 @@
 import json
 from discord.ext import commands
-import discord
-import os
 from functions.functions import *
+import discord
 from core.embedBuilder import embedBuilder
 from models.configuration import configuration 
 
