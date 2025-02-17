@@ -20,3 +20,5 @@
 ❌ Lock Url - Make
 ❌ Status - Bot Serveur Main
 ❌ Status rotate - Make
+❌ Compteurs - Panel + Events + Json
+❌ Backup - Crée, Delete, Register
