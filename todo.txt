@@ -14,11 +14,10 @@
 ✅ Captcha - Make (functions + command)
 ✅ Ticket - Panel + Config
 ✅ Api Latency Updater
+✅ Status rotate - Make
 ❌ Antispam - Antiraid
 ❌ Anti Mass Mention - Antiraid
-❌ All Config - Panel
 ❌ Lock Url - Make
 ❌ Status - Bot Serveur Main
-❌ Status rotate - Make
 ❌ Compteurs - Panel + Events + Json
 ❌ Backup - Crée, Delete, Register

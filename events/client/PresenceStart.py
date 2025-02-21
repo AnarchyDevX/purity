@@ -7,7 +7,7 @@ class PresenceStart(commands.Cog):
         self.bot = bot
         self.statusRotator.start()
 
-    @tasks.loop(minutes=35)
+    @tasks.loop(seconds=35)
     async def statusRotator(self):
         await self.bot.wait_until_ready()
         await self.bot.change_presence(activity=discord.activity.Streaming(name=f"{len(self.bot.guilds)} servers", url="https://twitch.tv/ivyenlive"))

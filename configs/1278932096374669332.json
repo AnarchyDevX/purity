@@ -90,9 +90,6 @@
         "active": false,
         "role": null
     },
-    "ghostping": [
-        1322616404553236563,
-        1278932250087657487,
-        1300941717821853737
-    ]
+    "ghostping": [],
+    "compteurs": {}
 }
