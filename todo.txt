@@ -15,9 +15,11 @@
 ✅ Ticket - Panel + Config
 ✅ Api Latency Updater
 ✅ Status rotate - Make
+✅ Compteurs - Panel + Events + Json
+❌ Ajout whitelist / ownerlist by role
 ❌ Antispam - Antiraid
 ❌ Anti Mass Mention - Antiraid
 ❌ Lock Url - Make
 ❌ Status - Bot Serveur Main
-❌ Compteurs - Panel + Events + Json
+❌ Persistent View - Role React
 ❌ Backup - Crée, Delete, Register

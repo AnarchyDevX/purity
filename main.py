@@ -1,4 +1,4 @@
-# Developed by scarlxrd
+# Developed by scarlxrd and okis
 import discord
 from core._colors import Colors
 from discord.ext import commands
