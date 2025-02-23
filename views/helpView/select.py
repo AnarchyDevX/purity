@@ -19,7 +19,8 @@ class selectHelp(Select):
             discord.SelectOption(label="Logs", value="logs", emoji="📂"),
             discord.SelectOption(label="Modération", value="mods", emoji="🔨"),
             discord.SelectOption(label="Utilitaire", value="utils", emoji="✨"),
-            discord.SelectOption(label="Vocal", value="voice", emoji="🔊")
+            discord.SelectOption(label="Vocal", value="voice", emoji="🔊"),
+            discord.SelectOption(label="Backup", value="backup", emoji="🧱")
         ]
         super().__init__(
             placeholder="Choisissez une option",
@@ -317,6 +318,10 @@ class selectHelp(Select):
                         "`/serveur-invite`": (
                             "*Crée et afficher une invitation du serveur*\n-# /serveur-invite [salon]",
                             False
+                        ),
+                        "`/snipe`": (
+                            "*Afficher le dernier message supprimé ou modifié dans un salon spécifique*\n-# /snipe [action] (salon)",
+                            False
                         )
                     }
                 )
@@ -352,7 +357,7 @@ class selectHelp(Select):
                             False
                         ),
                         "`/voice-afk`": (
-                            "**Déplacer un membre dans le salon afk du serveur\n-# /voice-afk [membre]", 
+                            "*Déplacer un membre dans le salon afk du serveur*\n-# /voice-afk [membre]", 
                             False
                         ),
                         "`/voice-lock-all`": (
@@ -363,6 +368,23 @@ class selectHelp(Select):
                             "*Déverouiller tout les salon vocaux du serveur*",
                             False
                         )
+                    }
+                )
+            case "backup": 
+                embed = embedBuilder(
+                    fields={
+                        "`/backup-create`": (
+                            "*Crée une sauvegarde de la configuration d'un serveur*\n-# /backup-create [nom]",
+                            False
+                        ),
+                        "`/backup-list`": (
+                            "*Afficher la liste des backups enregistrée*",
+                            False
+                        ),
+                        "`/backup-load`": (
+                            "*Charger une backup dans votre serveur*\n-# /backup-load [nom]",
+                            False
+                        ),
                     }
                 )
             case "home":

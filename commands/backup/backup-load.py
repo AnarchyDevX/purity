@@ -68,13 +68,13 @@ class BackupLoad(commands.Cog):
         for role in roles:
             try:
                 await role.delete()
-            except discord.Forbidden:
+            except Exception:
                 continue
 
         for channel in interaction.guild.channels:
             try:
                 await channel.delete()
-            except discord.Forbidden:
+            except Exception:
                 continue        
 
         role_map = await self.create_roles(interaction.guild, backup['roles'])
@@ -95,7 +95,7 @@ class BackupLoad(commands.Cog):
                     permissions=discord.Permissions(permissions=everyone_data['permission'])
                 )
                 role_map['@everyone'] = guild.default_role
-            except discord.Forbidden:
+            except Exception:
                 pass
         
         for role_id, role_data in sorted_roles:
@@ -107,7 +107,7 @@ class BackupLoad(commands.Cog):
                         colour=discord.Colour(int(role_data['color'], 16))
                     )
                     role_map[role_data['name']] = role
-                except discord.Forbidden:
+                except Exception:
                     continue
                 
         return role_map

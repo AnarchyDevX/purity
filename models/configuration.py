@@ -33,6 +33,7 @@ configuration = {
         "antibot": False,
         "antilien": False,
         "badwords": False,
+        "antimassjoin": False,
         "channels": {
             "create": False,
             "edit": False,
@@ -91,5 +92,15 @@ configuration = {
         "role": None
     },
     "ghostping": [],
-    "compteurs": {}
+    "compteurs": {},
+    "antispam": {
+        "message": {
+            "timeout": 1000,
+            "active": False,
+        },
+        "mentions": {
+            "timeout": 1000,
+            "active": False
+        }
+    }
 }

@@ -16,7 +16,7 @@ class backupList(commands.Cog):
         nameList = [name.split(".")[0] for name in os.listdir("./backups")]
         embed = embedBuilder(
             title="`📜`・Liste des backups",
-            description="\n\n".join('``' + name + '`' for name in nameList),
+            description="\n\n".join('`' + name + '`' for name in nameList),
             color=embed_color(),
             footer=footer()
         )

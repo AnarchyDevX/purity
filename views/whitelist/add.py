@@ -29,31 +29,25 @@ class whitelistAddButton(Button):
         try:
             await interaction.response.send_message("Merci de mentionner le membre que vous voulez ajouter dans la whitelist.", ephemeral=True)
             message: discord.Message = await self.bot.wait_for("message", check=check, timeout=30.0)
-            member: discord.Member = message.mentions[0]
-            if member:
-                if member not in whitelist:
-                    whitelist.append(member.id)
-                    json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
-                    await message.delete()
-                    formatted = [f'<@{memberId}> `{memberId}`' for memberId in whitelist]
-                    embed = embedBuilder(
-                        title="`📜`・Whitelist",
-                        description='\n'.join(formatted),
-                        color=embed_color(),
-                        footer=footer()
-                    )
-                    view = View(timeout=None)
-                    view.add_item(whitelistAddButton(self.bot, self.userId))
-                    view.add_item(whitelistRemoveButton(self.bot, self.userId))
-                    await interaction.followup.edit_message(message_id=interaction.message.id, embed=embed, view=view)
-                else:
-                    await message.delete()
-                    await err_embed(
-                        interaction,
-                        title="Whitelist",
-                        description=f"{member.mention} est déjà dans la whitelist.",
-                        followup=True
-                    )
+            members: list[discord.Member] = message.mentions
+            if members:
+                for member in members:
+                    if member.id not in whitelist:
+                        whitelist.append(member.id)
+
+                json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+                await message.delete()
+                formatted = [f'<@{memberId}> `{memberId}`' for memberId in whitelist]
+                embed = embedBuilder(
+                    title="`📜`・Whitelist",
+                    description='\n'.join(formatted),
+                    color=embed_color(),
+                    footer=footer()
+                )
+                view = View(timeout=None)
+                view.add_item(whitelistAddButton(self.bot, self.userId))
+                view.add_item(whitelistRemoveButton(self.bot, self.userId))
+                await interaction.followup.edit_message(message_id=interaction.message.id, embed=embed, view=view)
 
         except asyncio.TimeoutError:
             return await interaction.followup.send("Vous avez dépasser le delai maximum.", ephemeral=True)

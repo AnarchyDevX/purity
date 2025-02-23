@@ -91,5 +91,15 @@
         "role": null
     },
     "ghostping": [],
-    "compteurs": {}
+    "compteurs": {},
+    "antispam": {
+        "message": {
+            "active": false,
+            "timeout": 10
+        },
+        "mentions": {
+            "active": false,
+            "timeout": 10
+        }
+    }
 }

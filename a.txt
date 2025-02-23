@@ -1,0 +1,50 @@
+db (
+    perm1: {
+        commands: [
+            ...
+        ],
+        users [
+            ...
+        ]
+    },
+    perm12: {
+        commands: [
+            ...
+        ],
+        users [
+            ...
+        ]
+    },
+    perm13: {
+        commands: [
+            ...
+        ],
+        users [
+            ...
+        ]
+    },
+    perm14: {
+        commands: [
+            ...
+        ],
+        users [
+            ...
+        ]
+    },
+    perm15: {
+        commands: [
+            ...
+        ],
+        users [
+            ...
+        ]
+    },
+    permowner: {
+        commands: [
+            ...
+        ],
+        users [
+            ...
+        ]
+    }
+)

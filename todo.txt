@@ -16,10 +16,12 @@
 ✅ Api Latency Updater
 ✅ Status rotate - Make
 ✅ Compteurs - Panel + Events + Json
-❌ Ajout whitelist / ownerlist by role
+✅ Backup - Crée, Delete, Register
+✅ Add Backup - Help
+✅ Status - Bot Serveur Main
+✅ Ajout whitelist / ownerlist - Multiple mention
+❌ Invite Traker - Make
 ❌ Antispam - Antiraid
 ❌ Anti Mass Mention - Antiraid
 ❌ Lock Url - Make
-❌ Status - Bot Serveur Main
 ❌ Persistent View - Role React
-❌ Backup - Crée, Delete, Register

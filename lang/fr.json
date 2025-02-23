@@ -21,5 +21,12 @@
     "logs.raids": "Raids",
     "logs.voice": "Vocal",
     "logs.ranks": "Ranks",
-    "logs.joinleave": "Join & Leave"
+    "logs.joinleave": "Join & Leave",
+    "antispam.title": "Antispam",
+    "antispam.message": "Message",
+    "antispam.activer": "activé",
+    "antispam.desactiver": "désactivé",
+    "antispam.massmention": "Mass-mention",
+    "antispam.messagelimit": "Limite de messages",
+    "antispam.mentionlimit": "Limite de mention"
 }

@@ -1,1 +1,2 @@
 remttre le api udpdate hors comment
+J'ai commencer l'antispam et l'antimassmention

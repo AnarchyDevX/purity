@@ -1,6 +1,14 @@
 {
-    "ownerlist": [],
-    "whitelist": [],
+    "ownerlist": [
+        940965110443302974,
+        1341566966183497728,
+        1341085528346329239
+    ],
+    "whitelist": [
+        940965110443302974,
+        1341566966183497728,
+        1320831560890585119
+    ],
     "badwords": [],
     "lockedvoice": [],
     "logs": {
@@ -91,5 +99,15 @@
         "role": null
     },
     "ghostping": [],
-    "compteurs": {}
+    "compteurs": {},
+    "antispam": {
+        "message": {
+            "active": false,
+            "timeout": 10
+        },
+        "mentions": {
+            "active": false,
+            "timeout": 10
+        }
+    }
 }

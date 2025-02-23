@@ -33,6 +33,9 @@
         "antibot": false,
         "antilien": false,
         "badwords": false,
+        "antispam": false,
+        "antimassmention": false,
+        "antimassjoin": false,
         "channels": {
             "create": false,
             "edit": false,
@@ -91,5 +94,15 @@
         "role": null
     },
     "ghostping": [],
-    "compteurs": {}
+    "compteurs": {},
+    "antispam": {
+        "message": {
+            "active": false,
+            "timeout": 10
+        },
+        "mentions": {
+            "active": false,
+            "timeout": 10
+        }
+    }
 }
