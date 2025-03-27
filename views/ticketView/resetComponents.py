@@ -22,6 +22,7 @@ class resetComponentTicket(Button):
         
         embed = interaction.message.embeds[0]
         embed.clear_fields()
+        self.optionsList = []
         
         from views.ticketView.embedAddSelect import embedAddSelect
         from views.ticketView.addComponent import addComponentTicket

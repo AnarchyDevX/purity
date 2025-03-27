@@ -20,8 +20,10 @@
 ✅ Add Backup - Help
 ✅ Status - Bot Serveur Main
 ✅ Ajout whitelist / ownerlist - Multiple mention
+✅ Ping - edit / discord api
 ❌ Invite Traker - Make
 ❌ Antispam - Antiraid
-❌ Anti Mass Mention - Antiraid
+❌ Anti Mass Mention - Antiraidw
 ❌ Lock Url - Make
 ❌ Persistent View - Role React
+❌ Langs - A finir

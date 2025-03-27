@@ -57,3 +57,9 @@
 [LOGS] - [05:28:43] -  [ERROR]  - [scarlxrd_zk] - [940965110443302974] - 403 Forbidden (error code: 50013): Missing Permissions 
 [LOGS] - [05:28:48] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - role-add 
 [LOGS] - [05:28:53] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - role-add 
+[LOGS] - [11:56:37] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - embed 
+[LOGS] - [11:56:42] -  [VIEWS]  - [scarlxrd_zk] - [940965110443302974] - select embed edit 
+[LOGS] - [11:57:11] -  [VIEWS]  - [scarlxrd_zk] - [940965110443302974] - select embed reset 
+[LOGS] - [11:58:40] - [COMMAND] - [scarlxrd_zk] - [940965110443302974] - embed 
+[LOGS] - [11:58:43] -  [VIEWS]  - [scarlxrd_zk] - [940965110443302974] - select embed edit 
+[LOGS] - [11:58:49] -  [VIEWS]  - [scarlxrd_zk] - [940965110443302974] - select embed reset 

@@ -10,9 +10,7 @@ class guilds(commands.Cog):
     
     @app_commands.command(name="serveur-list", description="Afficher tout les serveurs ou le bot est présent")
     async def allGuilds(self, interaction: discord.Interaction):
-        check: bool = await check_perms(interaction, 3)
-        if check == False:
-            return
+        if not await check_perms(interaction, 3): return
         
         guildList: list[str] = [
             f'> `🛠️`・**Nom:** `{guild.name}`\n'

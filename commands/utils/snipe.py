@@ -90,6 +90,8 @@ class snipeDelete(commands.Cog):
                     }
                 )
                 await interaction.response.send_message(embed=embed)
+        else:
+            await interaction.response.send_message("Il n'y as aucun message modifier / supprimé dans ce salon.", ephemeral=True)
             
 async def setup(bot):
     await bot.add_cog(snipeDelete(bot))

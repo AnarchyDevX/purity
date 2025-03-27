@@ -17,6 +17,7 @@ class componentSelect(Select):
             SelectOption(label="Auteur (text)", value="author-text", description="Modifier l'auteur de l'embed", emoji="✨"),
             SelectOption(label="Auteur (icon)", value="author-url", description="Modifier l'icon de l'auteur de l'embed", emoji="🪄"),
             SelectOption(label="Image", value="image", description="Modifier l'image de l'embed", emoji="📸"),
+            SelectOption(label="Thumbnail", value="thumbnail", description="Modifier le thumbnail de l'embed", emoji="🖼️"),
             SelectOption(label="Add Field", value="add-field", description="Ajouter un field a l'embed", emoji="➕"),
             SelectOption(label="Lien", value="link", description="Ajouter un lien a l'embed", emoji="🔗")
         ]
@@ -65,6 +66,8 @@ class componentSelect(Select):
                 embed.url = newElement
             if value == "image-url":
                 embed.set_image(url=newElement)
+            if value == "thumbnail":
+                embed.set_thumbnail(url=newElement)
             if value == "add-field":
                 await interaction.followup.send("***Description du field**, doit faire maximum 4000 caractères.*", ephemeral=True)
                 secondMsg = await self.bot.wait_for(f"message", check=check, timeout=60.0)
@@ -160,4 +163,11 @@ class componentSelect(Select):
                     "Lien de l'embed",
                     maxChar=256,
                     value="url"
+                )
+            case 'thumbnail':
+                await self.handler_interaction(
+                    interaction,
+                    "Thumbnail de l'embed",
+                    maxChar=4000,
+                    value="thumbnail"
                 )
