@@ -17,9 +17,17 @@ class greetMember(commands.Cog):
         if guildJSON['greeting']['mention'] == True:
             mention = member.mention 
         if guildJSON['greeting']['type'] == "embed":
+            message: str = guildJSON['greeting']['message']
+            if "{mention}" in message:
+                message = message.replace("{mention}", member.mention)
+            if "{name}" in message:
+                message = message.replace("{name}", member.name)
+            if "{members}" in message:
+                message = message.replace("{members}", str(member.guild.member_count))
+            if "{date}" in message:
+                message = message.replace("{date}", format_date("all", member.joined_at))
             embed = embedBuilder(
-                title=f"`✨`・Bienvenue {member.name}",
-                description=f"*{mention} vient de rejoindre le serveur ! Nous sommes maintenant {member.guild.member_count} sur le serveur.*",
+                description=message,
                 color=embed_color(),
                 footer=footer()
             )

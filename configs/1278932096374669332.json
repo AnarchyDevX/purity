@@ -38,11 +38,11 @@
         }
     },
     "antiraid": {
-        "antibot": false,
+        "antibot": true,
         "antilien": false,
-        "badwords": false,
+        "badwords": true,
         "channels": {
-            "create": false,
+            "create": true,
             "edit": false,
             "delete": false
         },
@@ -52,8 +52,8 @@
             "delete": false
         },
         "rank": {
-            "up": false,
-            "down": false
+            "up": true,
+            "down": true
         },
         "webhook": false
     },
@@ -80,10 +80,11 @@
     },
     "onlypic": [],
     "greeting": {
-        "active": false,
-        "type": "message",
-        "channel": null,
-        "mention": false
+        "active": true,
+        "type": "embed",
+        "channel": 1278932250087657484,
+        "mention": false,
+        "message": ""
     },
     "greetmsg": {
         "alive": false,
@@ -109,5 +110,8 @@
             "active": false,
             "timeout": 10
         }
+    },
+    "channel": {
+        "create": true
     }
 }

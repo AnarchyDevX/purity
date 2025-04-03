@@ -1,20 +1,33 @@
 import discord
-from discord import app_commands
-from discord.ext import commands
+from discord.ui import Select, View
 from functions.functions import *
 from core.embedBuilder import embedBuilder
-from views.antiraidView.AntiraidSelect import AntiraidSelect
 
-class antiraidPanel(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
+class AntiraidSelect(Select):
+    def __init__(self, userId, modulesList: list[dict[str, str, str]]):
+        self.userId = userId
+        options = [
+            discord.SelectOption(label=element["name"], value=element['value'], emoji=f"✅" if element["module"] == True else "❌") for element in modulesList
+        ]
+        super().__init__(
+            options=options, min_values=1, max_values=1, placeholder="Selectionner une option."
+        )
 
-    @app_commands.command(name="antiraid-panel", description="Afficher la configuration de l'antiraid")
-    async def antiraidPanel(self, interaction: discord.Interaction):
-        if not await check_perms(interaction, 2):
-            return
-
+    async def callback(self, interaction: discord.Interaction):
+        if interaction.user.id != self.userId:
+            return await unauthorized(interaction)
+        
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
+        keys = self.values[0].split(".") 
+
+        current = guildJSON
+        for key in keys[:-1]:
+            if key not in current:
+                current[key] = {} 
+            current = current[key]  
+        last_key = keys[-1]
+        current[last_key] = not current[last_key]
+        json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
         antiraid = guildJSON["antiraid"]
         embed: embedBuilder = embedBuilder(
             title="`🛡️`・Antiraid",
@@ -57,7 +70,6 @@ class antiraidPanel(commands.Cog):
             }
         )
 
-        view = discord.ui.View(timeout=None)
         modulesList = [
             {"module": antiraid['antibot'], 'name': "Antibot", "value": "antiraid.antibot"},
             {"module": antiraid['antilien'], 'name': "Antilien", "value": "antiraid.antilien"},
@@ -73,9 +85,10 @@ class antiraidPanel(commands.Cog):
             {"module": antiraid['webhook'], 'name': "Webhook", "value": "antiraid.webhook"},
         ]
         
-        view.add_item(AntiraidSelect(interaction.user.id, modulesList))
-        await interaction.response.send_message(embed=embed, view=view)
 
-
-async def setup(bot):
-    await bot.add_cog(antiraidPanel(bot))
+        view = View(timeout=None)
+        view.add_item(AntiraidSelect(
+            self.userId,
+            modulesList
+        ))
+        await interaction.response.edit_message(embed=embed, view=view)

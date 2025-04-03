@@ -8,8 +8,7 @@ from views.joinMessage.enable import joinMessageEnable
 from views.joinMessage.embedEnable import EmbedEnableButton
 from views.joinMessage.embedDisable import EmbedDisableButton
 from views.joinMessage.channelConfig import channelConfigButton
-from views.joinMessage.mentionEnable import MentionEnableButton
-from views.joinMessage.mentionDisable import MentionDisableButton
+from views.joinMessage.messageConfig import MessageConfig
 
 class joinMessagePanel(commands.Cog):
     def __init__(self, bot):
@@ -48,7 +47,7 @@ class joinMessagePanel(commands.Cog):
         view.add_item(joinMessageDisable(interaction.user.id, self.bot) if greeting['active'] == True else joinMessageEnable(interaction.user.id, self.bot))
         view.add_item(EmbedEnableButton(interaction.user.id, self.bot) if greeting['type'] == "message" else EmbedDisableButton(interaction.user.id, self.bot))
         view.add_item(channelConfigButton(interaction.user.id, self.bot))
-        view.add_item(MentionEnableButton(interaction.user.id, self.bot) if greeting['mention'] == False else MentionDisableButton(interaction.user.id, self.bot))
+        view.add_item(MessageConfig(interaction.user.id, self.bot))
         await interaction.response.send_message(embed=embed, view=view)
 
 async def setup(bot):

@@ -75,7 +75,8 @@
         "active": false,
         "type": "message",
         "channel": null,
-        "mention": false
+        "mention": false,
+        "message": ""
     },
     "greetmsg": {
         "alive": false,

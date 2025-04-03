@@ -22,8 +22,7 @@ class channelConfigButton(Button):
         from views.joinMessage.enable import joinMessageEnable
         from views.joinMessage.embedEnable import EmbedEnableButton
         from views.joinMessage.embedDisable import EmbedDisableButton
-        from views.joinMessage.mentionEnable import MentionEnableButton
-        from views.joinMessage.mentionDisable import MentionDisableButton
+        from views.joinMessage.messageConfig import MessageConfig
 
         def check(message):
             return message.author == interaction.user and len(message.channel_mentions) > 0
@@ -64,7 +63,7 @@ class channelConfigButton(Button):
             view.add_item(joinMessageDisable(self.userId, self.bot) if greeting['active'] == True else joinMessageEnable(self.userId, self.bot))
             view.add_item(EmbedEnableButton(self.userId, self.bot) if greeting['type'] == "message" else EmbedDisableButton(self.userId, self.bot))
             view.add_item(channelConfigButton(self.userId, self.bot))
-            view.add_item(MentionEnableButton(self.userId, self.bot) if greeting['mention'] == False else MentionDisableButton(self.userId, self.bot))
+            view.add_item(MessageConfig(self.userId, self.bot))
             await interaction.followup.edit_message(message_id=interaction.message.id, embed=embed, view=view)
             return await message.delete()
 

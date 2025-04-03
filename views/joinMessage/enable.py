@@ -21,8 +21,7 @@ class joinMessageEnable(Button):
         from views.joinMessage.embedEnable import EmbedEnableButton
         from views.joinMessage.embedDisable import EmbedDisableButton  
         from views.joinMessage.channelConfig import channelConfigButton  
-        from views.joinMessage.mentionEnable import MentionEnableButton
-        from views.joinMessage.mentionDisable import MentionDisableButton
+        from views.joinMessage.messageConfig import MessageConfig
             
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         guildJSON["greeting"]['active'] = True
@@ -55,6 +54,6 @@ class joinMessageEnable(Button):
         view.add_item(joinMessageDisable(self.userId, self.bot))
         view.add_item(EmbedEnableButton(self.userId, self.bot) if greeting['type'] == "message" else EmbedDisableButton(self.userId, self.bot))
         view.add_item(channelConfigButton(self.userId, self.bot))
-        view.add_item(MentionEnableButton(self.userId, self.bot) if greeting['mention'] == False else MentionDisableButton(self.userId, self.bot))
-
+        view.add_item(MessageConfig(self.userId, self.bot)) 
+        
         return await interaction.response.edit_message(embed=embed, view=view)
