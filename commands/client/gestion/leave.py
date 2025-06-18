@@ -8,7 +8,7 @@ class leaveGuild(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot: commands.Bot = bot
     
-    @app_commands.command(name="serveur-leave", description="Quitté un serveur")
+    @app_commands.command(name="serveur-leave", description="Quitter un serveur")
     async def guildleave(self, interaction: discord.Interaction, guild: str):
         check: bool = await check_perms(interaction, 3)
         if check == False:

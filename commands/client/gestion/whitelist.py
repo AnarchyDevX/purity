@@ -10,7 +10,7 @@ class whitelistList(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
 
-    @app_commands.command(name="whitelist-panel", description="Gerer la whitelist.")
+    @app_commands.command(name="whitelist-panel", description="Gêrer la whitelist.")
     async def ownerlist(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 2):
             return

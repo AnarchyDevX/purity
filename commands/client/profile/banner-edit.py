@@ -9,7 +9,7 @@ class changeClientBanner(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot: commands.Bot = bot
 
-    @app_commands.command(name="banner-edit", description="Changer la banniere du bot")
+    @app_commands.command(name="banner-edit", description="Changer la bannière du bot")
     async def botEditBanner(self, interaction: discord.Interaction, url :str):
         check: bool = await check_perms(interaction, 3)
         if check == False:

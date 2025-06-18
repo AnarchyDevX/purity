@@ -10,7 +10,7 @@ class ownerList(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
 
-    @app_commands.command(name="owner-panel", description="Gerer les owners bot")
+    @app_commands.command(name="owner-panel", description="Gêrer les owners bot")
     async def ownerlist(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 3):
             return

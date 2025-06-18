@@ -8,7 +8,7 @@ class guilds(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:
         self.bot: commands.Bot = bot
     
-    @app_commands.command(name="serveur-list", description="Afficher tout les serveurs ou le bot est présent")
+    @app_commands.command(name="serveur-list", description="Afficher tous les serveurs où le bot est présent")
     async def allGuilds(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 3): return
         

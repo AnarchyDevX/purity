@@ -10,7 +10,7 @@ class backupCreate(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
     
-    @app_commands.command(name="backup-create", description="Crée une backup d'un serveur et l'enrigster dans le bot")
+    @app_commands.command(name="backup-create", description="Crée une backup d'un serveur et l'enregistrer dans le bot")
     async def backupCreate(self, interaction: discord.Interaction, name: str):
         if not await check_perms(interaction, 3): return
 
@@ -82,7 +82,7 @@ class backupCreate(commands.Cog):
         json.dump(backupJSON, open(f"./backups/{name}.json", 'w'), indent=4)
         embed = embedBuilder(
             title="`✅`・Backup crée",
-            description=f"*La backup `{name}` à été crée et enregistrée avec succès.*",
+            description=f"*La backup `{name}` à été créé et enregistrée avec succès.*",
             color=embed_color(),
             footer=footer()
         )
