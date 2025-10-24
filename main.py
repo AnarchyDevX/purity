@@ -1,4 +1,7 @@
-# Developed by scarlxrd and okis
+# Developed by Celentroft
+# Github: https://github.com/Celentroft
+# Telegram: https://t.me/scarlxrd_1337
+
 import discord
 from core._colors import Colors
 from discord.ext import commands
@@ -8,7 +11,7 @@ class MyBot(commands.Bot):
     def __init__(self) -> None:
         self.C = Colors()
         super().__init__(
-            command_prefix="noprefix", # you can define a prefix using config['prefix'] (also add it into config.json)
+            command_prefix="dontneedaprefix",
             intents=discord.Intents.all(),
             help_command=None
         )

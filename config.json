@@ -1,12 +1,9 @@
 {
-    "token": "MTMwMzE5MzkxMzg4Mzg4NTU2OA.GDMzTv.U1LESEmw4qTD6F9axGmOKbBneKuXAbme3iT_UI",
-    "color": "dda0dd",
-    "buyer": [
-        940965110443302974,
-        1279783854089048228
-    ],
+    "token": "token",
+    "color": "color",
+    "buyer": [],
     "blacklist": [],
     "guildjoin": true, 
     "lang": "fr.json",
-    "apichannel": 1339783428316463105
+    "apichannel": null
 }

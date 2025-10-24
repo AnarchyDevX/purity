@@ -31,7 +31,7 @@ class greetMeassageConfig(commands.Cog):
                 color=embed_color(),
                 footer=footer()
             )
-            return await interaction.response.send_message(embed=embed)
+            return await interaction.response.send_message(embed=embed)  
         
 async def setup(bot):
     await bot.add_cog(greetMeassageConfig(bot))

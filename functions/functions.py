@@ -2,11 +2,9 @@ import io
 import json
 import random
 import discord
-import yt_dlp as youtube_dl
 from typing import Dict, Any
 from datetime import datetime
 from core.embedBuilder import embedBuilder
-from googleapiclient.discovery import build
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 def load_json() -> Dict[str, Any]:
@@ -27,7 +25,7 @@ def load_json_file(filePath: str) -> Dict[str, Any]:
 
 async def unauthorized(interaction: discord.Interaction) -> None:
     embed: embedBuilder = embedBuilder(
-        title="`❌`・Commade non autorisée",
+        title="`❌`・Commande non autorisée",
         description="*Vous n'avez pas la permission d'utiliser cette commande.*",
         color=embed_color(),
         footer=footer()
