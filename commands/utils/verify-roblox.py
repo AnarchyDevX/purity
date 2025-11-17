@@ -7,54 +7,11 @@ from discord.ext import commands
 from discord import app_commands
 from functions.functions import *
 from core.embedBuilder import embedBuilder
-from web_server import get_verification_queue
 
 class robloxVerify(commands.Cog):
     def __init__(self, bot):
         self.bot: commands.Bot = bot
         self.verification_codes = {}  # Stocke les codes: {code: {roblox_username, timestamp, guild_id}}
-        self._verification_task = None
-    
-    async def cog_load(self):
-        """Démarrer la tâche de monitoring de la queue de vérification"""
-        self._verification_task = asyncio.create_task(self._monitor_verification_queue())
-    
-    async def cog_unload(self):
-        """Arrêter la tâche de monitoring"""
-        if self._verification_task:
-            self._verification_task.cancel()
-    
-    async def _monitor_verification_queue(self):
-        """Monitorer la queue de vérification du serveur web"""
-        queue_obj = get_verification_queue()
-        while True:
-            try:
-                # Vérifier toutes les 0.5 secondes s'il y a des codes en attente
-                await asyncio.sleep(0.5)
-                
-                # Traiter tous les codes disponibles dans la queue
-                while not queue_obj.empty():
-                    try:
-                        verification_data = queue_obj.get_nowait()
-                        code = verification_data['code'].upper()
-                        username = verification_data['username']
-                        
-                        # Enregistrer le code
-                        self.verification_codes[code] = {
-                            'roblox_username': username,
-                            'timestamp': verification_data['timestamp'],
-                            'guild_id': None  # Sera déterminé lors de la vérification Discord
-                        }
-                        
-                        print(f"[VERIFICATION] Code créé via web: {code} pour {username}")
-                    except Exception as e:
-                        print(f"[VERIFICATION] Erreur lors du traitement: {e}")
-                        
-            except asyncio.CancelledError:
-                break
-            except Exception as e:
-                print(f"[VERIFICATION] Erreur dans le monitoring: {e}")
-                await asyncio.sleep(1)
 
     @app_commands.command(name="verify", description="Vérifier votre compte Roblox")
     async def verify(self, interaction: discord.Interaction, roblox_username: str, code: str):

@@ -9,12 +9,8 @@ import sys
 from core._colors import Colors
 from discord.ext import commands
 from functions.functions import load_json
-from web_server import run_server
 
-# Lancer le serveur web pour la vérification Roblox
 C = Colors()
-print(f"{C.YELLOW}[STARTING] {C.WHITE}Starting web server...")
-web_thread = run_server()
 
 class MyBot(commands.Bot):
     def __init__(self) -> None:
