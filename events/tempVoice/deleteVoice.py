@@ -11,12 +11,18 @@ class deleteVoice(commands.Cog):
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         if before.channel != None:
             guildJSON = load_json_file(f'./configs/{member.guild.id}.json')
-            if not guildJSON or not guildJSON.get('configuration') or not guildJSON['configuration'].get('tempvoices') or not guildJSON['configuration']['tempvoices'].get('active'):
+            if not guildJSON:
                 return
-            if before.channel.id in guildJSON['configuration']['tempvoices']['active'] and len(before.channel.members) == 0:
+            config = guildJSON.get('configuration')
+            if not config or not config.get('tempvoices'):
+                return
+            tempvoices = config['tempvoices']
+            if not tempvoices.get('active'):
+                return
+            if before.channel.id in tempvoices['active'] and len(before.channel.members) == 0:
                 try:
                     await before.channel.delete(reason="Tempvoice ended")
-                    activeList = guildJSON['configuration']['tempvoices']['active']
+                    activeList = tempvoices['active']
                     activeList.remove(before.channel.id)
                     with open(f'./configs/{member.guild.id}.json', 'w', encoding='utf-8') as f:
                         json.dump(guildJSON, f, indent=4)

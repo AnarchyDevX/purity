@@ -18,11 +18,17 @@ class createVoice(commands.Cog):
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         if after.channel != None:
             guildJSON = load_json_file(f'./configs/{member.guild.id}.json')
-            if not guildJSON or not guildJSON.get('configuration') or not guildJSON['configuration'].get('tempvoices') or not guildJSON['configuration']['tempvoices'].get('configs'):
+            if not guildJSON:
                 return
-            for element in guildJSON['configuration']['tempvoices']['configs']:
+            config = guildJSON.get('configuration')
+            if not config or not config.get('tempvoices'):
+                return
+            tempvoices = config['tempvoices']
+            if not tempvoices.get('configs'):
+                return
+            for element in tempvoices['configs']:
                 if after.channel.id == int(element):
-                    category = discord.utils.get(member.guild.categories, id=guildJSON['configuration']['tempvoices']['configs'][element]['category'])
+                    category = discord.utils.get(member.guild.categories, id=tempvoices['configs'][element]['category'])
                     if category:
                         try:
                             toMoveChannel = await category.create_voice_channel(name=f"{member.name}")
@@ -49,7 +55,9 @@ class createVoice(commands.Cog):
 
                             await toMoveChannel.send(embed=embed, view=view, content=member.mention)
                             await member.move_to(toMoveChannel)
-                            activeList = guildJSON['configuration']['tempvoices']['active']
+                            if 'active' not in tempvoices:
+                                tempvoices['active'] = []
+                            activeList = tempvoices['active']
                             activeList.append(toMoveChannel.id)
                             with open(f'./configs/{member.guild.id}.json', 'w', encoding='utf-8') as f:
                                 json.dump(guildJSON, f, indent=4)

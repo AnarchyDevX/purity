@@ -9,9 +9,12 @@ class joinChecker(commands.Cog):
     @commands.Cog.listener()
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         guildJSON = load_json_file(f"./configs/{member.guild.id}.json")
+        if not guildJSON:
+            return
         if after.channel != None:
-            if member.id in guildJSON['ownerlist']: return
-            if after.channel.id in guildJSON['lockedvoice']:
+            if guildJSON.get('ownerlist') and member.id in guildJSON['ownerlist']:
+                return
+            if guildJSON.get('lockedvoice') and after.channel.id in guildJSON['lockedvoice']:
                 try:
                     await member.move_to(None)
                 except discord.Forbidden:
