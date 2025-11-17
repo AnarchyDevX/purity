@@ -1,3 +1,4 @@
+import json
 import discord
 from discord.ext import commands
 from functions.functions import *
@@ -10,6 +11,8 @@ class deleteVoice(commands.Cog):
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         if before.channel != None:
             guildJSON = load_json_file(f'./configs/{member.guild.id}.json')
+            if not guildJSON or not guildJSON.get('configuration') or not guildJSON['configuration'].get('tempvoices') or not guildJSON['configuration']['tempvoices'].get('active'):
+                return
             if before.channel.id in guildJSON['configuration']['tempvoices']['active'] and len(before.channel.members) == 0:
                 try:
                     await before.channel.delete(reason="Tempvoice ended")

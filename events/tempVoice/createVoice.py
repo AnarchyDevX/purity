@@ -18,6 +18,8 @@ class createVoice(commands.Cog):
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
         if after.channel != None:
             guildJSON = load_json_file(f'./configs/{member.guild.id}.json')
+            if not guildJSON or not guildJSON.get('configuration') or not guildJSON['configuration'].get('tempvoices') or not guildJSON['configuration']['tempvoices'].get('configs'):
+                return
             for element in guildJSON['configuration']['tempvoices']['configs']:
                 if after.channel.id == int(element):
                     category = discord.utils.get(member.guild.categories, id=guildJSON['configuration']['tempvoices']['configs'][element]['category'])
