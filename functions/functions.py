@@ -44,7 +44,9 @@ async def unauthorized(interaction: discord.Interaction) -> None:
 async def check_perms(interaction: discord.Interaction, number: int) -> bool:
     config: Dict[str, Any] = load_json()
     guildConfig = load_json_file(f"./configs/{interaction.guild.id}.json")
-    if guildConfig is None: return False  # Config n'existe pas
+    if guildConfig is None:
+        await unauthorized(interaction)
+        return False  # Config n'existe pas
     interactionUser: int = interaction.user.id
     isOwner: bool = interactionUser in guildConfig['ownerlist']
     isWhitelist: bool = interactionUser in guildConfig['whitelist']
