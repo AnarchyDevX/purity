@@ -20,7 +20,14 @@ class reactionAddRole(commands.Cog):
                         if role:
                             try:
                                 await payload.member.add_roles(role)
-                            except Exception as e:
+                            except discord.Forbidden:
+                                # Bot n'a pas les permissions
+                                return
+                            except discord.HTTPException:
+                                # Erreur Discord API
+                                return
+                            except discord.NotFound:
+                                # Membre ou rôle introuvable
                                 return
 
 async def setup(bot: commands.Bot):

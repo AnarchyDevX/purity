@@ -37,9 +37,10 @@ class MessageConfig(Button):
 
         try:
             message = await self.bot.wait_for("message", check=lambda m: m.author == interaction.user and m.channel == interaction.channel, timeout=30)
-            guildJSON = load_json_file(f"configs/{interaction.guild.id}.json")
+            guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
             guildJSON['greeting']['message'] = message.content
-            json.dump(guildJSON, open(f"configs/{interaction.guild.id}.json", "w"), indent=4)
+            with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                json.dump(guildJSON, f, indent=4)
             await interaction.followup.send("Message d'arrivée configuré avec succès", ephemeral=True)
             await message.delete()
 

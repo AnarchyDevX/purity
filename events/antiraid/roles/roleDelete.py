@@ -8,16 +8,28 @@ class guildRoleDeleteAntiraid(commands.Cog):
     
     @commands.Cog.listener()
     async def on_guild_role_delete(self, role: discord.Role):
+        if role.guild.id in getattr(self.bot, "_backup_loading_guilds", set()):
+            return
         config = load_json()
         guildJSON = load_json_file(f"./configs/{role.guild.id}.json")
+        if guildJSON is None: return  # Config n'existe pas
         if guildJSON['antiraid']['roles']['delete'] == True:
             async for entry in role.guild.audit_logs(limit=1, action=discord.AuditLogAction.role_delete):
                 if entry.target.id == role.id:
                     if entry.user.id == self.bot.user.id:
                         return 
                     if await check_id_perms(entry.user, entry.user.guild, 2): return
-                    try: await entry.user.ban(reason="Antiraid: Role Supprimé")
-                    except Exception: pass
+                    try:
+                        await entry.user.ban(reason="Antiraid: Role Supprimé")
+                    except discord.Forbidden:
+                        # Bot n'a pas les permissions
+                        pass
+                    except discord.HTTPException:
+                        # Erreur Discord API
+                        pass
+                    except discord.NotFound:
+                        # User déjà banni
+                        pass
                     try:
                         backrole = await role.guild.create_role(
                             name=role.name,
@@ -31,7 +43,15 @@ class guildRoleDeleteAntiraid(commands.Cog):
                         await backrole.edit(
                             position=role.position,
                         )
-                    except Exception: return
+                    except discord.Forbidden:
+                        # Bot n'a pas les permissions
+                        return
+                    except discord.HTTPException:
+                        # Erreur Discord API
+                        return
+                    except discord.NotFound:
+                        # Role déjà supprimé
+                        return
                     break
 
 async def setup(bot):

@@ -2,26 +2,35 @@ import io
 import json
 import random
 import discord
+import re
 from typing import Dict, Any
 from datetime import datetime
+from urllib.parse import urlparse
 from core.embedBuilder import embedBuilder
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 def load_json() -> Dict[str, Any]:
-    config: Dict[str, Any] = json.load(open("config.json", 'r'))
+    with open("config.json", 'r', encoding='utf-8') as f:
+        config: Dict[str, Any] = json.load(f)
     return config
 
 def embed_color() -> int:
     config: Dict[str, Any] = load_json()
-    return int(config['color'], 16)
+    color = config['color'].replace('#', '')  # Enlever le # si présent
+    return int(color, 16)
 
 def footer() -> str:
     now: str = datetime.now().strftime('%H:%M:%S')
-    return f"[{now}] - Purity Beta"
+    return f"[{now}] - Purity | Anarchy | 685552160594723015"
 
-def load_json_file(filePath: str) -> Dict[str, Any]:
-    file: Dict[str, Any] = json.load(open(filePath, 'r'))
-    return file
+def load_json_file(filePath: str) -> Dict[str, Any] | None:
+    try:
+        with open(filePath, 'r', encoding='utf-8') as f:
+            file: Dict[str, Any] = json.load(f)
+        return file
+    except FileNotFoundError:
+        # Fichier de config n'existe pas, retourner None
+        return None
 
 async def unauthorized(interaction: discord.Interaction) -> None:
     embed: embedBuilder = embedBuilder(
@@ -34,7 +43,8 @@ async def unauthorized(interaction: discord.Interaction) -> None:
 
 async def check_perms(interaction: discord.Interaction, number: int) -> bool:
     config: Dict[str, Any] = load_json()
-    guildConfig: Dict[str, Any] = json.load(open(f"./configs/{interaction.guild.id}.json", 'r'))
+    guildConfig = load_json_file(f"./configs/{interaction.guild.id}.json")
+    if guildConfig is None: return False  # Config n'existe pas
     interactionUser: int = interaction.user.id
     isOwner: bool = interactionUser in guildConfig['ownerlist']
     isWhitelist: bool = interactionUser in guildConfig['whitelist']
@@ -59,7 +69,7 @@ async def check_perms(interaction: discord.Interaction, number: int) -> bool:
 
 async def logs(content: str, logsTypes: int, interaction: discord.Interaction = None) -> None:
     now: str = datetime.now().strftime('%H:%M:%S')
-    with open("./logs/logs.log", "+a") as f:
+    with open("./logs/logs.log", "+a", encoding='utf-8') as f:
         if logsTypes == 1:
             f.write(f"[LOGS] - [{now}] - [COMMAND] - [{interaction.user.name}] - [{interaction.user.id}] - {content} ")
         if logsTypes == 2 and interaction == None:
@@ -69,7 +79,6 @@ async def logs(content: str, logsTypes: int, interaction: discord.Interaction = 
         if logsTypes == 4:
             f.write(f"[LOGS] - [{now}] -  [ERROR]  - [{interaction.user.name}] - [{interaction.user.id}] - {content} ")
         f.write("\n")
-        f.close()
 
 def time_now(choice: bool = None) -> str:
     if choice == None:
@@ -82,7 +91,9 @@ def time_now(choice: bool = None) -> str:
             return f"{nowYear} à {nowHour}"
 
 async def check_if_logs(guild: discord.Guild, logsType: str) -> (discord.abc.GuildChannel | None):
-    guildJSON: Dict[str, Any] = json.load(open(f"./configs/{guild.id}.json", 'r'))
+    guildJSON = load_json_file(f"./configs/{guild.id}.json")
+    if guildJSON is None:
+        return None  # Config n'existe pas
     logsConfig: Any = guildJSON['logs'][logsType]
     if logsConfig['alive'] == True:
         if logsConfig['channel'] != None:
@@ -96,7 +107,9 @@ async def check_if_logs(guild: discord.Guild, logsType: str) -> (discord.abc.Gui
     else:
         return None
         
-def format_date(choice: str, toFormat: datetime) -> (str | None):
+def format_date(choice: str, toFormat: datetime | None) -> (str | None):
+    if toFormat is None:
+        return None
     if choice == "hour":
         return toFormat.strftime("%H:%M:%S")
     elif choice == "year":
@@ -126,7 +139,8 @@ async def err_embed(interaction: discord.Interaction, title: str, description: s
 
 async def check_id_perms(member: discord.Member | discord.User, guild: discord.Guild, number: int) -> bool:
     config: Dict[str, Any] = load_json()
-    guildConfig: Dict[str, Any] = json.load(open(f"./configs/{guild.id}.json", 'r'))
+    guildConfig = load_json_file(f"./configs/{guild.id}.json")
+    if guildConfig is None: return False  # Config n'existe pas
     memberId: int = member.id
     isOwner: bool = memberId in guildConfig['ownerlist']
     isWhitelist: bool = memberId in guildConfig['whitelist']
@@ -181,3 +195,38 @@ def gen_captcha(code):
     img.save(buf, format='PNG')
     buf.seek(0)
     return buf
+
+def is_valid_url(url: str) -> bool:
+    """
+    Valide une URL en vérifiant le domaine et l'extension de fichier
+    Protection contre SSRF et téléchargement de fichiers malveillants
+    """
+    ALLOWED_DOMAINS = [
+        'discord.com', 
+        'discordapp.com', 
+        'cdn.discordapp.com',
+        'media.discordapp.net',
+        'i.imgur.com',
+        'i.redd.it',
+        'images-ext-1.discordapp.net'
+    ]
+    
+    try:
+        parsed = urlparse(url)
+        
+        # Vérifier le schéma
+        if parsed.scheme != 'https':
+            return False
+        
+        # Vérifier le domaine
+        if parsed.netloc not in ALLOWED_DOMAINS:
+            return False
+        
+        # Vérifier l'extension du fichier
+        if not re.match(r'.*\.(jpg|jpeg|png|gif|webp)$', parsed.path, re.IGNORECASE):
+            return False
+        
+        return True
+    except (ValueError, AttributeError, TypeError):
+        # URL invalide, format incorrect, etc.
+        return False

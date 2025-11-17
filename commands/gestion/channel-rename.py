@@ -14,19 +14,35 @@ class channelRename(commands.Cog):
             return
         oldName = channel.name
         if isinstance(channel, discord.TextChannel):
-            try: await channel.edit(name=name)
-            except Exception: return await err_embed(
-                interaction,
-                title="Impossible de renommer le salon",
-                description=f"Je n'ai pas réussi a renomme le salon {channel.name}"
-            )
+            try:
+                await channel.edit(name=name)
+            except discord.Forbidden:
+                return await err_embed(
+                    interaction,
+                    title="Impossible de renommer le salon",
+                    description=f"Je n'ai pas réussi à renommer le salon {channel.name}. Permission manquante."
+                )
+            except discord.HTTPException:
+                return await err_embed(
+                    interaction,
+                    title="Impossible de renommer le salon",
+                    description=f"Je n'ai pas réussi à renommer le salon {channel.name}. Erreur Discord API."
+                )
         elif isinstance(channel, discord.VoiceChannel):
-            try: await channel.edit(name=name)
-            except Exception: return await err_embed(
-                interaction,
-                title="Impossible de renommer le salon",
-                description=f"Je n'ai pas réussi a renomme le salon {channel.name}"
-            )
+            try:
+                await channel.edit(name=name)
+            except discord.Forbidden:
+                return await err_embed(
+                    interaction,
+                    title="Impossible de renommer le salon",
+                    description=f"Je n'ai pas réussi à renommer le salon {channel.name}. Permission manquante."
+                )
+            except discord.HTTPException:
+                return await err_embed(
+                    interaction,
+                    title="Impossible de renommer le salon",
+                    description=f"Je n'ai pas réussi à renommer le salon {channel.name}. Erreur Discord API."
+                )
 
         embed = embedBuilder(
             title="`🔨`・Salon renommé",

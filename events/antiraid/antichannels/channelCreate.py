@@ -9,9 +9,16 @@ class guildChannelCreateAntiraid(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_channel_create(self, channel: discord.abc.GuildChannel):
+        if channel.guild.id in getattr(self.bot, "_backup_loading_guilds", set()):
+            return
         guildJSON = load_json_file(f"./configs/{channel.guild.id}.json")
+        if guildJSON is None: return  # Config n'existe pas
         if guildJSON['antiraid']['channels']['create'] == True:
-            async for entry in channel.guild.audit_logs(limit=1, action=discord.AuditLogAction.channel_create):
+            async for entry in channel.guild.audit_logs(limit=5, action=discord.AuditLogAction.channel_create):
+                time_diff = (discord.utils.utcnow() - entry.created_at).total_seconds()
+                if time_diff > 5:  # Ignorer les entries anciennes
+                    continue
+                    
                 if entry.target.id == channel.id:
                     if entry.user.id == self.bot.user.id:
                         return
@@ -19,8 +26,20 @@ class guildChannelCreateAntiraid(commands.Cog):
 
                     try:
                         await channel.delete(reason="Antiraid: Salon Créé")
+                    except discord.Forbidden:
+                        return
+                    except discord.NotFound:
+                        # Channel déjà supprimé
+                        pass
+                    except discord.HTTPException:
+                        return
+                        
+                    try:
                         await entry.user.ban(reason="Antiraid: Salon Créé")
-                    except Exception: return
+                    except discord.Forbidden:
+                        pass
+                    except discord.HTTPException:
+                        pass
                     break
 
 async def setup(bot):

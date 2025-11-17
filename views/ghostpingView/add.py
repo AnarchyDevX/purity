@@ -38,7 +38,8 @@ class addGhostPingButton(Button):
                     return await interaction.followup.send(f"Le salon {channel.mention} est déjà un salon de ghostping a l'arrivée", ephemeral=True)
                 
                 ghostpingList.append(channel.id)
-                json.dump(guildJSON, open(f'./configs/{interaction.guild.id}.json', 'w', encoding='utf-8'), indent=4)
+                with open(f'./configs/{interaction.guild.id}.json', 'w', encoding='utf-8') as f:
+                    json.dump(guildJSON, f, indent=4)
                 embed = embedBuilder(
                     title="`👻`・Ghostping",
                     description="\n".join(f'<#{channelId}> `{channelId}`' for channelId in ghostpingList),

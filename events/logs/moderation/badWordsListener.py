@@ -13,7 +13,9 @@ class badWordsListener(commands.Cog):
             return
         if not isinstance(message, discord.Message):
             return
-        badwordsJSON = json.load(open(f'./configs/{message.guild.id}.json', 'r'))
+        guildJSON = load_json_file(f'./configs/{message.guild.id}.json')
+        if guildJSON is None: return  # Config n'existe pas
+        badwordsJSON = guildJSON
         badwordsList = badwordsJSON['badwords']
         if badwordsList == []:
             return

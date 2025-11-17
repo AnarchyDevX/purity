@@ -16,12 +16,21 @@ class mp(commands.Cog):
         await interaction.response.defer(ephemeral=True)
         try:
             await member.send(content=message)
-        except: return await err_embed(
-            interaction, 
-            title="Impossible d'envoyé le message",
-            description=f"Je n'ai pas réussi a envoyer le message a {member.mention}",
-            followup=True
-        )
+        except discord.Forbidden:
+            # L'utilisateur a désactivé les DMs
+            return await err_embed(
+                interaction, 
+                title="Impossible d'envoyer le message",
+                description=f"Je n'ai pas réussi à envoyer le message à {member.mention}. Les messages privés sont peut-être désactivés.",
+                followup=True
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction, 
+                title="Impossible d'envoyer le message",
+                description=f"Je n'ai pas réussi à envoyer le message à {member.mention}. Erreur Discord API.",
+                followup=True
+            )
 
         await interaction.followup.send(content=f"Le message à été envoyer en message privée a {member.mention}", ephemeral=True)
 

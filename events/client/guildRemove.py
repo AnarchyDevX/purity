@@ -10,7 +10,9 @@ class GuildRemove(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild: discord.Guild) -> None:
-        os.remove(f'./configs/{guild.id}.json')
+        config_path = f'./configs/{guild.id}.json'
+        if os.path.exists(config_path):
+            os.remove(config_path)
         return
     
 async def setup(bot):

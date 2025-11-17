@@ -42,7 +42,10 @@ class guildChannelDelete(commands.Cog):
                         inline=False
                     )
                     break
-            await logsChannel.send(embed=embed)
+            try:
+                await logsChannel.send(embed=embed)
+            except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                pass
 
 async def setup(bot):
     await bot.add_cog(guildChannelDelete(bot))

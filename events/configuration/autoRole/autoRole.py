@@ -16,15 +16,21 @@ class autoRole(commands.Cog):
             if role:
                 try:
                     await member.add_roles(role)
-                except Exception:
+                except discord.Forbidden:
+                    # Bot n'a pas les permissions
+                    pass
+                except discord.HTTPException:
+                    # Erreur Discord API
                     pass
             else:
                 depractatedRoles.append(roles)
         
-        for role in depractatedRoles:
+        # Créer une copie pour éviter de modifier la liste pendant l'itération
+        for role in depractatedRoles[:]:
             roleList.remove(role)        
 
-        json.dump(guildJSON, open(f'./configs/{member.guild.id}.json', 'w'), indent=4)
+        with open(f'./configs/{member.guild.id}.json', 'w', encoding='utf-8') as f:
+            json.dump(guildJSON, f, indent=4)
 
 
 async def setup(bot: commands.Bot) -> None:

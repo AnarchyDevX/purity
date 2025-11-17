@@ -34,11 +34,11 @@ class leaveGuild(commands.Cog):
 
         try:
             await guild.leave()
-        except Exception:
+        except discord.HTTPException:
             return await err_embed(
                 interaction, 
                 title="Impossible de quitter le serveur",
-                description=f"Je n'ai pas réussi a quitté le serveur **{guild.name}**",
+                description=f"Je n'ai pas réussi à quitter le serveur **{guild.name}**. Erreur Discord API.",
                 followup=True
             )
         

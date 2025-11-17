@@ -28,10 +28,14 @@ class voiceMoveAll(commands.Cog):
             if member.voice:
                 if member.voice.channel == interaction.user.voice.channel:
                     continue
-                try: 
+                try:
                     await member.move_to(interaction.user.voice.channel)
                     succes += 1
-                except Exception as e:
+                except discord.Forbidden:
+                    # Bot n'a pas les permissions
+                    failed += 1
+                except discord.HTTPException:
+                    # Erreur Discord API
                     failed += 1
                 await asyncio.sleep(0.5)
 

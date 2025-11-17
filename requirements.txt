@@ -2,3 +2,5 @@ Pillow
 aiohttp
 discord.py
 requests
+flask
+flask-cors

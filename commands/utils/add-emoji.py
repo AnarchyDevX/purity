@@ -53,11 +53,18 @@ class EmojiCloner(commands.Cog):
             )
             await interaction.followup.send(embed=embed)
 
-        except Exception as e:
-            return err_embed(
+        except discord.Forbidden:
+            return await err_embed(
                 interaction, 
-                title="Impossible de crée l'emojis",
-                description="Je n'ai pas reussi crée l'emojis",
+                title="Impossible de créer l'emoji",
+                description="Je n'ai pas réussi à créer l'emoji. Permission manquante.",
+                followup=True
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction, 
+                title="Impossible de créer l'emoji",
+                description="Je n'ai pas réussi à créer l'emoji. Erreur Discord API.",
                 followup=True
             )
         

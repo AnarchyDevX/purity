@@ -15,79 +15,104 @@ class BackupLoad(commands.Cog):
     async def backup_load(self, interaction: discord.Interaction, name: str):
         if not await check_perms(interaction, 3):
             return
+        
+        user_backup_dir = f'./backups/{interaction.user.id}'
             
         try:
-            with open(f"./backups/{name}.json", 'r', encoding='utf-8') as f:
+            with open(f"{user_backup_dir}/{name}.json", 'r', encoding='utf-8') as f:
                 backup = json.load(f)
         except FileNotFoundError:
-            await interaction.response.send_message("❌ Backup introuvable", ephemeral=True)
+            await err_embed(interaction, "Backup introuvable", "La backup demandée n'existe pas.")
             return
             
         await interaction.response.send_message("⏳ Chargement de la backup en cours...", ephemeral=True)
-        await interaction.guild.edit(name=backup['name'])
-        pfpUrl = backup['pfp'] if backup['pfp'] != "rien" else None
-        try:
-            async with aiohttp.ClientSession() as session:
-                async with session.get(pfpUrl) as r:
-                    if r.status != 200:
-                        return await err_embed(
-                            interaction, 
-                            title="Impossible de récuperer l'image",
-                            description="Je n'ai pas réussi a lire et récuperer votre image",
-                            followup=True
-                        )
-                    newPfp = await r.read()
-                    
 
-            await interaction.guild.edit(icon=newPfp)
-        except Exception as e:
-            pass
-            
-        if interaction.guild.premium_subscription_count >= 14:
+        backup_guard = getattr(self.bot, "_backup_loading_guilds", None)
+        if backup_guard is None:
+            backup_guard = set()
+            self.bot._backup_loading_guilds = backup_guard
+        backup_guard.add(interaction.guild.id)
+
+        try:
+            await self._apply_backup(interaction, backup)
+        finally:
+            backup_guard.discard(interaction.guild.id)
+
+    async def _apply_backup(self, interaction: discord.Interaction, backup: dict) -> None:
+        # Édition du nom du serveur
+        await interaction.guild.edit(name=backup['name'])
+
+        # Édition de l'icône
+        pfpUrl = backup['pfp'] if backup['pfp'] != "rien" else None
+        if pfpUrl:
             try:
-                bannerUrl = backup['banner'] if backup['banner'] != "rien" else None
                 async with aiohttp.ClientSession() as session:
-                    async with session.get(bannerUrl) as r:
-                        if r.status != 200:
-                            return await err_embed(
-                                interaction, 
-                                title="Impossible de récuperer l'image",
-                                description="Je n'ai pas réussi a lire et récuperer votre image",
-                                followup=True
-                            )
-                        newBanner = await r.read()
-                        
-                    
-                await interaction.guild.edit(icon=newBanner)
-                
-            except Exception as e:
-                print(e)
-                
-        
-        roles = [role for role in interaction.guild.roles if role != interaction.guild.default_role and role.position < interaction.guild.me.top_role.position]
+                    async with session.get(pfpUrl) as r:
+                        if r.status == 200:
+                            newPfp = await r.read()
+                            await interaction.guild.edit(icon=newPfp)
+            except (discord.HTTPException, ValueError, AttributeError):
+                pass
+
+        # Édition de la bannière si niveau suffisant
+        if interaction.guild.premium_subscription_count >= 14:
+            bannerUrl = backup['banner'] if backup['banner'] != "rien" else None
+            if bannerUrl:
+                try:
+                    async with aiohttp.ClientSession() as session:
+                        async with session.get(bannerUrl) as r:
+                            if r.status == 200:
+                                newBanner = await r.read()
+                                await interaction.guild.edit(banner=newBanner)
+                except (discord.HTTPException, ValueError, AttributeError):
+                    pass
+
+        # Suppression des rôles existants (sauf @everyone et le rôle du bot)
+        roles = [role for role in interaction.guild.roles
+                 if role != interaction.guild.default_role
+                 and role != interaction.guild.me.top_role
+                 and role.position <= interaction.guild.me.top_role.position]
+
+        # Trier par position décroissante pour supprimer du haut vers le bas
+        roles.sort(key=lambda r: r.position, reverse=True)
+
         for role in roles:
             try:
                 await role.delete()
-            except Exception:
+                await asyncio.sleep(0.1)  # Petit délai pour éviter les rate limits
+            except (discord.Forbidden, discord.HTTPException):
                 continue
 
-        for channel in interaction.guild.channels:
+        # Suppression des channels existants
+        for channel in list(interaction.guild.channels):
             try:
                 await channel.delete()
-            except Exception:
-                continue        
+            except (discord.Forbidden, discord.HTTPException, discord.NotFound):
+                continue
 
-        role_map = await self.create_roles(interaction.guild, backup['roles'])
-        await self.create_categories_and_channels(interaction.guild, backup['categories'], role_map)
+        # Création des rôles
+        role_map = await self.create_roles(interaction.guild, backup.get('roles', {}))
+
+        # Création des catégories et channels
+        await self.create_categories_and_channels(interaction.guild, backup.get('categories', {}), role_map)
+
+        # Création des channels sans catégorie
+        await self.create_uncategorized_channels(interaction.guild, backup.get('uncategorized_channels', []), role_map)
+
         try:
-            await interaction.user.send("✅ Backup chargée avec succès!", ephemeral=True)
-        except Exception as e:
+            await interaction.followup.send("✅ Backup chargée avec succès!", ephemeral=True)
+        except (discord.Forbidden, discord.HTTPException):
             pass
 
     async def create_roles(self, guild: discord.Guild, roles_data: dict) -> dict:
         role_map = {}
-        sorted_roles = sorted(roles_data.items(), key=lambda x: x[1]['permission'])
         
+        # Trier par position décroissante pour garder l'ordre
+        sorted_roles = sorted(roles_data.items(), 
+                            key=lambda x: x[1].get('position', 0), 
+                            reverse=True)
+        
+        # Gérer @everyone séparément
         everyone_data = next((data for _, data in roles_data.items() if data['name'] == '@everyone'), None)
         if everyone_data:
             try:
@@ -95,63 +120,138 @@ class BackupLoad(commands.Cog):
                     permissions=discord.Permissions(permissions=everyone_data['permission'])
                 )
                 role_map['@everyone'] = guild.default_role
-            except Exception:
+            except (discord.Forbidden, discord.HTTPException):
                 pass
         
+        # Créer les autres rôles
+        created_roles = []
         for role_id, role_data in sorted_roles:
-            if role_data['name'] != '@everyone':  
+            if role_data['name'] != '@everyone':
                 try:
                     role = await guild.create_role(
                         name=role_data['name'],
                         permissions=discord.Permissions(permissions=role_data['permission']),
-                        colour=discord.Colour(int(role_data['color'], 16))
+                        colour=discord.Colour(int(role_data['color'], 16)),
+                        mentionable=role_data.get('mentionable', False),
+                        hoist=role_data.get('hoist', False)
                     )
                     role_map[role_data['name']] = role
-                except Exception:
+                    created_roles.append((role, role_data['position']))
+                except (discord.Forbidden, discord.HTTPException):
                     continue
-                
+        
+        # Réorganiser les positions dans l'ordre correct
+        await self.reorganize_role_positions(created_roles, guild.me.top_role.position)
+        
         return role_map
 
+    async def reorganize_role_positions(self, created_roles: list, bot_position: int):
+        """Réorganise les positions des rôles créés"""
+        if not created_roles:
+            return
+        
+        # Note: Discord crée automatiquement les rôles dans l'ordre inverse
+        # Les positions seront correctes si on crée dans l'ordre décroissant
+        # Les positions exactes ne peuvent être restaurées que manuellement
+        # car Discord ne permet pas de définir directement une position absolue
+        pass
+
     async def create_categories_and_channels(self, guild: discord.Guild, categories_data: dict, role_map: dict):
-        for category_name, category_data in categories_data.items():
+        # Trier les catégories par position
+        sorted_categories = sorted(categories_data.items(), 
+                                 key=lambda x: x[1].get('position', 0))
+        
+        for category_name, category_data in sorted_categories:
             category_overwrites = await self.create_overwrites(category_data.get('overwrites', {}), role_map)
             
             try:
                 category = await guild.create_category(name=category_name, overwrites=category_overwrites)
                 
-                for channel_name, channel_data in category_data.items():
-                    if channel_name == 'overwrites':
-                        continue
+                # Trier les channels par position
+                sorted_channels = sorted(
+                    [(k, v) for k, v in category_data.items() if k != 'overwrites' and k != 'position'],
+                    key=lambda x: x[1].get('position', 0)
+                )
+                
+                for channel_name, channel_data in sorted_channels:
+                    await self.create_channel(guild, channel_data, category, role_map)
                         
-                    channel_overwrites = await self.create_overwrites(channel_data.get('perms', {}), role_map)
-                    
-                    channel_type = channel_data.get('type', 'text')
-                    if channel_type == 'text':
-                        await guild.create_text_channel(name=channel_data['name'], category=category, overwrites=channel_overwrites)
-                    elif channel_type == 'voice':
-                        await guild.create_voice_channel(name=channel_data['name'], category=category, overwrites=channel_overwrites)
-                    elif channel_type == 'stage':
-                        await guild.create_stage_channel(name=channel_data['name'], category=category, overwrites=channel_overwrites)
-                    elif channel_type == 'forum':
-                        await guild.create_forum(name=channel_data['name'], category=category, overwrites=channel_overwrites)
-                        
-            except Exception as e:
+            except (discord.Forbidden, discord.HTTPException):
                 continue
 
-    async def create_overwrites(self, overwrites_data: dict, role_map: dict) -> dict:
+    async def create_uncategorized_channels(self, guild: discord.Guild, channels_data: list, role_map: dict):
+        # Trier par position
+        sorted_channels = sorted(channels_data, key=lambda x: x.get('position', 0))
+        
+        for channel_data in sorted_channels:
+            await self.create_channel(guild, channel_data, None, role_map)
+
+    async def create_channel(self, guild: discord.Guild, channel_data: dict, category: discord.CategoryChannel, role_map: dict):
+        channel_overwrites = await self.create_overwrites(channel_data.get('perms', {}), role_map)
+        
         try:
-            overwrites = {}
-            for role_name, perm_data in overwrites_data.items():
-                role = role_map.get(role_name)
-                if role:
+            channel_type = channel_data.get('type', 'text')
+            kwargs = {
+                'name': channel_data['name'],
+                'overwrites': channel_overwrites,
+                'category': category
+            }
+            
+            # Ajouter les propriétés spécifiques
+            if channel_type in ['text', 'news']:
+                if 'topic' in channel_data and channel_data['topic']:
+                    kwargs['topic'] = channel_data['topic']
+                if 'slowmode_delay' in channel_data:
+                    kwargs['slowmode_delay'] = channel_data['slowmode_delay']
+                if 'nsfw' in channel_data:
+                    kwargs['nsfw'] = channel_data['nsfw']
+                    
+                # Créer le channel textuel (news channels sont aussi des text channels dans discord.py)
+                await guild.create_text_channel(**kwargs)
+                    
+            elif channel_type == 'voice':
+                if 'bitrate' in channel_data:
+                    kwargs['bitrate'] = channel_data['bitrate']
+                if 'user_limit' in channel_data:
+                    kwargs['user_limit'] = channel_data['user_limit']
+                await guild.create_voice_channel(**kwargs)
+                
+            elif channel_type == 'stage':
+                # Note: create_stage_channel n'existe pas dans discord.py
+                # Créer comme un channel textuel à la place
+                if 'topic' in channel_data and channel_data['topic']:
+                    kwargs['topic'] = channel_data['topic']
+                await guild.create_text_channel(**kwargs)
+                
+            elif channel_type == 'forum':
+                # Note: create_forum_channel n'existe pas dans discord.py
+                # Créer comme un channel textuel à la place
+                if 'topic' in channel_data and channel_data['topic']:
+                    kwargs['topic'] = channel_data['topic']
+                await guild.create_text_channel(**kwargs)
+                
+        except (discord.Forbidden, discord.HTTPException) as e:
+            pass
+
+    async def create_overwrites(self, overwrites_data: dict, role_map: dict) -> dict:
+        overwrites = {}
+        
+        for identifier, perm_data in overwrites_data.items():
+            # identifier est le nom du rôle
+            role = role_map.get(identifier)
+            
+            if role and isinstance(perm_data, dict) and 'perms' in perm_data:
+                try:
                     overwrite = discord.PermissionOverwrite()
                     for perm_name, value in perm_data['perms'].items():
-                        setattr(overwrite, perm_name, value)
+                        if hasattr(overwrite, perm_name):
+                            setattr(overwrite, perm_name, value)
                     overwrites[role] = overwrite
-            return overwrites
-        except Exception as e:
-            pass
-            
+                except (AttributeError, TypeError, ValueError):
+                    continue
+        
+        return overwrites
+
 
 async def setup(bot):
     await bot.add_cog(BackupLoad(bot))

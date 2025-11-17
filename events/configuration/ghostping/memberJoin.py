@@ -17,14 +17,25 @@ class ghostpingMemberJoin(commands.Cog):
                 try:
                     message = await channel.send(member.mention)
                     self.messagesList.append(message)
-                except Exception:
+                except discord.Forbidden:
+                    # Pas de permissions pour envoyer des messages
+                    continue
+                except discord.HTTPException:
+                    # Erreur Discord API
                     continue
 
         await asyncio.sleep(3)
         for message in self.messagesList:
             try:
                 await message.delete()
-            except Exception:
+            except discord.Forbidden:
+                # Pas de permissions pour supprimer le message
+                continue
+            except discord.HTTPException:
+                # Erreur Discord API
+                continue
+            except discord.NotFound:
+                # Message déjà supprimé
                 continue
 
 async def setup(bot):

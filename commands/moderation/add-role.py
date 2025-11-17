@@ -16,12 +16,17 @@ class addRole(commands.Cog):
             return
         try:
             await member.add_roles(role)
-        except Exception as e:
-            await logs(e, 4, interaction)
+        except discord.Forbidden:
             return await err_embed(
                 interaction,
                 title="Erreur lors de l'ajout du rôle",
-                description=f"*Je n'ai pas réussi à ajouter le role {role.mention} à {member.mention}*"
+                description=f"*Je n'ai pas réussi à ajouter le role {role.mention} à {member.mention}. Permission manquante.*"
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction,
+                title="Erreur lors de l'ajout du rôle",
+                description=f"*Je n'ai pas réussi à ajouter le role {role.mention} à {member.mention}. Erreur Discord API.*"
             )
         embed: embedBuilder = embedBuilder(
             title="`✅`・Role ajouté avec succès",

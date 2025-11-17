@@ -9,6 +9,10 @@ class presenceUpdate(commands.Cog):
     @commands.Cog.listener()
     async def on_presence_update(self, before: discord.Member, after):
         guildJSON = load_json_file(f'./configs/{before.guild.id}.json')
+        if guildJSON is None:
+            return  # Config n'existe pas pour ce serveur
+        if guildJSON.get('soutien') is None:
+            return  # Configuration soutien n'existe pas
         content = guildJSON['soutien']['needed']
         role = before.guild.get_role(guildJSON['soutien']['role'])
         if guildJSON['soutien']['active'] == True:
@@ -24,8 +28,14 @@ class presenceUpdate(commands.Cog):
                 if content in str(before.activity) and content not in str(after.activity):
                     role = discord.utils.get(before.guild.roles, id=guildJSON['soutien']['role'])
                     await after.remove_roles(role)
-            except Exception as e:
-                print(e)
+            except discord.Forbidden:
+                # Bot n'a pas les permissions pour ajouter/retirer les rôles
+                return
+            except discord.HTTPException:
+                # Erreur Discord API
+                return
+            except discord.NotFound:
+                # Rôle ou membre introuvable
                 return
 
 async def setup(bot):

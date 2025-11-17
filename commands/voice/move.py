@@ -37,11 +37,17 @@ class voiceMove(commands.Cog):
         
         try:
             await member.move_to(interaction.user.voice.channel)
-        except Exception:
+        except discord.Forbidden:
             return await err_embed(
                 interaction,
                 title="Impossible de déplacer le membre",
-                description=f"Je n'ai pas réussi à déplacer le membre {member.mention}"
+                description=f"Je n'ai pas réussi à déplacer le membre {member.mention}. Permission manquante."
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction,
+                title="Impossible de déplacer le membre",
+                description=f"Je n'ai pas réussi à déplacer le membre {member.mention}. Erreur Discord API."
             )
         
         embed: embedBuilder = embedBuilder(

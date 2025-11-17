@@ -32,18 +32,27 @@ class kick(commands.Cog):
                 embed.add_field(name="`📜`・Raison de l'expulsion", value=f"*{reason}*", inline=False)
             try:
                 await member.send(embed=embed)    
-            except Exception as e:
-                print(e)
-                await logs(e, 4, interaction)
+            except discord.Forbidden:
+                # Utilisateur a ses DMs désactivés
+                pass
+            except discord.HTTPException as e:
+                await logs(f"Erreur HTTP lors de l'envoi du DM: {e}", 4, interaction)
                 
         try:
             await member.kick(reason=reason)
-        except Exception as e:
-            await logs(e, 4, interaction)
+        except discord.Forbidden:
+            await logs(f"Permissions insuffisantes pour kick {member.name}", 4, interaction)
             return await err_embed(
                 interaction,
-                title="Impossible d'expluser le membre",
-                description=f"Je n'ai pas réussi à expulser le membre {member.mention}"
+                title="Impossible d'expulser le membre",
+                description=f"Je n'ai pas les permissions nécessaires pour expulser {member.mention}"
+            )
+        except discord.HTTPException as e:
+            await logs(f"Erreur HTTP lors de l'expulsion: {e}", 4, interaction)
+            return await err_embed(
+                interaction,
+                title="Impossible d'expulser le membre",
+                description=f"Une erreur est survenue lors de l'expulsion de {member.mention}"
             )
 
         embed: embedBuilder = embedBuilder(

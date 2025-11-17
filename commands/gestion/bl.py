@@ -20,7 +20,16 @@ class blackList(commands.Cog):
                 try:
                     await guild.ban(member)
                     g += 1
-                except Exception as e:
+                except discord.Forbidden:
+                    # Bot n'a pas les permissions
+                    f += 1
+                    continue
+                except discord.HTTPException:
+                    # Erreur Discord API
+                    f += 1
+                    continue
+                except discord.NotFound:
+                    # Membre déjà banni
                     f += 1
                     continue
         

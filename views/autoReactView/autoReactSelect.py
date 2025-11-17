@@ -34,7 +34,8 @@ class autoReactSelect(Select):
             return await unauthorized(interaction)
             
         del self.config['configuration']['autoreact'][self.values[0]]
-        json.dump(self.config, open(f'./configs/{interaction.guild.id}.json', 'w'), indent=4)
+        with open(f'./configs/{interaction.guild.id}.json', 'w', encoding='utf-8') as f:
+            json.dump(self.config, f, indent=4)
         config2 = load_json_file(f"./configs/{self.guild.id}.json")
         
         view = None

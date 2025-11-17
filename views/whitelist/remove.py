@@ -32,8 +32,7 @@ class whitelistRemoveButton(Button):
             member = message.content
             try:
                 member = int(member)
-            except Exception as e:
-                print(e)
+            except ValueError:
                 return await err_embed(
                     interaction=interaction,
                     title="Id invalide",
@@ -44,7 +43,8 @@ class whitelistRemoveButton(Button):
             if member:
                 if member in whitelist:
                     whitelist.remove(member)
-                    json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+                    with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                        json.dump(guildJSON, f, indent=4)
                     await message.delete()
                     formatted = [f'<@{memberId}> `{memberId}`' for memberId in whitelist]
                     embed = embedBuilder(

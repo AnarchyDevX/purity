@@ -13,7 +13,11 @@ class greetMessageEvent(commands.Cog):
             if guildJSON['greetmsg']['content'] != "":
                 try:
                     await member.send(guildJSON['greetmsg']['content'])
-                except Exception:
+                except discord.Forbidden:
+                    # L'utilisateur a désactivé les DMs
+                    pass
+                except discord.HTTPException:
+                    # Erreur Discord API
                     pass
 
 async def setup(bot):

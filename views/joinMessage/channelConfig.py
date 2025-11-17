@@ -34,7 +34,8 @@ class channelConfigButton(Button):
             message = await self.bot.wait_for("message", check=check, timeout=30)
             channel = message.channel_mentions[0]
             guildJSON['greeting']['channel'] = channel.id
-            json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+            with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                json.dump(guildJSON, f, indent=4)
             greeting = guildJSON["greeting"]
             embed = embedBuilder(
                 title="`🖖`・Message de bienvenue",

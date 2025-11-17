@@ -15,6 +15,8 @@ class badwordList(commands.Cog):
         if not await check_perms(interaction, 2):
             return
         
+        await interaction.response.defer(ephemeral=True)
+        
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         badwords = ", ".join(guildJSON['badwords'])
 
@@ -30,7 +32,7 @@ class badwordList(commands.Cog):
         view = discord.ui.View(timeout=None)
         view.add_item(badwordsAddButton(interaction.user.id))
         view.add_item(badwordsRemoveButton(interaction.user.id))
-        return await interaction.response.send_message(embed=embed, view=view)
+        return await interaction.followup.send(embed=embed, view=view, ephemeral=True)
     
 async def setup(bot):
     await bot.add_cog(badwordList(bot))

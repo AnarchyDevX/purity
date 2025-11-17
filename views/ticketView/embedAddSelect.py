@@ -83,7 +83,7 @@ class embedAddSelect(Select):
                 embed.set_image(url=newElement)
             if value == "add-field":
                 await interaction.followup.send("***Description du field**, doit faire maximum 4000 caractères.*", ephemeral=True)
-                secondMsg = await self.bot.wait_for(f"message", check=check, timeout=60.0)
+                secondMsg = await self.bot.wait_for('message', check=check, timeout=60.0)
                 fieldValue = secondMsg.content
                 if len(fieldValue) > 4000:
                     await interaction.followup.send(f"*Le contenu du field dépasse la limite de 4000 caractères. Veuillez essayer à nouveau.*", ephemeral=True)

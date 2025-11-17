@@ -35,12 +35,11 @@ class removeButtonTempVoice(Button):
             await interaction.response.send_message("Veuillez mentionner le salon que vous voulez supprimer des configurations", ephemeral=True)
             message: discord.Message = await self.bot.wait_for("message", check=check, timeout=30.0)
             channel = message.channel_mentions[0]
-            print(channel.id)
             for element in guildJSON['configuration']['tempvoices']['configs']:
-                print(element)
                 if int(element) == channel.id:
                     del guildJSON['configuration']['tempvoices']['configs'][str(channel.id)]
-                    json.dump(guildJSON, open(f'./configs/{interaction.guild.id}.json', 'w'), indent=4)
+                    with open(f'./configs/{interaction.guild.id}.json', 'w', encoding='utf-8') as f:
+                        json.dump(guildJSON, f, indent=4)
                     tempvoiceConfigs = guildJSON['configuration']['tempvoices']['configs']
                     voiceList = [
                         f'> `🪄`・**Channel:** <#{element}>\n'

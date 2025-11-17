@@ -36,11 +36,17 @@ class voiceMute(commands.Cog):
         
         try:
             await member.edit(mute=option)
-        except Exception:
+        except discord.Forbidden:
             return await err_embed(
                 interaction,
                 title="Impossible de rendre muet le membre",
-                description=f"Je n'ai pas réussi à rendre muet le membre {member.mention}"
+                description=f"Je n'ai pas réussi à rendre muet le membre {member.mention}. Permission manquante."
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction,
+                title="Impossible de rendre muet le membre",
+                description=f"Je n'ai pas réussi à rendre muet le membre {member.mention}. Erreur Discord API."
             )
         text: None = None
         if option == False:

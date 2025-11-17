@@ -18,12 +18,17 @@ class mute(commands.Cog):
 
         try:
             await member.timeout(discord.utils.utcnow() + timedelta(minutes=duration), reason=reason)
-        except Exception as e:
-            await logs(e, 4, interaction)
+        except discord.Forbidden:
             return await err_embed(
                 interaction,
                 title="Impossible de rendre le membre muet",
-                description=f"Je n'ai pas réussi à rendre muet le membre {member.mention}"
+                description=f"Je n'ai pas réussi à rendre muet le membre {member.mention}. Permission manquante."
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction,
+                title="Impossible de rendre le membre muet",
+                description=f"Je n'ai pas réussi à rendre muet le membre {member.mention}. Erreur Discord API."
             )
 
         embed: embedBuilder = embedBuilder(

@@ -32,19 +32,27 @@ class ban(commands.Cog):
                 embed.add_field(name="`📜`・Raison du bannisement", value=f"*{reason}*", inline=False)
             try:
                 await member.send(embed=embed)    
-            except Exception as e:
-                print(e)
-                await logs(e, 4, interaction)
+            except discord.Forbidden:
+                # Utilisateur a ses DMs désactivés
+                pass
+            except discord.HTTPException as e:
+                await logs(f"Erreur HTTP lors de l'envoi du DM: {e}", 4, interaction)
         
         try:
             await member.ban(reason=reason, delete_message_days=7)
-        except Exception as e:
-            await logs(e, 4, interaction)
-            
+        except discord.Forbidden:
+            await logs(f"Permissions insuffisantes pour bannir {member.name}", 4, interaction)
             return await err_embed(
                 interaction,
                 title="Impossible de bannir le membre",
-                description=f"Je n'ai pas réussi à bannir le membre {member.mention}"
+                description=f"Je n'ai pas les permissions nécessaires pour bannir {member.mention}"
+            )
+        except discord.HTTPException as e:
+            await logs(f"Erreur HTTP lors du bannissement: {e}", 4, interaction)
+            return await err_embed(
+                interaction,
+                title="Impossible de bannir le membre",
+                description=f"Une erreur est survenue lors du bannissement de {member.mention}"
             )
         
 

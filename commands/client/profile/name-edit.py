@@ -17,11 +17,18 @@ class changeServerName(commands.Cog):
         await interaction.response.defer()
         try:
             await interaction.guild.me.edit(nick=name)
-        except Exception as e:
+        except discord.Forbidden:
             return await err_embed(
                 interaction, 
                 title="Impossible de changer le nom",
-                description="Je n'ai pas réussi a changer mon nom sur le serveur", 
+                description="Je n'ai pas réussi à changer mon nom sur le serveur. Permission manquante.", 
+                followup=False
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction, 
+                title="Impossible de changer le nom",
+                description="Je n'ai pas réussi à changer mon nom sur le serveur. Erreur Discord API.", 
                 followup=False
             )
         

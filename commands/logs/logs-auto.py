@@ -27,7 +27,8 @@ class logsAuto(commands.Cog):
             guildJSON['logs'][name]["alive"] = True
             guildJSON["logs"][name]['channel'] = channel.id
 
-        json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+        with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+            json.dump(guildJSON, f, indent=4)
 
         embed = embedBuilder(
             title=f"`📂`・{lang('logs.autoTitle')}",

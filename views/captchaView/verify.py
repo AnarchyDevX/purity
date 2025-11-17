@@ -44,9 +44,20 @@ class startVerify(Button):
                 await interaction.followup.send('Code Incorrect', ephemeral=True)
                 try:
                     await interaction.user.kick(reason="Failed Captcha")
-                except Exception:
+                except discord.Forbidden:
+                    # Bot n'a pas les permissions pour expulser
+                    pass
+                except discord.HTTPException:
+                    # Erreur Discord API
                     pass
             await response.delete()
         except asyncio.TimeoutError:
             await interaction.followup.send('Temps écoulé', ephemeral=True)
-            await interaction.user.kick(reason="Timeout Captcha")
+            try:
+                await interaction.user.kick(reason="Timeout Captcha")
+            except discord.Forbidden:
+                # Bot n'a pas les permissions pour expulser
+                pass
+            except discord.HTTPException:
+                # Erreur Discord API
+                pass

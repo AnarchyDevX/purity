@@ -15,11 +15,13 @@ class changeClientPfp(commands.Cog):
         if check == False:
             return
         
-        if not url.startswith("https://"):
+        # VALIDATION URL - PROTECTION CONTRE SSRF
+        from functions.functions import is_valid_url
+        if not is_valid_url(url):
             return await err_embed(
                 interaction,
                 title="Lien invalide",
-                description="Le lien que vous avez fourni est invalide."
+                description="Le lien fourni doit être une URL HTTPS valide vers une image (jpg, png, gif, webp) depuis un domaine autorisé."
             )
         
         await interaction.response.defer()
@@ -37,11 +39,11 @@ class changeClientPfp(commands.Cog):
                 
         try:
             await self.bot.user.edit(avatar=newPfp)
-        except Exception as e:
+        except discord.HTTPException:
             return await err_embed(
                 interaction,
                 title="Erreur lors du changement",
-                description="Une erreur est survenu lors du changement de l'avatar du bot",
+                description="Une erreur est survenue lors du changement de l'avatar du bot. Erreur Discord API.",
                 followup=True
             )
         

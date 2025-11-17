@@ -25,11 +25,14 @@ class snipeDelete(commands.Cog):
         if before.author.bot:
             return
         
+        # Utiliser edited_at si disponible, sinon created_at
+        edit_time = after.edited_at if after.edited_at else after.created_at
+        
         self.sniped["edit"][before.channel.id] = {
             "before": before.content,
             "after": after.content,
             "author": before.author.id,
-            "time": format_date("all", after.edited_at)
+            "time": format_date("all", edit_time)
         }
 
     @app_commands.command(name="snipe", description="Obtenir le dernier message supprimé ou modifier dans un salon aux choix")

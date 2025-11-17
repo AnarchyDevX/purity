@@ -36,11 +36,11 @@ class changeClientBanner(commands.Cog):
                 
         try:
             await self.bot.user.edit(banner=newBanner)
-        except Exception as e:
+        except discord.HTTPException:
             return await err_embed(
                 interaction,
                 title="Erreur lors du changement",
-                description="Une erreur est survenu lors du changement de la banniere du bot",
+                description="Une erreur est survenue lors du changement de la bannière du bot. Erreur Discord API.",
                 followup=True
             )
         

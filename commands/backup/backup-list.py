@@ -13,13 +13,34 @@ class backupList(commands.Cog):
     async def backupList(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 3): return
 
-        nameList = [name.split(".")[0] for name in os.listdir("./backups")]
-        embed = embedBuilder(
-            title="`📜`・Liste des backups",
-            description="\n\n".join('`' + name + '`' for name in nameList),
-            color=embed_color(),
-            footer=footer()
-        )
+        user_backup_dir = f'./backups/{interaction.user.id}'
+        
+        # Vérifier si le dossier existe, sinon retourner une liste vide
+        if not os.path.exists(user_backup_dir):
+            embed = embedBuilder(
+                title="`📜`・Liste des backups",
+                description="Aucune backup enregistrée.",
+                color=embed_color(),
+                footer=footer()
+            )
+            return await interaction.response.send_message(embed=embed, ephemeral=True)
+        
+        nameList = [name.split(".")[0] for name in os.listdir(user_backup_dir) if name.endswith('.json')]
+        
+        if not nameList:
+            embed = embedBuilder(
+                title="`📜`・Liste des backups",
+                description="Aucune backup enregistrée.",
+                color=embed_color(),
+                footer=footer()
+            )
+        else:
+            embed = embedBuilder(
+                title="`📜`・Liste des backups",
+                description="\n\n".join('`' + name + '`' for name in nameList),
+                color=embed_color(),
+                footer=footer()
+            )
         return await interaction.response.send_message(embed=embed, ephemeral=True)
 
 async def setup(bot):

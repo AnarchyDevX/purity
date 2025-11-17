@@ -49,7 +49,8 @@ class autoroleAddButton(Button):
                     return await message.delete()
                 else:
                     roleList.append(role.id)
-                    json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+                    with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                        json.dump(guildJSON, f, indent=4)
                     rolesList: list[str] = [f"<@&{roleId}>`{roleId}`" for roleId in guildJSON['configuration']['autorole']]
                     embed: embedBuilder = embedBuilder(
                         title="`✨`・Liste des roles ajoutés a l'arrivée",

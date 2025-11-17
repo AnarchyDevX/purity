@@ -20,8 +20,12 @@ class derank(commands.Cog):
             try:
                 removedRoles.append(roles.mention)
                 await member.remove_roles(roles)
-            except Exception as e:
-                await logs(e, 4, interaction)
+            except discord.Forbidden:
+                # Bot n'a pas les permissions
+                await logs("Impossible de retirer le rôle (Forbidden)", 4, interaction)
+            except discord.HTTPException:
+                # Erreur Discord API
+                await logs("Erreur lors de la suppression du rôle (HTTPException)", 4, interaction)
 
         embed: embedBuilder = embedBuilder(
             title="`🛠️`・Derank",

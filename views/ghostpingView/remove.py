@@ -33,7 +33,7 @@ class removeGhostPingButton(Button):
             channelId = message.content
             try:
                 channelId = int(channelId)
-            except Exception:
+            except ValueError:
                 return await err_embed(
                     interaction,
                     title="Id manquant",
@@ -45,7 +45,8 @@ class removeGhostPingButton(Button):
                 return await interaction.followup.send("L'id du salon que vous avez fourni n'est pas dans la liste des salon ghostping", ephemeral=True)
             
             ghostpingList.remove(channelId)
-            json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8'), indent=4)
+            with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                json.dump(guildJSON, f, indent=4)
             embed = embedBuilder(
                 title="`👻`・Ghostping",
                 description="\n".join(f'<#{channelId}> `{channelId}`' for channelId in ghostpingList),

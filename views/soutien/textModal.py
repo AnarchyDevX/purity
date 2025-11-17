@@ -33,16 +33,17 @@ class textSoutienModal(Modal):
         from views.soutien.disableButton import disableSoutienButton
         try:
             roleId = int(self.children[1].value)
-        except Exception:
+        except ValueError:
             return await err_embed(
                 interaction,
-                title=f"Id Invalide",
+                title="Id Invalide",
                 description="L'id que vous avez fourni est invalide. Merci de fournir un id correct.",
             )
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         guildJSON['soutien']['needed'] = self.children[0].value
         guildJSON['soutien']['role'] = roleId
-        json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+        with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+            json.dump(guildJSON, f, indent=4)
         embed = embedBuilder(
             title="`🛠️`・Panel soutien",
             color=embed_color(),

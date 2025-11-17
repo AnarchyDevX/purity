@@ -17,8 +17,14 @@ class lockChannel(commands.Cog):
         await interaction.response.defer()
         await channel.set_permissions(interaction.guild.default_role, send_messages=False)
         for role in channel.overwrites:
-            try: await channel.set_permissions(role, send_messages=False)
-            except Exception: continue
+            try:
+                await channel.set_permissions(role, send_messages=False)
+            except discord.Forbidden:
+                # Pas de permissions
+                continue
+            except discord.HTTPException:
+                # Erreur Discord API
+                continue
         
         embed = embedBuilder(
             title="`🔐`・Lock", 

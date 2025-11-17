@@ -1,0 +1,50 @@
+# Fichiers de configuration sensibles
+config.json
+.env
+.env.local
+*.env
+
+# Dossiers de données
+configs/
+backups/
+logs/
+
+# Fichiers Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+.venv/
+
+# Cache Python
+*.cache
+.pytest_cache/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Système
+Thumbs.db
+*.log
+*.tmp
+
+# Polices personnalisées
+*.ttf
+*.otf
+
+# Backups temporaires
+*.bak
+*.backup
+*~
+
+# Virtual environments
+venv/
+ENV/

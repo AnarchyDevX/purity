@@ -20,11 +20,12 @@ class greetMeassageConfig(commands.Cog):
         if not await check_perms(interaction, 2): return
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         alive = True if alive == "on" else False
-        guildJSON['greetmsg']['alive'] == alive
+        guildJSON['greetmsg']['alive'] = alive
         if alive:
             return await interaction.response.send_modal(greetMessageModal())
         else:
-            json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+            with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                json.dump(guildJSON, f, indent=4)
             embed = embedBuilder(
                 title="`🌍`・Message d'arrivée",
                 description=f"*Le message a l'arrivée a été correctement désactivé*",

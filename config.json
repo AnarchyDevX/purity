@@ -1,9 +1,0 @@
-{
-    "token": "token",
-    "color": "color",
-    "buyer": [],
-    "blacklist": [],
-    "guildjoin": true, 
-    "lang": "fr.json",
-    "apichannel": null
-}

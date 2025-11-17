@@ -18,37 +18,36 @@ class linkMessage(commands.Cog):
         if message.author.id == self.bot.user.id:
             return
         if message.content.startswith("https://tenor.com/"): return
+        
+        # Vérifier si l'antilien est actif - si oui, ne pas logger ici (l'antilien le fera après suppression)
+        guildJSON = load_json_file(f"./configs/{message.guild.id}.json")
+        if guildJSON is not None:
+            if guildJSON.get('antiraid', {}).get('antilien', False) == True:
+                # Vérifier si l'utilisateur n'est pas exempté (si exempté, on peut logger)
+                if not await check_id_perms(message.author, message.guild, 1):
+                    # Antilien actif et utilisateur non exempté = l'antilien va gérer, ne pas logger ici
+                    return
 
         logsChannel: discord.abc.GuildChannel | None = await check_if_logs(message.guild, "raidlogs") 
         if logsChannel:
             if bool(self.regex.search(message.content)) != False or "discord.gg" in message.content or ".gg/" in message.content:
+                message_content_short = message.content[:1000] + '...' if len(message.content) > 1000 else message.content
                 embed: embedBuilder = embedBuilder(
                     description=f"```[{time_now()}] - Raid | Message Contenant Un Lien```",
                     color=embed_color(),
                     footer=footer(),
                     fields={
-                    "`🪡`・Informations sur le membre": (
-                        f"> `🪄`・**Nom:** `{message.author.name}`\n"
-                        f"> `🆔`・**Id:** `{message.author.id}`\n"
-                        f"> `✨`・**Mention:** {message.author.mention}\n"
-                        f"> `🔨`・**Créé le:** `{format_date('all', message.author.created_at)}`\n"
-                        f"> `➕`・**Rejoint le:** `{format_date('all', message.author.joined_at)}`\n",
-                        False
-                    ),
-                    "`✨`・Informations sur le message": (
-                        f"> `🪄`・**Salon:** {message.channel.mention}\n"
-                        f"> `🆔`・**Id:** `{message.id}`\n"
-                        f"> `➕`・**Envoyée le:** `{format_date('all', message.created_at)}`\n",
-                        False
-                    )
-                }
+                        "`👤`・Membre": (
+                            f"{message.author.mention} (`{message.author.id}`) | Créé: `{format_date('year', message.author.created_at)}` | Rejoint: `{format_date('year', message.author.joined_at)}`",
+                            False
+                        ),
+                        "`📝`・Message": (
+                            f"Salon: {message.channel.mention} | ID: `{message.id}` | `{format_date('all', message.created_at)}`\n**Contenu:** {message_content_short}",
+                            False
+                        )
+                    }
                 )
-                embedContent: embedBuilder = embedBuilder(
-                    title="`🛠️`・Contenu du message contenant le lien",
-                    description=message.content,
-                    color=embed_color()
-                )
-                await logsChannel.send(embeds=[embed, embedContent])
+                await logsChannel.send(embed=embed)
 
 async def setup(bot: commands.Bot):
     await bot.add_cog(linkMessage(bot))

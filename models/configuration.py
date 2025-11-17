@@ -69,7 +69,13 @@ configuration = {
         "transcripts": True,
         "roles": [],
         "claim": True,
-        "buttons": {}
+        "buttons": {},
+        "categories": {
+            "nouveaux": None,
+            "pris_en_charge": None,
+            "en_pause": None,
+            "fermes": None
+        }
     },
     "onlypic": [],
     "greeting": {
@@ -102,5 +108,16 @@ configuration = {
             "timeout": 1000,
             "active": False
         }
+    },
+    "roblox_verification": {
+        "active": False,
+        "role": None,
+        "webhook_url": None
+    },
+    "badwords_learning": {
+        "enabled": False,
+        "suspicion_channel": None,
+        "threshold": 3,
+        "suspicions": {}
     }
 }

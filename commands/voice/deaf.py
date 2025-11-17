@@ -35,11 +35,17 @@ class voiceDeaf(commands.Cog):
         
         try:
             await member.edit(deafen=option)
-        except Exception:
+        except discord.Forbidden:
             return await err_embed(
                 interaction,
                 title="Impossible de mettre en sourdine le membre",
-                description=f"Je n'ai pas réussi à mettre en sourdine le membre {member.mention}"
+                description=f"Je n'ai pas réussi à mettre en sourdine le membre {member.mention}. Permission manquante."
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction,
+                title="Impossible de mettre en sourdine le membre",
+                description=f"Je n'ai pas réussi à mettre en sourdine le membre {member.mention}. Erreur Discord API."
             )
         
         text: None = None

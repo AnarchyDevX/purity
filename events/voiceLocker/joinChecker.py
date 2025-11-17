@@ -12,8 +12,14 @@ class joinChecker(commands.Cog):
         if after.channel != None:
             if member.id in guildJSON['ownerlist']: return
             if after.channel.id in guildJSON['lockedvoice']:
-                try: await member.move_to(None)
-                except Exception: return
+                try:
+                    await member.move_to(None)
+                except discord.Forbidden:
+                    # Bot n'a pas les permissions
+                    return
+                except discord.HTTPException:
+                    # Erreur Discord API
+                    return
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(joinChecker(bot))

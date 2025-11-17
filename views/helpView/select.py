@@ -111,6 +111,10 @@ class selectHelp(Select):
                             "*Afficher l'embed de configuration des salons onlypics*",
                             False
                         ),
+                        "`/roblox-config`": (
+                            "*Configurer le système de vérification Roblox*\n-# /roblox-config [action] (paramètres)",
+                            False
+                        ),
                         "`/role-reaction`": (
                             "*Configurer et envoyer un embed de rôle réaction*\n-# /role-reaction [role] [salon]",
                             False
@@ -321,6 +325,10 @@ class selectHelp(Select):
                         ),
                         "`/snipe`": (
                             "*Afficher le dernier message supprimé ou modifié dans un salon spécifique*\n-# /snipe [action] (salon)",
+                            False
+                        ),
+                        "`/verify`": (
+                            "*Vérifier votre compte Roblox*\n-# /verify [roblox_username] [code]",
                             False
                         )
                     }

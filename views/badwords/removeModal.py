@@ -32,7 +32,8 @@ class badwordRemoveModal(Modal):
                 description=f"Le mot `{mot}` n'est pas présent dans la liste des badwords."
             )
         badwordsList.remove(mot)
-        json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+        with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+            json.dump(guildJSON, f, indent=4)
         badwords = ", ".join(guildJSON['badwords'])
         embed: embedBuilder = embedBuilder(
             title="`🧪`・Badwords",

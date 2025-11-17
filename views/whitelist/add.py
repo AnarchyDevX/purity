@@ -35,7 +35,8 @@ class whitelistAddButton(Button):
                     if member.id not in whitelist:
                         whitelist.append(member.id)
 
-                json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+                with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                    json.dump(guildJSON, f, indent=4)
                 await message.delete()
                 formatted = [f'<@{memberId}> `{memberId}`' for memberId in whitelist]
                 embed = embedBuilder(

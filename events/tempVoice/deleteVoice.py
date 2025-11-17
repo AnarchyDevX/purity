@@ -15,8 +15,17 @@ class deleteVoice(commands.Cog):
                     await before.channel.delete(reason="Tempvoice ended")
                     activeList = guildJSON['configuration']['tempvoices']['active']
                     activeList.remove(before.channel.id)
-                    json.dump(guildJSON, open(f'./configs/{member.guild.id}.json', 'w'), indent=4)
-                except Exception: return
+                    with open(f'./configs/{member.guild.id}.json', 'w', encoding='utf-8') as f:
+                        json.dump(guildJSON, f, indent=4)
+                except discord.Forbidden:
+                    # Bot n'a pas les permissions
+                    return
+                except discord.HTTPException:
+                    # Erreur Discord API
+                    return
+                except discord.NotFound:
+                    # Salon déjà supprimé
+                    return
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(deleteVoice(bot))

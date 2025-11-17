@@ -25,7 +25,8 @@ class EmbedEnableButton(Button):
 
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         guildJSON['greeting']['type'] = "embed"
-        json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+        with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+            json.dump(guildJSON, f, indent=4)
         greeting = guildJSON["greeting"]
         embed = embedBuilder(
             title="`🖖`・Message de bienvenue",

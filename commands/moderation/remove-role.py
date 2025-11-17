@@ -23,11 +23,17 @@ class removeRole(commands.Cog):
         
         try:
             await member.remove_roles(role)
-        except Exception as e:
+        except discord.Forbidden:
             return await err_embed(
                 interaction,
                 title="Impossible de retirer le role",
-                description=f"Je n'ai pas réussi a retirer le role {role.mention} à {member.mention}"
+                description=f"Je n'ai pas réussi à retirer le role {role.mention} à {member.mention}. Permission manquante."
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction,
+                title="Impossible de retirer le role",
+                description=f"Je n'ai pas réussi à retirer le role {role.mention} à {member.mention}. Erreur Discord API."
             )
         
         embed: embedBuilder = embedBuilder(

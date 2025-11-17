@@ -15,6 +15,7 @@ class channelUpdate(commands.Cog):
         await self.bot.wait_until_ready()
         for guild in self.bot.guilds:
             guildJSON = load_json_file(f"./configs/{guild.id}.json")
+            if guildJSON is None: continue  # Config n'existe pas, passer au serveur suivant
             for element in guildJSON['compteurs']:
                 channel = guild.get_channel(int(element))
                 if channel:
@@ -35,14 +36,21 @@ class channelUpdate(commands.Cog):
                             channelName = channel.name.split(":")[0] + ": " + str(counts)
                     try:
                         await channel.edit(name=channelName)
-                    except Exception: 
+                    except discord.Forbidden:
+                        # Bot n'a pas les permissions
+                        pass
+                    except discord.HTTPException:
+                        # Erreur Discord API
                         pass
                 else:
                     toDeleteList.append(element)
 
             for element in toDeleteList:
                 del guildJSON['compteurs'][element]
-                json.dump(guildJSON, open(f'./configs/{guild.id}.json', 'w'), indent=4)
+            
+            if toDeleteList:  # Écrire seulement s'il y a eu des suppressions
+                with open(f'./configs/{guild.id}.json', 'w', encoding='utf-8') as f:
+                    json.dump(guildJSON, f, indent=4)
                     
 
 async def setup(bot):

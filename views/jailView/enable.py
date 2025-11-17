@@ -33,7 +33,8 @@ class enableButtonView(Button):
                 guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
                 guildJSON['jail']['active'] = True
                 guildJSON['jail']['role'] = role.id
-                json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8'), indent=4)
+                with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                    json.dump(guildJSON, f, indent=4)
                 embed = embedBuilder(
                     title=f"`🔨`・Jail",
                     color=embed_color(),

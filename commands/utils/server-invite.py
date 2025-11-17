@@ -15,8 +15,12 @@ class serverInvite(commands.Cog):
         if interaction.guild.premium_subscription_count >= 14:
             link = interaction.guild.vanity_invite
         else:
-            try: invite = await channel.create_invite()
-            except Exception: return await err_embed(interaction, title="Impossible de crée l'invitation", description=f"Je n'ai pas reussi a crée d'invitation pour le salon {channel.mention}", followup=True)
+            try:
+                invite = await channel.create_invite()
+            except discord.Forbidden:
+                return await err_embed(interaction, title="Impossible de créer l'invitation", description=f"Je n'ai pas réussi à créer d'invitation pour le salon {channel.mention}. Permission manquante.", followup=True)
+            except discord.HTTPException:
+                return await err_embed(interaction, title="Impossible de créer l'invitation", description=f"Je n'ai pas réussi à créer d'invitation pour le salon {channel.mention}. Erreur Discord API.", followup=True)
             link = invite.url
 
         embed: embedBuilder = embedBuilder(

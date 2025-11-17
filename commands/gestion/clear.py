@@ -26,11 +26,18 @@ class clear(commands.Cog):
         
         try:
             await interaction.channel.purge(limit=amount)
-        except Exception:
+        except discord.Forbidden:
             return await err_embed(
                 interaction,
                 title="Impossible de clear le salon",
-                description=f"Je n'ai pas réussi a clear le salon {interaction.channel.mention}",
+                description=f"Je n'ai pas réussi à clear le salon {interaction.channel.mention}. Permission manquante.",
+                followup=True
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction,
+                title="Impossible de clear le salon",
+                description=f"Je n'ai pas réussi à clear le salon {interaction.channel.mention}. Erreur Discord API.",
                 followup=True
             )
         

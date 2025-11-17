@@ -40,10 +40,14 @@ class addModalTempVoice(Modal):
 
         channelId = self.children[0].value
         categoryId = self.children[1].value
-        try: channelId = int(channelId)
-        except Exception: return await err_embed(interaction=interaction, title="Id du channel invalide", description="L'id du salon que vous avez fourni est invalide.")
-        try: categoryId = int(categoryId)
-        except Exception: return await err_embed(interaction=interaction, title="Id de la categorie invalide", description="L'id de la categorie que vous avez fourni est invalide.")
+        try:
+            channelId = int(channelId)
+        except ValueError:
+            return await err_embed(interaction=interaction, title="Id du channel invalide", description="L'id du salon que vous avez fourni est invalide.")
+        try:
+            categoryId = int(categoryId)
+        except ValueError:
+            return await err_embed(interaction=interaction, title="Id de la categorie invalide", description="L'id de la categorie que vous avez fourni est invalide.")
         channel = interaction.guild.get_channel(channelId)
         category = discord.utils.get(interaction.guild.categories, id=categoryId)
         if not channel: return await err_embed(interaction=interaction, title="Id du channel invalide", description="L'id du salon que vous avez fourni est invalide.")
@@ -57,7 +61,8 @@ class addModalTempVoice(Modal):
             "category": category.id
         }
         guildJSON['configuration']['tempvoices']['configs'][str(channel.id)] = payloads
-        json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+        with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+            json.dump(guildJSON, f, indent=4)
         tempvoiceConfigs = guildJSON['configuration']['tempvoices']['configs']
         voiceList = [
             f'> `🪄`・**Channel:** <#{element}>\n'

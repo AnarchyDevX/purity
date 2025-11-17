@@ -13,8 +13,20 @@ class say(commands.Cog):
         if check == False:
             return
         
-        await interaction.response.send_message('*Votre message va être envoyer avec le bot*', ephemeral=True)
-        await interaction.channel.send(content=message)
+        # LIMITE DE CARACTÈRES - PROTECTION CONTRE SPAM
+        if len(message) > 2000:
+            return await err_embed(
+                interaction, 
+                title="Message trop long", 
+                description="Le message ne peut pas dépasser 2000 caractères"
+            )
+        
+        # BLOCK MENTIONS - PROTECTION CONTRE INJECTION
+        from discord.utils import escape_mentions
+        safe_message = escape_mentions(message[:2000])
+        
+        await interaction.response.send_message('*Votre message va être envoyé avec le bot*', ephemeral=True)
+        await interaction.channel.send(content=safe_message)
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(say(bot))

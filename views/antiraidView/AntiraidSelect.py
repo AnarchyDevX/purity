@@ -17,6 +17,23 @@ class AntiraidSelect(Select):
         if interaction.user.id != self.userId:
             return await unauthorized(interaction)
         
+        # LISTE BLANCHE DES CLÉS AUTORISÉES - PROTECTION CONTRE INJECTION JSON
+        ALLOWED_KEYS = {
+            "antiraid.antibot", "antiraid.antilien", "antiraid.badwords",
+            "antiraid.channels.create", "antiraid.channels.edit", "antiraid.channels.delete",
+            "antiraid.roles.create", "antiraid.roles.edit", "antiraid.roles.delete",
+            "antiraid.rank.up", "antiraid.rank.down", "antiraid.webhook"
+        }
+        
+        # VALIDATION DE LA CLÉ
+        if self.values[0] not in ALLOWED_KEYS:
+            return await err_embed(
+                interaction, 
+                title="Clé invalide", 
+                description="Cette clé n'est pas autorisée pour la modification",
+                followup=False
+            )
+        
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         keys = self.values[0].split(".") 
 
@@ -27,7 +44,8 @@ class AntiraidSelect(Select):
             current = current[key]  
         last_key = keys[-1]
         current[last_key] = not current[last_key]
-        json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+        with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+            json.dump(guildJSON, f, indent=4)
         antiraid = guildJSON["antiraid"]
         embed: embedBuilder = embedBuilder(
             title="`🛡️`・Antiraid",

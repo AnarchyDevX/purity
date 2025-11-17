@@ -51,7 +51,8 @@ class warnAdd(commands.Cog):
                 )
 
             del userDb[str(member.id)]
-            json.dump(guildJSON, open(config_path, 'w'), indent=4)
+            with open(config_path, 'w', encoding='utf-8') as f:
+                json.dump(guildJSON, f, indent=4)
             embed = embedBuilder(
                 title=f"`🪼`・Membre {title}",
                 description=f"*Le membre {member.mention} a été {title} du serveur car il a dépassé `{warnConfig['maxwarn']} warn`.*",
@@ -60,7 +61,8 @@ class warnAdd(commands.Cog):
             )
             return await interaction.followup.send(embed=embed)
         else:
-            json.dump(guildJSON, open(config_path, 'w'), indent=4)
+            with open(config_path, 'w', encoding='utf-8') as f:
+                json.dump(guildJSON, f, indent=4)
             embed = embedBuilder(
                 title="`📢`・Warn ajouté",
                 description=f"*Le membre {member.mention} a été averti. Il est à `{warnCount}/{warnConfig['maxwarn']} warn`.*",

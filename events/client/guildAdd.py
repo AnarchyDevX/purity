@@ -25,7 +25,11 @@ class guildAdd(commands.Cog):
                         )
                         try:
                             await owner.send(embed=embed)
-                        except Exception:
+                        except discord.Forbidden:
+                            # L'utilisateur a désactivé les DMs
+                            continue
+                        except discord.HTTPException:
+                            # Erreur Discord API
                             continue
                     return await guild.leave()
         else:
@@ -44,8 +48,11 @@ class guildAdd(commands.Cog):
                         )
                         try:
                             await owner.send(embed=embed)
-                        except Exception as e:
-                            print(e)
+                        except discord.Forbidden:
+                            # L'utilisateur a désactivé les DMs
+                            continue
+                        except discord.HTTPException:
+                            # Erreur Discord API
                             continue
 
 async def setup(bot):

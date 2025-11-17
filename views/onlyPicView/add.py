@@ -40,7 +40,8 @@ class addButtonOnlypic(Button):
                     )
                 else:
                     onlypicList.append(channel.id)
-                    json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+                    with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                        json.dump(guildJSON, f, indent=4)
                     onlypicList = [f"<#{channelId}> `{channelId}`" for channelId in guildJSON['onlypic']]
                     embed = embedBuilder(
                         title="`🥏`・Onlypic",

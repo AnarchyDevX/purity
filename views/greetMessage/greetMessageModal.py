@@ -21,5 +21,6 @@ class greetMessageModal(Modal):
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         guildJSON['greetmsg']["content"] = self.children[0].value
         guildJSON['greetmsg']['alive'] = True
-        json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+        with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+            json.dump(guildJSON, f, indent=4)
         await interaction.response.send_message("Le message a l'arrivée a été configuré avec succès", ephemeral=True)

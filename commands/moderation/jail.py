@@ -17,8 +17,12 @@ class jail(commands.Cog):
             try:
                 removedRoles.append(roles.mention)
                 await member.remove_roles(roles)
-            except Exception as e:
-                await logs(e, 4, interaction)
+            except discord.Forbidden:
+                # Bot n'a pas les permissions
+                await logs(f"Impossible de retirer le rôle {roles.name} (Forbidden)", 4, interaction)
+            except discord.HTTPException:
+                # Erreur Discord API
+                await logs(f"Erreur lors de la suppression du rôle {roles.name} (HTTPException)", 4, interaction)
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         roleId = guildJSON['jail']['role']
         role = discord.utils.get(interaction.guild.roles, id=roleId)

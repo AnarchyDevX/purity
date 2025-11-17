@@ -14,6 +14,9 @@ class eventsLoader:
             if os.path.isdir(folderPath):  
                 for file in os.listdir(folderPath):
                     filePath: str = os.path.join(folderPath, file)
+                    # Ignorer ready.py qui est déjà chargé dans main.py
+                    if file == 'ready.py':
+                        continue
                     if file.endswith('.py'): 
                         try:
                             await self.bot.load_extension(f"events.{folder}.{file[:-3]}")
@@ -24,6 +27,9 @@ class eventsLoader:
                     
                     elif os.path.isdir(filePath): 
                         for subfile in os.listdir(filePath):
+                            # Ignorer ready.py dans les sous-dossiers aussi
+                            if subfile == 'ready.py':
+                                continue
                             if subfile.endswith('.py'):
                                 try:
                                     await self.bot.load_extension(f"events.{folder}.{file}.{subfile[:-3]}")

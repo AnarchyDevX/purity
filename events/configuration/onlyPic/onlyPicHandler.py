@@ -11,6 +11,7 @@ class onlyPicHandler(commands.Cog):
         if not isinstance(message, discord.Message): return
         if message.author.id == self.bot.user.id: return
         guildJSON = load_json_file(f"./configs/{message.guild.id}.json")
+        if guildJSON is None: return  # Config n'existe pas
         if await check_id_perms(message.author, message.guild, 1): return
         if message.channel.id not in guildJSON['onlypic']: return
         if message.attachments == []: await message.delete()

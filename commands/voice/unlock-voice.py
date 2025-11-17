@@ -23,7 +23,8 @@ class unlockVoice(commands.Cog):
             )
         
         lockeds.remove(channel.id)
-        json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+        with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+            json.dump(guildJSON, f, indent=4)
         embed: embedBuilder = embedBuilder(
             title="`🔒`・Salon unlock",
             description=f"*Le salon {channel.mention} est maintenant débloqué*",

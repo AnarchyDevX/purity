@@ -32,8 +32,7 @@ class ownerRemoveButton(Button):
             member = message.content
             try:
                 member = int(member)
-            except Exception as e:
-                print(e)
+            except ValueError:
                 return await err_embed(
                     interaction=interaction,
                     title="Id invalide",
@@ -44,7 +43,8 @@ class ownerRemoveButton(Button):
             if member:
                 if member in ownerlist:
                     ownerlist.remove(member)
-                    json.dump(guildJSON, open(f"./configs/{interaction.guild.id}.json", 'w'), indent=4)
+                    with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                        json.dump(guildJSON, f, indent=4)
                     await message.delete()
                     formatted = [f'<@{memberId}> `{memberId}`' for memberId in ownerlist]
                     embed = embedBuilder(

@@ -30,11 +30,17 @@ class voiceAft(commands.Cog):
 
         try:
             await member.move_to(interaction.guild.afk_channel)
-        except Exception:
+        except discord.Forbidden:
             return await err_embed(
                 interaction,
                 title="Impossible de deplacer le membre",
-                description=f"Je n'ai pas réussi a déplacer le membre {member.mention} dans le salon vocal {interaction.guild.afk_channel.mention}."
+                description=f"Je n'ai pas réussi à déplacer le membre {member.mention} dans le salon vocal {interaction.guild.afk_channel.mention}. Permission manquante."
+            )
+        except discord.HTTPException:
+            return await err_embed(
+                interaction,
+                title="Impossible de deplacer le membre",
+                description=f"Je n'ai pas réussi à déplacer le membre {member.mention} dans le salon vocal {interaction.guild.afk_channel.mention}. Erreur Discord API."
             )
         
         embed: embedBuilder = embedBuilder(
