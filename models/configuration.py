@@ -109,11 +109,6 @@ configuration = {
             "active": False
         }
     },
-    "roblox_verification": {
-        "active": False,
-        "role": None,
-        "webhook_url": None
-    },
     "badwords_learning": {
         "enabled": False,
         "suspicion_channel": None,
