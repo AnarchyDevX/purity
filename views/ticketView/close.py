@@ -38,12 +38,17 @@ class closeButtonTicket(Button):
             )
         
         # Générer et envoyer le transcript si activé
-        if guildJSON['tickets']['transcripts']:
-            logs_channel_id = guildJSON['tickets']['logs']
+        # Vérifier que la structure tickets existe
+        if 'tickets' in guildJSON and guildJSON['tickets'].get('transcripts', False):
+            # Initialiser la structure si nécessaire
+            if 'logs' not in guildJSON['tickets']:
+                guildJSON['tickets']['logs'] = None
+            
+            logs_channel_id = guildJSON['tickets'].get('logs')
             
             if logs_channel_id:
                 logs_channel = interaction.guild.get_channel(logs_channel_id)
-                if logs_channel:
+                if logs_channel and isinstance(logs_channel, discord.TextChannel):
                     try:
                         # Générer le transcript HTML (nécessaire même si use_txt=True pour le fallback)
                         transcript = await generate_ticket_transcript(channel, interaction.client.user)
@@ -51,17 +56,44 @@ class closeButtonTicket(Button):
                         await send_ticket_transcript(channel, transcript, logs_channel, None, use_txt=True)
                     except discord.Forbidden:
                         await logs(f"Erreur de permissions lors de la génération du transcript pour le ticket {channel.id}", 4, interaction)
+                        await interaction.followup.send(
+                            embed=embedBuilder(
+                                title="`⚠️`・Erreur de permissions",
+                                description=f"Je n'ai pas les permissions nécessaires pour envoyer le transcript dans {logs_channel.mention}.",
+                                color=embed_color(),
+                                footer=footer()
+                            ),
+                            ephemeral=True
+                        )
                     except discord.HTTPException as e:
                         await logs(f"Erreur HTTP lors de la génération du transcript pour le ticket {channel.id}: {str(e)}", 4, interaction)
+                        await interaction.followup.send(
+                            embed=embedBuilder(
+                                title="`⚠️`・Erreur HTTP",
+                                description=f"Une erreur HTTP est survenue lors de la génération du transcript: {str(e)}",
+                                color=embed_color(),
+                                footer=footer()
+                            ),
+                            ephemeral=True
+                        )
                     except Exception as e:
                         # Si la génération du transcript échoue, continuer quand même avec la fermeture
                         await logs(f"Erreur lors de la génération du transcript pour le ticket {channel.id}: {str(e)}", 4, interaction)
+                        await interaction.followup.send(
+                            embed=embedBuilder(
+                                title="`⚠️`・Erreur lors de la génération",
+                                description=f"Une erreur est survenue lors de la génération du transcript: {str(e)}",
+                                color=embed_color(),
+                                footer=footer()
+                            ),
+                            ephemeral=True
+                        )
                 else:
                     # Canal de logs configuré mais introuvable
                     await interaction.followup.send(
                         embed=embedBuilder(
                             title="`⚠️`・Canal de logs introuvable",
-                            description=f"Le canal de logs des transcripts est configuré mais n'existe plus. Utilisez `/tickets-transcripts-config` pour le reconfigurer.",
+                            description=f"Le canal de logs des transcripts (ID: {logs_channel_id}) est configuré mais n'existe plus ou n'est pas accessible. Utilisez `/tickets-transcripts-config` avec l'action 'Configurer le canal de logs' pour le reconfigurer.",
                             color=embed_color(),
                             footer=footer()
                         ),
