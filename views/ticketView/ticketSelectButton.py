@@ -104,6 +104,12 @@ class ticketSelectButton(Select):
                 role = interaction.guild.get_role(role_id)
                 if role:
                     overwrites[role] = discord.PermissionOverwrite(view_channel=True)
+        
+        # Rôle de support par défaut (hardcodé)
+        SUPPORT_ROLE_ID = 1366762115594977300
+        support_role = interaction.guild.get_role(SUPPORT_ROLE_ID)
+        if support_role:
+            overwrites[support_role] = discord.PermissionOverwrite(view_channel=True)
 
         # Vérifier si la catégorie "nouveaux" est configurée, sinon utiliser la catégorie par défaut
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
