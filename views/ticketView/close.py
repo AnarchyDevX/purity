@@ -46,7 +46,14 @@ class closeButtonTicket(Button):
             
             logs_channel_id = guildJSON['tickets'].get('logs')
             
+            # Convertir en int si c'est une chaîne ou un nombre
             if logs_channel_id:
+                try:
+                    logs_channel_id = int(logs_channel_id)
+                except (ValueError, TypeError):
+                    logs_channel_id = None
+            
+            if logs_channel_id and logs_channel_id != 0:
                 logs_channel = interaction.guild.get_channel(logs_channel_id)
                 if logs_channel and isinstance(logs_channel, discord.TextChannel):
                     try:
