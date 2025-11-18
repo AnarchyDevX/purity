@@ -4,6 +4,7 @@ from discord import app_commands
 from functions.functions import *
 from core.embedBuilder import embedBuilder
 import json
+from typing import Dict, Any
 
 class ticketsTranscriptsConfig(commands.Cog):
     def __init__(self, bot):
@@ -19,16 +20,32 @@ class ticketsTranscriptsConfig(commands.Cog):
     )
     async def ticketsTranscriptsConfig(self, interaction: discord.Interaction, action: str, 
                                       channel: discord.TextChannel | None = None):
-        if not await check_perms(interaction, 2):
-            return
+        await interaction.response.defer(ephemeral=True)
         
-        guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
-        if guildJSON is None:
+        # Vérifier les permissions après le defer
+        config: Dict[str, Any] = load_json()
+        guildConfig = load_json_file(f"./configs/{interaction.guild.id}.json")
+        if guildConfig is None:
             return await err_embed(
                 interaction,
                 title="Configuration manquante",
-                description="La configuration du serveur n'existe pas."
+                description="La configuration du serveur n'existe pas.",
+                followup=True
             )
+        
+        interactionUser: int = interaction.user.id
+        isOwner: bool = interactionUser in guildConfig['ownerlist']
+        has_perms = (interactionUser in config['buyer'] or isOwner)
+        
+        if not has_perms:
+            return await err_embed(
+                interaction,
+                title="Commande non autorisée",
+                description="Vous n'avez pas la permission d'utiliser cette commande.",
+                followup=True
+            )
+        
+        guildJSON = guildConfig
         
         # Initialiser la structure si nécessaire
         if 'tickets' not in guildJSON:
@@ -45,8 +62,6 @@ class ticketsTranscriptsConfig(commands.Cog):
                     "fermes": None
                 }
             }
-        
-        await interaction.response.defer(ephemeral=True)
         
         try:
             if action == "enable":
