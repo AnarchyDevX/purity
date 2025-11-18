@@ -54,7 +54,14 @@ class closeButtonTicket(Button):
                     logs_channel_id = None
             
             if logs_channel_id and logs_channel_id != 0:
+                # Essayer d'abord avec get_channel (cache), puis fetch_channel (API) si échec
                 logs_channel = interaction.guild.get_channel(logs_channel_id)
+                if not logs_channel:
+                    try:
+                        logs_channel = await interaction.client.fetch_channel(logs_channel_id)
+                    except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                        logs_channel = None
+                
                 if logs_channel and isinstance(logs_channel, discord.TextChannel):
                     try:
                         # Générer le transcript HTML (nécessaire même si use_txt=True pour le fallback)
