@@ -39,12 +39,31 @@ class closeButtonTicket(Button):
             )
         
         # Générer et envoyer le transcript si activé
-        if guildJSON['tickets']['transcripts']:
-            logs_channel_id = guildJSON['tickets']['logs']
+        # Vérifier que la structure tickets existe
+        if 'tickets' in guildJSON and guildJSON['tickets'].get('transcripts', False):
+            # Initialiser la structure si nécessaire
+            if 'logs' not in guildJSON['tickets']:
+                guildJSON['tickets']['logs'] = None
             
+            logs_channel_id = guildJSON['tickets'].get('logs')
+            
+            # Convertir en int si c'est une chaîne ou un nombre
             if logs_channel_id:
+                try:
+                    logs_channel_id = int(logs_channel_id)
+                except (ValueError, TypeError):
+                    logs_channel_id = None
+            
+            if logs_channel_id and logs_channel_id != 0:
+                # Essayer d'abord avec get_channel (cache), puis fetch_channel (API) si échec
                 logs_channel = interaction.guild.get_channel(logs_channel_id)
-                if logs_channel:
+                if not logs_channel:
+                    try:
+                        logs_channel = await interaction.client.fetch_channel(logs_channel_id)
+                    except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                        logs_channel = None
+                
+                if logs_channel and isinstance(logs_channel, discord.TextChannel):
                     transcript_sent = False
                     try:
                         # Générer le transcript HTML (nécessaire même si use_txt=True pour le fallback)
@@ -79,6 +98,15 @@ class closeButtonTicket(Button):
                             pass
                     except discord.HTTPException as e:
                         await logs(f"Erreur HTTP lors de la génération du transcript pour le ticket {channel.id}: {str(e)}", 4, interaction)
+                        await interaction.followup.send(
+                            embed=embedBuilder(
+                                title="`⚠️`・Erreur HTTP",
+                                description=f"Une erreur HTTP est survenue lors de la génération du transcript: {str(e)}",
+                                color=embed_color(),
+                                footer=footer()
+                            ),
+                            ephemeral=True
+                        )
                     except Exception as e:
                         # Si la génération du transcript échoue, continuer quand même avec la fermeture
                         await logs(f"Erreur lors de la génération du transcript pour le ticket {channel.id}: {str(e)}", 4, interaction)
@@ -121,7 +149,7 @@ class closeButtonTicket(Button):
                     await interaction.followup.send(
                         embed=embedBuilder(
                             title="`⚠️`・Canal de logs introuvable",
-                            description=f"Le canal de logs des transcripts est configuré mais n'existe plus. Utilisez `/tickets-transcripts-config` pour le reconfigurer.",
+                            description=f"Le canal de logs des transcripts (ID: {logs_channel_id}) est configuré mais n'existe plus ou n'est pas accessible. Utilisez `/tickets-transcripts-config` avec l'action 'Configurer le canal de logs' pour le reconfigurer.",
                             color=embed_color(),
                             footer=footer()
                         ),

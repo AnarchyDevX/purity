@@ -15,12 +15,27 @@ class claimButtonTicket(Button):
     async def callback(self, interaction: discord.Interaction):
         await interaction.response.defer(ephemeral=True)
         
-        # Vérifier que l'utilisateur a les permissions modérateur
-        if not await check_id_perms(interaction.user, interaction.guild, 1):
+        # Vérifier que l'utilisateur a les permissions modérateur ou un rôle de support
+        has_mod_perms = await check_id_perms(interaction.user, interaction.guild, 1)
+        has_support_role = False
+        
+        # Rôle de support par défaut (hardcodé)
+        SUPPORT_ROLE_ID = 1366762115594977300
+        user_roles = [role.id for role in interaction.user.roles]
+        has_support_role = SUPPORT_ROLE_ID in user_roles
+        
+        # Vérifier si l'utilisateur a un des rôles de support configurés dans la config
+        if not has_support_role:
+            guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
+            if guildJSON and 'tickets' in guildJSON and 'roles' in guildJSON['tickets']:
+                support_roles = guildJSON['tickets']['roles']
+                has_support_role = any(role_id in user_roles for role_id in support_roles)
+        
+        if not has_mod_perms and not has_support_role:
             return await err_embed(
                 interaction,
                 title="Permission manquante",
-                description="Vous devez être modérateur pour prendre en charge un ticket.",
+                description="Vous devez être modérateur ou avoir un rôle de support pour prendre en charge un ticket.",
                 followup=True
             )
         

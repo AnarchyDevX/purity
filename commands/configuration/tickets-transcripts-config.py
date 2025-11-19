@@ -4,6 +4,7 @@ from discord import app_commands
 from functions.functions import *
 from core.embedBuilder import embedBuilder
 import json
+from typing import Dict, Any
 
 class ticketsTranscriptsConfig(commands.Cog):
     def __init__(self, bot):
@@ -19,16 +20,32 @@ class ticketsTranscriptsConfig(commands.Cog):
     )
     async def ticketsTranscriptsConfig(self, interaction: discord.Interaction, action: str, 
                                       channel: discord.TextChannel | None = None):
-        if not await check_perms(interaction, 2):
-            return
+        await interaction.response.defer(ephemeral=True)
         
-        guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
-        if guildJSON is None:
+        # Vérifier les permissions après le defer
+        config: Dict[str, Any] = load_json()
+        guildConfig = load_json_file(f"./configs/{interaction.guild.id}.json")
+        if guildConfig is None:
             return await err_embed(
                 interaction,
                 title="Configuration manquante",
-                description="La configuration du serveur n'existe pas."
+                description="La configuration du serveur n'existe pas.",
+                followup=True
             )
+        
+        interactionUser: int = interaction.user.id
+        isOwner: bool = interactionUser in guildConfig['ownerlist']
+        has_perms = (interactionUser in config['buyer'] or isOwner)
+        
+        if not has_perms:
+            return await err_embed(
+                interaction,
+                title="Commande non autorisée",
+                description="Vous n'avez pas la permission d'utiliser cette commande.",
+                followup=True
+            )
+        
+        guildJSON = guildConfig
         
         # Initialiser la structure si nécessaire
         if 'tickets' not in guildJSON:
@@ -46,48 +63,63 @@ class ticketsTranscriptsConfig(commands.Cog):
                 }
             }
         
-        await interaction.response.defer(ephemeral=True)
-        
-        if action == "enable":
-            guildJSON['tickets']['transcripts'] = True
-            embed = embedBuilder(
-                title="`✅`・Transcripts activés",
-                description="Le système de transcription des tickets est maintenant activé.",
-                color=embed_color(),
-                footer=footer()
-            )
-        
-        elif action == "disable":
-            guildJSON['tickets']['transcripts'] = False
-            embed = embedBuilder(
-                title="`❌`・Transcripts désactivés",
-                description="Le système de transcription des tickets est maintenant désactivé.",
-                color=embed_color(),
-                footer=footer()
-            )
-        
-        elif action == "channel":
-            if not channel:
+        try:
+            if action == "enable":
+                guildJSON['tickets']['transcripts'] = True
+                embed = embedBuilder(
+                    title="`✅`・Transcripts activés",
+                    description="Le système de transcription des tickets est maintenant activé.",
+                    color=embed_color(),
+                    footer=footer()
+                )
+            
+            elif action == "disable":
+                guildJSON['tickets']['transcripts'] = False
+                embed = embedBuilder(
+                    title="`❌`・Transcripts désactivés",
+                    description="Le système de transcription des tickets est maintenant désactivé.",
+                    color=embed_color(),
+                    footer=footer()
+                )
+            
+            elif action == "channel":
+                if not channel:
+                    return await err_embed(
+                        interaction,
+                        title="Canal manquant",
+                        description="Veuillez spécifier un canal de logs pour les transcripts.",
+                        followup=True
+                    )
+                
+                guildJSON['tickets']['logs'] = channel.id
+                embed = embedBuilder(
+                    title="`✅`・Canal de logs configuré",
+                    description=f"Le canal de logs des transcripts a été défini sur {channel.mention}.",
+                    color=embed_color(),
+                    footer=footer()
+                )
+            else:
+                # Action invalide (ne devrait jamais arriver avec les choices)
                 return await err_embed(
                     interaction,
-                    title="Canal manquant",
-                    description="Veuillez spécifier un canal de logs pour les transcripts.",
+                    title="Action invalide",
+                    description=f"L'action '{action}' n'est pas valide.",
                     followup=True
                 )
             
-            guildJSON['tickets']['logs'] = channel.id
-            embed = embedBuilder(
-                title="`✅`・Canal de logs configuré",
-                description=f"Le canal de logs des transcripts a été défini sur {channel.mention}.",
-                color=embed_color(),
-                footer=footer()
+            # Sauvegarder seulement si une action valide a été effectuée
+            with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                json.dump(guildJSON, f, indent=4, ensure_ascii=False)
+            
+            await interaction.followup.send(embed=embed, ephemeral=True)
+            
+        except Exception as e:
+            await err_embed(
+                interaction,
+                title="Erreur",
+                description=f"Une erreur est survenue lors de la configuration: {str(e)}",
+                followup=True
             )
-        
-        # Sauvegarder
-        with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
-            json.dump(guildJSON, f, indent=4, ensure_ascii=False)
-        
-        await interaction.followup.send(embed=embed, ephemeral=True)
 
 async def setup(bot):
     await bot.add_cog(ticketsTranscriptsConfig(bot))
