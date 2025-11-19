@@ -66,12 +66,31 @@ class closeButtonTicket(Button):
                 if logs_channel and isinstance(logs_channel, discord.TextChannel):
                     transcript_sent = False
                     try:
+                        # Vérifier les permissions du bot dans le canal de logs
+                        bot_member = logs_channel.guild.get_member(interaction.client.user.id)
+                        if not bot_member:
+                            bot_member = await logs_channel.guild.fetch_member(interaction.client.user.id)
+                        
+                        perms = logs_channel.permissions_for(bot_member)
+                        if not perms.send_messages or not perms.attach_files or not perms.embed_links:
+                            raise discord.Forbidden("Le bot n'a pas les permissions nécessaires dans le canal de logs")
+                        
                         # Générer le transcript HTML (nécessaire même si use_txt=True pour le fallback)
                         transcript = await generate_ticket_transcript(channel, interaction.client.user)
                         # Envoyer le transcript (format texte, pas de VPS)
                         result = await send_ticket_transcript(channel, transcript, logs_channel, None, use_txt=True)
                         if result:
                             transcript_sent = True
+                            # Confirmer à l'utilisateur que le transcript a été envoyé
+                            await interaction.followup.send(
+                                embed=embedBuilder(
+                                    title="`✅`・Transcript généré",
+                                    description=f"Le transcript a été envoyé avec succès dans {logs_channel.mention}.",
+                                    color=embed_color(),
+                                    footer=footer()
+                                ),
+                                ephemeral=True
+                            )
                     except discord.Forbidden:
                         await logs(f"Erreur de permissions lors de la génération du transcript pour le ticket {channel.id}", 4, interaction)
                         # Essayer le fallback TXT direct
@@ -138,7 +157,7 @@ class closeButtonTicket(Button):
                         await interaction.followup.send(
                             embed=embedBuilder(
                                 title="`⚠️`・Transcript non généré",
-                                description="Le transcript n'a pas pu être généré ou envoyé. Le ticket sera quand même fermé.",
+                                description="Le transcript n'a pas pu être généré ou envoyé. Le ticket sera quand même fermé.\n\n**Vérifiez :**\n- Que le canal de logs existe toujours\n- Que le bot a les permissions d'envoyer des messages dans ce canal\n- Consultez les logs du bot pour plus de détails",
                                 color=0xfaa61a,
                                 footer=footer()
                             ),
@@ -149,8 +168,8 @@ class closeButtonTicket(Button):
                     await interaction.followup.send(
                         embed=embedBuilder(
                             title="`⚠️`・Canal de logs introuvable",
-                            description=f"Le canal de logs des transcripts (ID: {logs_channel_id}) est configuré mais n'existe plus ou n'est pas accessible. Utilisez `/tickets-transcripts-config` avec l'action 'Configurer le canal de logs' pour le reconfigurer.",
-                            color=embed_color(),
+                            description=f"Le canal de logs des transcripts (ID: {logs_channel_id}) est configuré mais n'existe plus ou n'est pas accessible.\n\n**Solution :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** et sélectionnez un canal valide.",
+                            color=0xfaa61a,
                             footer=footer()
                         ),
                         ephemeral=True
@@ -160,8 +179,8 @@ class closeButtonTicket(Button):
                 await interaction.followup.send(
                     embed=embedBuilder(
                         title="`⚠️`・Canal de logs non configuré",
-                        description=f"Les transcripts sont activés mais aucun canal de logs n'est configuré. Utilisez `/tickets-transcripts-config` avec l'action 'Configurer le canal de logs' pour configurer un canal.",
-                        color=embed_color(),
+                        description=f"Les transcripts sont activés mais aucun canal de logs n'est configuré.\n\n**Solution :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** et sélectionnez un canal où envoyer les transcripts.",
+                        color=0xfaa61a,
                         footer=footer()
                     ),
                     ephemeral=True
