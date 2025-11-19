@@ -4,7 +4,7 @@ from discord.ext import commands
 from discord.ui import Button
 from functions.functions import *
 from core.embedBuilder import embedBuilder
-from functions.ticketTranscript import generate_ticket_transcript, send_ticket_transcript
+from functions.ticketTranscript import generate_ticket_transcript, send_ticket_transcript, generate_ticket_transcript_txt
 from datetime import datetime
 import json
 
@@ -175,16 +175,59 @@ class closeButtonTicket(Button):
                         ephemeral=True
                     )
             else:
-                # Canal de logs non configuré
-                await interaction.followup.send(
-                    embed=embedBuilder(
-                        title="`⚠️`・Canal de logs non configuré",
-                        description=f"Les transcripts sont activés mais aucun canal de logs n'est configuré.\n\n**Solution :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** et sélectionnez un canal où envoyer les transcripts.",
+                # Canal de logs non configuré - proposer d'envoyer en DM
+                try:
+                    # Essayer d'envoyer le transcript en DM à l'utilisateur qui ferme le ticket
+                    transcript_txt = await generate_ticket_transcript_txt(channel)
+                    import io
+                    from discord import File
+                    transcript_file = File(
+                        io.BytesIO(transcript_txt.encode('utf-8')),
+                        filename=f"transcript-{channel.name}-{datetime.now().strftime('%Y%m%d-%H%M%S')}.txt"
+                    )
+                    embed_dm = embedBuilder(
+                        title="📄 Transcript de ticket",
+                        description=f"Transcript du ticket **{channel.name}**\n\n⚠️ **Note :** Le canal de logs n'est pas configuré sur le serveur. Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** pour configurer un canal.",
                         color=0xfaa61a,
                         footer=footer()
-                    ),
-                    ephemeral=True
-                )
+                    )
+                    embed_dm.add_field(name="Ticket", value=f"#{channel.name}", inline=False)
+                    embed_dm.add_field(name="Créé le", value=channel.created_at.strftime('%d/%m/%Y à %H:%M:%S'), inline=True)
+                    embed_dm.add_field(name="Fermé le", value=datetime.now().strftime('%d/%m/%Y à %H:%M:%S'), inline=True)
+                    
+                    try:
+                        await interaction.user.send(embed=embed_dm, file=transcript_file)
+                        await interaction.followup.send(
+                            embed=embedBuilder(
+                                title="`✅`・Transcript envoyé en MP",
+                                description=f"Le transcript a été envoyé dans vos messages privés car aucun canal de logs n'est configuré.\n\n**Pour configurer un canal :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'**.",
+                                color=embed_color(),
+                                footer=footer()
+                            ),
+                            ephemeral=True
+                        )
+                    except discord.Forbidden:
+                        # L'utilisateur a désactivé les DMs
+                        await interaction.followup.send(
+                            embed=embedBuilder(
+                                title="`⚠️`・Canal de logs non configuré",
+                                description=f"Les transcripts sont activés mais aucun canal de logs n'est configuré.\n\n**Solution :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** et sélectionnez un canal où envoyer les transcripts.\n\n*Note : Impossible d'envoyer le transcript en MP (messages privés désactivés).*",
+                                color=0xfaa61a,
+                                footer=footer()
+                            ),
+                            ephemeral=True
+                        )
+                except Exception as e:
+                    # Erreur lors de la génération du transcript
+                    await interaction.followup.send(
+                        embed=embedBuilder(
+                            title="`⚠️`・Canal de logs non configuré",
+                            description=f"Les transcripts sont activés mais aucun canal de logs n'est configuré.\n\n**Solution :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** et sélectionnez un canal où envoyer les transcripts.\n\n*Erreur lors de la génération du transcript : {str(e)}*",
+                            color=0xfaa61a,
+                            footer=footer()
+                        ),
+                        ephemeral=True
+                    )
         
         # Déplacer vers la catégorie "fermes" ou supprimer
         category_fermes_id = guildJSON['tickets']['categories'].get('fermes')
