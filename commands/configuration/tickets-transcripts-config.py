@@ -90,10 +90,26 @@ class ticketsTranscriptsConfig(commands.Cog):
                         followup=True
                     )
                 
-                guildJSON['tickets']['logs'] = channel.id
+                # S'assurer que l'ID est bien un entier
+                channel_id = int(channel.id)
+                guildJSON['tickets']['logs'] = channel_id
+                
+                # Vérifier que le canal est accessible
+                test_channel = interaction.guild.get_channel(channel_id)
+                if not test_channel:
+                    try:
+                        test_channel = await interaction.client.fetch_channel(channel_id)
+                    except:
+                        return await err_embed(
+                            interaction,
+                            title="Canal inaccessible",
+                            description=f"Le canal {channel.mention} n'est pas accessible. Vérifiez que le bot a accès à ce canal.",
+                            followup=True
+                        )
+                
                 embed = embedBuilder(
                     title="`✅`・Canal de logs configuré",
-                    description=f"Le canal de logs des transcripts a été défini sur {channel.mention}.",
+                    description=f"Le canal de logs des transcripts a été défini sur {channel.mention} (ID: {channel_id}).",
                     color=embed_color(),
                     footer=footer()
                 )

@@ -47,23 +47,49 @@ class closeButtonTicket(Button):
             
             logs_channel_id = guildJSON['tickets'].get('logs')
             
+            # Debug: logger l'ID récupéré
+            print(f"[TRANSCRIPT DEBUG] logs_channel_id récupéré: {logs_channel_id} (type: {type(logs_channel_id)})")
+            
             # Convertir en int si c'est une chaîne ou un nombre
-            if logs_channel_id:
+            if logs_channel_id is not None:
                 try:
-                    logs_channel_id = int(logs_channel_id)
-                except (ValueError, TypeError):
+                    # Si c'est déjà un int, pas besoin de conversion
+                    if isinstance(logs_channel_id, int):
+                        pass  # Déjà un int
+                    elif isinstance(logs_channel_id, str):
+                        logs_channel_id = int(logs_channel_id)
+                    else:
+                        logs_channel_id = int(logs_channel_id)
+                    print(f"[TRANSCRIPT DEBUG] logs_channel_id converti: {logs_channel_id}")
+                except (ValueError, TypeError) as e:
+                    print(f"[TRANSCRIPT DEBUG] Erreur conversion logs_channel_id: {e}")
                     logs_channel_id = None
             
             if logs_channel_id and logs_channel_id != 0:
+                print(f"[TRANSCRIPT DEBUG] Tentative de récupération du canal {logs_channel_id}")
                 # Essayer d'abord avec get_channel (cache), puis fetch_channel (API) si échec
                 logs_channel = interaction.guild.get_channel(logs_channel_id)
                 if not logs_channel:
                     try:
                         logs_channel = await interaction.client.fetch_channel(logs_channel_id)
-                    except (discord.NotFound, discord.Forbidden, discord.HTTPException):
+                        print(f"[TRANSCRIPT DEBUG] Canal récupéré via fetch_channel: {logs_channel}")
+                    except discord.NotFound:
+                        print(f"[TRANSCRIPT DEBUG] Canal {logs_channel_id} non trouvé (NotFound)")
+                        logs_channel = None
+                    except discord.Forbidden:
+                        print(f"[TRANSCRIPT DEBUG] Pas d'accès au canal {logs_channel_id} (Forbidden)")
+                        logs_channel = None
+                    except discord.HTTPException as e:
+                        print(f"[TRANSCRIPT DEBUG] Erreur HTTP lors de la récupération du canal {logs_channel_id}: {e}")
                         logs_channel = None
                 
+                if logs_channel:
+                    print(f"[TRANSCRIPT DEBUG] Canal trouvé: {logs_channel.name} (type: {type(logs_channel)})")
+                else:
+                    print(f"[TRANSCRIPT DEBUG] Canal non trouvé pour l'ID {logs_channel_id}")
+                
                 if logs_channel and isinstance(logs_channel, discord.TextChannel):
+                    print(f"[TRANSCRIPT DEBUG] Canal valide, génération du transcript...")
                     transcript_sent = False
                     try:
                         # Vérifier les permissions du bot dans le canal de logs
