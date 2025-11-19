@@ -2,6 +2,12 @@
 
 ## 📥 Récupérer les changements (Git Pull)
 
+### Si erreur "dubious ownership" (première fois)
+```bash
+git config --global --add safe.directory /opt/purity
+```
+
+### Puis récupérer les changements
 ```bash
 cd /opt/purity
 git pull origin main
