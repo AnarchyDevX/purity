@@ -5,6 +5,7 @@ from discord.ui import Button
 from functions.functions import *
 from core.embedBuilder import embedBuilder
 from functions.ticketTranscript import generate_ticket_transcript, send_ticket_transcript
+from datetime import datetime
 import json
 
 
@@ -44,18 +45,77 @@ class closeButtonTicket(Button):
             if logs_channel_id:
                 logs_channel = interaction.guild.get_channel(logs_channel_id)
                 if logs_channel:
+                    transcript_sent = False
                     try:
                         # Générer le transcript HTML (nécessaire même si use_txt=True pour le fallback)
                         transcript = await generate_ticket_transcript(channel, interaction.client.user)
                         # Envoyer le transcript (format texte, pas de VPS)
-                        await send_ticket_transcript(channel, transcript, logs_channel, None, use_txt=True)
+                        result = await send_ticket_transcript(channel, transcript, logs_channel, None, use_txt=True)
+                        if result:
+                            transcript_sent = True
                     except discord.Forbidden:
                         await logs(f"Erreur de permissions lors de la génération du transcript pour le ticket {channel.id}", 4, interaction)
+                        # Essayer le fallback TXT direct
+                        try:
+                            from functions.ticketTranscript import generate_ticket_transcript_txt
+                            import io
+                            from discord import File
+                            transcript_txt = await generate_ticket_transcript_txt(channel)
+                            transcript_file = File(
+                                io.BytesIO(transcript_txt.encode('utf-8')),
+                                filename=f"transcript-{channel.name}-{datetime.now().strftime('%Y%m%d-%H%M%S')}.txt"
+                            )
+                            await logs_channel.send(
+                                embed=embedBuilder(
+                                    title="📄 Transcript de ticket (Fallback)",
+                                    description=f"Transcript du ticket **{channel.name}**",
+                                    color=embed_color(),
+                                    footer=footer()
+                                ),
+                                file=transcript_file
+                            )
+                            transcript_sent = True
+                        except:
+                            pass
                     except discord.HTTPException as e:
                         await logs(f"Erreur HTTP lors de la génération du transcript pour le ticket {channel.id}: {str(e)}", 4, interaction)
                     except Exception as e:
                         # Si la génération du transcript échoue, continuer quand même avec la fermeture
                         await logs(f"Erreur lors de la génération du transcript pour le ticket {channel.id}: {str(e)}", 4, interaction)
+                        # Essayer le fallback TXT minimal
+                        try:
+                            from functions.ticketTranscript import generate_ticket_transcript_txt
+                            import io
+                            from discord import File
+                            transcript_txt = await generate_ticket_transcript_txt(channel)
+                            transcript_file = File(
+                                io.BytesIO(transcript_txt.encode('utf-8')),
+                                filename=f"transcript-{channel.name}-{datetime.now().strftime('%Y%m%d-%H%M%S')}.txt"
+                            )
+                            await logs_channel.send(
+                                embed=embedBuilder(
+                                    title="📄 Transcript de ticket (Fallback)",
+                                    description=f"Transcript du ticket **{channel.name}**\n⚠️ Certaines erreurs sont survenues lors de la génération.",
+                                    color=0xfaa61a,
+                                    footer=footer()
+                                ),
+                                file=transcript_file
+                            )
+                            transcript_sent = True
+                        except:
+                            pass
+                    
+                    # Notifier l'utilisateur si le transcript n'a pas pu être envoyé
+                    if not transcript_sent:
+                        await interaction.followup.send(
+                            embed=embedBuilder(
+                                title="`⚠️`・Transcript non généré",
+                                description="Le transcript n'a pas pu être généré ou envoyé. Le ticket sera quand même fermé.",
+                                color=0xfaa61a,
+                                footer=footer()
+                            ),
+                            ephemeral=True
+                        )
                 else:
                     # Canal de logs configuré mais introuvable
                     await interaction.followup.send(

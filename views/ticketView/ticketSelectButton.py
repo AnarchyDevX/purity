@@ -99,11 +99,26 @@ class ticketSelectButton(Select):
         
         # Ajouter les rôles configurés pour les tickets
         guildJSON_check = load_json_file(f"./configs/{interaction.guild.id}.json")
-        if guildJSON_check and 'tickets' in guildJSON_check and 'roles' in guildJSON_check['tickets']:
-            for role_id in guildJSON_check['tickets']['roles']:
-                role = interaction.guild.get_role(role_id)
-                if role:
-                    overwrites[role] = discord.PermissionOverwrite(view_channel=True)
+        if guildJSON_check and 'tickets' in guildJSON_check:
+            # Ajouter le rôle staff (priorité haute)
+            if 'staff_role' in guildJSON_check['tickets'] and guildJSON_check['tickets']['staff_role']:
+                staff_role = interaction.guild.get_role(guildJSON_check['tickets']['staff_role'])
+                if staff_role:
+                    # Permissions complètes pour le staff : read, send, history, attach files
+                    overwrites[staff_role] = discord.PermissionOverwrite(
+                        view_channel=True,
+                        send_messages=True,
+                        read_message_history=True,
+                        attach_files=True,
+                        embed_links=True
+                    )
+            
+            # Ajouter les autres rôles configurés
+            if 'roles' in guildJSON_check['tickets']:
+                for role_id in guildJSON_check['tickets']['roles']:
+                    role = interaction.guild.get_role(role_id)
+                    if role and role not in overwrites:  # Éviter les doublons
+                        overwrites[role] = discord.PermissionOverwrite(view_channel=True)
 
         # Vérifier si la catégorie "nouveaux" est configurée, sinon utiliser la catégorie par défaut
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")

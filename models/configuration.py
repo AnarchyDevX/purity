@@ -68,6 +68,7 @@ configuration = {
         "logs": None,
         "transcripts": True,
         "roles": [],
+        "staff_role": None,
         "claim": True,
         "buttons": {},
         "categories": {
