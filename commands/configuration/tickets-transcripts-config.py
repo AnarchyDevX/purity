@@ -20,14 +20,25 @@ class ticketsTranscriptsConfig(commands.Cog):
     )
     async def ticketsTranscriptsConfig(self, interaction: discord.Interaction, action: str, 
                                       channel: discord.TextChannel | None = None):
-        # Vérifier les permissions AVANT le defer
+        # Defer immédiatement pour éviter l'expiration de l'interaction
+        try:
+            await interaction.response.defer(ephemeral=True)
+        except discord.InteractionResponded:
+            # L'interaction a déjà été répondue
+            pass
+        except Exception as e:
+            print(f"[TICKETS-TRANSCRIPTS-CONFIG] Erreur lors du defer: {e}")
+            return
+        
+        # Vérifier les permissions APRÈS le defer
         config: Dict[str, Any] = load_json()
         guildConfig = load_json_file(f"./configs/{interaction.guild.id}.json")
         if guildConfig is None:
             return await err_embed(
                 interaction,
                 title="Configuration manquante",
-                description="La configuration du serveur n'existe pas."
+                description="La configuration du serveur n'existe pas.",
+                followup=True
             )
         
         interactionUser: int = interaction.user.id
@@ -38,11 +49,9 @@ class ticketsTranscriptsConfig(commands.Cog):
             return await err_embed(
                 interaction,
                 title="Commande non autorisée",
-                description="Vous n'avez pas la permission d'utiliser cette commande."
+                description="Vous n'avez pas la permission d'utiliser cette commande.",
+                followup=True
             )
-        
-        # Maintenant on peut defer
-        await interaction.response.defer(ephemeral=True)
         
         guildJSON = guildConfig
         
