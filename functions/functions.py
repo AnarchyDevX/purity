@@ -26,10 +26,22 @@ def footer() -> str:
 def load_json_file(filePath: str) -> Dict[str, Any] | None:
     try:
         with open(filePath, 'r', encoding='utf-8') as f:
-            file: Dict[str, Any] = json.load(f)
+            content = f.read().strip()
+            # Si le fichier est vide, retourner None
+            if not content:
+                return None
+            file: Dict[str, Any] = json.loads(content)
         return file
     except FileNotFoundError:
         # Fichier de config n'existe pas, retourner None
+        return None
+    except json.JSONDecodeError as e:
+        # Logger l'erreur pour debug
+        print(f"[JSON] Erreur de décodage JSON dans {filePath}: {e}")
+        return None
+    except Exception as e:
+        # Autre erreur inattendue
+        print(f"[JSON] Erreur lors du chargement de {filePath}: {e}")
         return None
 
 async def unauthorized(interaction: discord.Interaction) -> None:
