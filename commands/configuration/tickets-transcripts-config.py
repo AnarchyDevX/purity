@@ -20,17 +20,14 @@ class ticketsTranscriptsConfig(commands.Cog):
     )
     async def ticketsTranscriptsConfig(self, interaction: discord.Interaction, action: str, 
                                       channel: discord.TextChannel | None = None):
-        await interaction.response.defer(ephemeral=True)
-        
-        # Vérifier les permissions après le defer
+        # Vérifier les permissions AVANT le defer
         config: Dict[str, Any] = load_json()
         guildConfig = load_json_file(f"./configs/{interaction.guild.id}.json")
         if guildConfig is None:
             return await err_embed(
                 interaction,
                 title="Configuration manquante",
-                description="La configuration du serveur n'existe pas.",
-                followup=True
+                description="La configuration du serveur n'existe pas."
             )
         
         interactionUser: int = interaction.user.id
@@ -41,9 +38,11 @@ class ticketsTranscriptsConfig(commands.Cog):
             return await err_embed(
                 interaction,
                 title="Commande non autorisée",
-                description="Vous n'avez pas la permission d'utiliser cette commande.",
-                followup=True
+                description="Vous n'avez pas la permission d'utiliser cette commande."
             )
+        
+        # Maintenant on peut defer
+        await interaction.response.defer(ephemeral=True)
         
         guildJSON = guildConfig
         
@@ -108,10 +107,29 @@ class ticketsTranscriptsConfig(commands.Cog):
                 )
             
             # Sauvegarder seulement si une action valide a été effectuée
-            with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
-                json.dump(guildJSON, f, indent=4, ensure_ascii=False)
-            
-            await interaction.followup.send(embed=embed, ephemeral=True)
+            import os
+            try:
+                # S'assurer que le dossier configs existe
+                os.makedirs('./configs', exist_ok=True)
+                
+                with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                    json.dump(guildJSON, f, indent=4, ensure_ascii=False)
+                
+                await interaction.followup.send(embed=embed, ephemeral=True)
+            except PermissionError:
+                await err_embed(
+                    interaction,
+                    title="Erreur de permissions",
+                    description=f"Impossible d'écrire dans le fichier de configuration. Vérifiez les permissions du dossier configs.",
+                    followup=True
+                )
+            except OSError as e:
+                await err_embed(
+                    interaction,
+                    title="Erreur système",
+                    description=f"Erreur lors de l'écriture du fichier: {str(e)}",
+                    followup=True
+                )
             
         except Exception as e:
             await err_embed(
