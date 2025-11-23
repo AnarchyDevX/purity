@@ -418,8 +418,7 @@ class PreTicketHandler:
             if footer_text:
                 summary_embed.set_footer(text=footer_text)
             else:
-                footer_data = footer()
-                summary_embed.set_footer(text=footer_data['text'], icon_url=footer_data.get('icon_url'))
+                summary_embed.set_footer(text=footer())
             
             # Mention du rôle si configuré
             role_id = category_data.get('role_id')
