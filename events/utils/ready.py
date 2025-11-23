@@ -153,8 +153,17 @@ class ready(commands.Cog):
         eventsCount = await self.events_load()
         print(f"{self.C.GREEN}[SUCCESS] {self.C.WHITE}Commands loaded !")
         print(f"{self.C.YELLOW}[UPDATING] {self.C.WHITE}Syncing commands...")
+        # Sync global (prend jusqu'à 1h)
         await self.bot.tree.sync()
-        print(f"{self.C.GREEN}[SUCCESS] {self.C.WHITE}Commands synced !")
+        # Sync par serveur (instantané)
+        synced_guilds = 0
+        for guild in self.bot.guilds:
+            try:
+                await self.bot.tree.sync(guild=guild)
+                synced_guilds += 1
+            except Exception as e:
+                print(f"{self.C.RED}[ERROR] {self.C.WHITE}Failed to sync for {guild.name}: {e}")
+        print(f"{self.C.GREEN}[SUCCESS] {self.C.WHITE}Commands synced globally and for {synced_guilds} guilds!")
         print(f"{self.C.YELLOW}[UPDATING] {self.C.WHITE}Initialisation du système de pré-tickets...")
         # Initialiser le PreTicketHandler
         from functions.preticketHandler import PreTicketHandler
