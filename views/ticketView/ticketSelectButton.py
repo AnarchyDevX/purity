@@ -47,6 +47,77 @@ class ticketSelectButton(Select):
         await interaction.response.defer(ephemeral=True)
         
         selected_option = self.values[0]
+        
+        # Charger la configuration
+        guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
+        
+        # Vérifier si c'est une catégorie dynamique
+        is_dynamic_category = False
+        category_data = None
+        
+        if guildJSON and 'tickets' in guildJSON and 'ticket_categories' in guildJSON['tickets']:
+            if selected_option in guildJSON['tickets']['ticket_categories']:
+                is_dynamic_category = True
+                category_data = guildJSON['tickets']['ticket_categories'][selected_option]
+        
+        # Si c'est une catégorie dynamique, utiliser le système de pré-formulaire
+        if is_dynamic_category and category_data:
+            # Vérifier d'abord si l'utilisateur a déjà un ticket de cette catégorie
+            expected_ticket_name = f"{interaction.user.name}-{selected_option}"
+            
+            # Vérifier dans toutes les catégories de tickets
+            categories_to_check = []
+            
+            if guildJSON and 'tickets' in guildJSON and 'categories' in guildJSON['tickets']:
+                categories_to_check = [
+                    guildJSON['tickets']['categories'].get('nouveaux'),
+                    guildJSON['tickets']['categories'].get('pris_en_charge'),
+                    guildJSON['tickets']['categories'].get('en_pause'),
+                    guildJSON['tickets']['categories'].get('fermes')
+                ]
+                categories_to_check = [cat_id for cat_id in categories_to_check if cat_id is not None]
+            
+            # Ajouter aussi la catégorie dynamique
+            if 'discord_category_id' in category_data:
+                categories_to_check.append(category_data['discord_category_id'])
+            
+            # Vérifier dans toutes ces catégories
+            for cat_id in categories_to_check:
+                cat = interaction.guild.get_channel(cat_id)
+                if cat and isinstance(cat, discord.CategoryChannel):
+                    for existing_channel in cat.channels:
+                        if existing_channel.permissions_for(interaction.user).view_channel:
+                            if existing_channel.name == expected_ticket_name:
+                                return await err_embed(
+                                    interaction,
+                                    title="Ticket déjà ouvert",
+                                    description=f"Vous avez déjà un ticket **{selected_option}** ouvert: {existing_channel.mention}\n\nVeuillez fermer votre ticket existant avant d'en créer un nouveau.",
+                                    followup=True
+                                )
+            
+            # Récupérer la catégorie cible
+            target_category = self.category
+            if 'discord_category_id' in category_data:
+                dynamic_cat = interaction.guild.get_channel(category_data['discord_category_id'])
+                if dynamic_cat and isinstance(dynamic_cat, discord.CategoryChannel):
+                    target_category = dynamic_cat
+            
+            # Utiliser le système de pré-formulaire
+            from functions.preticketHandler import PreTicketHandler
+            
+            # Récupérer ou créer le handler
+            if not hasattr(self.bot, 'preticket_handler'):
+                self.bot.preticket_handler = PreTicketHandler(self.bot)
+            
+            await self.bot.preticket_handler.create_preticket(
+                interaction,
+                selected_option,
+                category_data,
+                target_category
+            )
+            return
+        
+        # Sinon, utiliser l'ancien système (pour les options non-dynamiques)
         expected_ticket_name = f"{interaction.user.name}-{selected_option}"
         
         # Vérifier dans toutes les catégories de tickets si l'utilisateur a déjà un ticket pour cette option

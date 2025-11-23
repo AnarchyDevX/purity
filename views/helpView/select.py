@@ -122,6 +122,54 @@ class selectHelp(Select):
                         "`tempvoice-config`": (
                             "*Afficher l'embed de configuration des salons vocaux temporaires*",
                             False
+                        ),
+                        "`/ticket-config`": (
+                            "*Configurer et envoyer un panel de tickets*\n-# /ticket-config [salon] [catégorie]",
+                            False
+                        ),
+                        "`/ticket-category-add`": (
+                            "*Ajouter une catégorie de ticket dynamique*\n-# /ticket-category-add [nom] (emoji) (role) (category)",
+                            False
+                        ),
+                        "`/ticket-category-list`": (
+                            "*Lister toutes les catégories de tickets dynamiques*",
+                            False
+                        ),
+                        "`/ticket-category-remove`": (
+                            "*Supprimer une catégorie de ticket*\n-# /ticket-category-remove [nom] (delete_category)",
+                            False
+                        ),
+                        "`/set-role-ticket`": (
+                            "*Définir le rôle à mentionner pour une catégorie*\n-# /set-role-ticket [category] (role)",
+                            False
+                        ),
+                        "`/ticket-embed-config`": (
+                            "*Personnaliser l'embed des tickets (titre, description, couleur, champs)*",
+                            False
+                        ),
+                        "`/ticket-preticket-category-config`": (
+                            "*Définir où les pré-tickets temporaires seront créés*\n-# /ticket-preticket-category-config (category)",
+                            False
+                        ),
+                        "`/ticket-adduser-role-config`": (
+                            "*Définir le rôle autorisé à utiliser /add user*\n-# /ticket-adduser-role-config (role)",
+                            False
+                        ),
+                        "`/ticket-categories-config`": (
+                            "*Configurer les catégories de tickets (nouveaux, en cours, pause, fermés)*\n-# /ticket-categories-config [type] [category]",
+                            False
+                        ),
+                        "`/tickets-roles-config`": (
+                            "*Configurer les rôles de support pour les tickets*",
+                            False
+                        ),
+                        "`/tickets-staff-config`": (
+                            "*Configurer le rôle staff des tickets*",
+                            False
+                        ),
+                        "`/tickets-transcripts-config`": (
+                            "*Configurer les transcripts des tickets*",
+                            False
                         )
                     }
                 )
@@ -246,6 +294,10 @@ class selectHelp(Select):
             case "mods": 
                 embed = embedBuilder(
                     fields={
+                        "`/add`": (
+                            "*Ajouter un membre à un ticket*\n-# /add [user]",
+                            False
+                        ),
                         "`/role-add`": (
                             "*Ajouter un rôle à un membre*\n-# /role-add [membre] [role]",
                             False

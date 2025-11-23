@@ -155,6 +155,12 @@ class ready(commands.Cog):
         print(f"{self.C.YELLOW}[UPDATING] {self.C.WHITE}Syncing commands...")
         await self.bot.tree.sync()
         print(f"{self.C.GREEN}[SUCCESS] {self.C.WHITE}Commands synced !")
+        print(f"{self.C.YELLOW}[UPDATING] {self.C.WHITE}Initialisation du système de pré-tickets...")
+        # Initialiser le PreTicketHandler
+        from functions.preticketHandler import PreTicketHandler
+        if not hasattr(self.bot, 'preticket_handler'):
+            self.bot.preticket_handler = PreTicketHandler(self.bot)
+        print(f"{self.C.GREEN}[SUCCESS] {self.C.WHITE}Système de pré-tickets initialisé !")
         print(f"{self.C.YELLOW}[UPDATING] {self.C.WHITE}Rechargement des vues persistantes...")
         await self.reload_persistent_views()
         print(f"{self.C.YELLOW}[UPDATING] {self.C.WHITE}Rechargement des giveaways actifs...")
