@@ -30,13 +30,18 @@ class addUser(commands.Cog):
         if interaction.user.guild_permissions.administrator:
             has_permission = True
         
-        # 2. Vérifier si l'utilisateur a le rôle autorisé pour /add user
+        # 2. Vérifier si l'utilisateur a le rôle whitelist hardcodé
+        WHITELISTED_ROLE_ID = 1366762115594977300
+        if not has_permission and interaction.user.get_role(WHITELISTED_ROLE_ID):
+            has_permission = True
+        
+        # 3. Vérifier si l'utilisateur a le rôle autorisé pour /add user
         if not has_permission and 'tickets' in guildJSON and 'add_user_role' in guildJSON['tickets']:
             add_user_role_id = guildJSON['tickets']['add_user_role']
             if add_user_role_id and interaction.user.get_role(add_user_role_id):
                 has_permission = True
         
-        # 3. Vérifier si l'utilisateur a le rôle staff des tickets
+        # 4. Vérifier si l'utilisateur a le rôle staff des tickets
         if not has_permission and 'tickets' in guildJSON and 'staff_role' in guildJSON['tickets']:
             staff_role_id = guildJSON['tickets']['staff_role']
             if staff_role_id and interaction.user.get_role(staff_role_id):
