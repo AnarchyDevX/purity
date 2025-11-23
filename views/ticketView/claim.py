@@ -39,37 +39,8 @@ class claimButtonTicket(Button):
                 followup=True
             )
         
-        guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
-        if guildJSON is None:
-            return await err_embed(
-                interaction,
-                title="Configuration manquante",
-                description="La configuration du serveur n'existe pas.",
-                followup=True
-            )
-        
-        # Vérifier que la catégorie "pris_en_charge" est configurée
-        pris_en_charge_id = guildJSON.get('tickets', {}).get('categories', {}).get('pris_en_charge')
-        if not pris_en_charge_id:
-            return await err_embed(
-                interaction,
-                title="Catégorie non configurée",
-                description="La catégorie 'Pris en charge' n'est pas configurée. Utilisez `/ticket-categories-config` pour la configurer.",
-                followup=True
-            )
-        
-        target_category = interaction.guild.get_channel(pris_en_charge_id)
-        if not target_category or not isinstance(target_category, discord.CategoryChannel):
-            return await err_embed(
-                interaction,
-                title="Catégorie introuvable",
-                description="La catégorie 'Pris en charge' configurée n'existe pas.",
-                followup=True
-            )
-        
-        # Déplacer le ticket
+        # Ne pas déplacer le ticket, juste l'indiquer comme pris en charge
         try:
-            await interaction.channel.edit(category=target_category)
             
             # Ajouter les permissions pour le modérateur qui a claim le ticket
             overwrite = interaction.channel.overwrites_for(interaction.user)
@@ -96,12 +67,12 @@ class claimButtonTicket(Button):
                     await message.edit(embed=embed, view=view)
                     break
             
-            await interaction.followup.send(f"✅ Ticket pris en charge et déplacé dans {target_category.mention}", ephemeral=True)
+            await interaction.followup.send(f"✅ Ticket pris en charge avec succès !", ephemeral=True)
         except discord.Forbidden:
             await err_embed(
                 interaction,
                 title="Permission manquante",
-                description="Je n'ai pas la permission de déplacer ce salon.",
+                description="Je n'ai pas la permission de modifier ce salon.",
                 followup=True
             )
         except discord.HTTPException as e:
