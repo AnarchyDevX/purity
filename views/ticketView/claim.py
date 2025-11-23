@@ -41,14 +41,13 @@ class claimButtonTicket(Button):
         
         # Ne pas déplacer le ticket, juste l'indiquer comme pris en charge
         try:
-            
             # Ajouter les permissions pour le modérateur qui a claim le ticket
             overwrite = interaction.channel.overwrites_for(interaction.user)
             overwrite.view_channel = True
             overwrite.send_messages = True
             await interaction.channel.set_permissions(interaction.user, overwrite=overwrite)
             
-            # Mettre à jour l'embed avec le claim
+            # Envoyer un message visible pour indiquer la prise en charge
             embed = embedBuilder(
                 title="`✅`・Ticket pris en charge",
                 description=f"Ce ticket a été pris en charge par {interaction.user.mention}",
@@ -56,16 +55,15 @@ class claimButtonTicket(Button):
                 footer=footer()
             )
             
-            # Trouver le message d'embed initial et le modifier
-            async for message in interaction.channel.history(limit=10):
-                if message.embeds and len(message.embeds) > 0 and message.embeds[0].title and "Tickets" in message.embeds[0].title:
-                    view = discord.ui.View(timeout=None)
-                    from views.ticketView.pause import pauseButtonTicket
-                    from views.ticketView.close import closeButtonTicket
-                    view.add_item(pauseButtonTicket())
-                    view.add_item(closeButtonTicket())
-                    await message.edit(embed=embed, view=view)
-                    break
+            # Créer les nouveaux boutons (pause et close)
+            view = discord.ui.View(timeout=None)
+            from views.ticketView.pause import pauseButtonTicket
+            from views.ticketView.close import closeButtonTicket
+            view.add_item(pauseButtonTicket())
+            view.add_item(closeButtonTicket())
+            
+            # Envoyer le message dans le channel
+            await interaction.channel.send(embed=embed, view=view)
             
             await interaction.followup.send(f"✅ Ticket pris en charge avec succès !", ephemeral=True)
         except discord.Forbidden:
