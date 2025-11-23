@@ -124,7 +124,7 @@ class ticketEmbedConfig(commands.Cog):
         if footer_text:
             preview.set_footer(text=footer_text)
         else:
-            preview.set_footer(text=footer()['text'], icon_url=footer().get('icon_url'))
+            preview.set_footer(text=footer())
         
         return preview
 
