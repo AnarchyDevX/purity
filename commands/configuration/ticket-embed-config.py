@@ -130,4 +130,3 @@ class ticketEmbedConfig(commands.Cog):
 
 async def setup(bot):
     await bot.add_cog(ticketEmbedConfig(bot))
-

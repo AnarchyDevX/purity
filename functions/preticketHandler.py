@@ -336,13 +336,15 @@ class PreTicketHandler:
                             read_message_history=True
                         )
         
-        # Vérifier si on doit utiliser la catégorie "nouveaux"
-        if guildJSON:
-            nouveaux_id = guildJSON.get('tickets', {}).get('categories', {}).get('nouveaux')
-            if nouveaux_id:
-                nouveaux_category = guild.get_channel(nouveaux_id)
-                if nouveaux_category and isinstance(nouveaux_category, discord.CategoryChannel):
-                    target_category = nouveaux_category
+        # Vérifier si on doit utiliser la catégorie "nouveaux" (seulement si pas de catégorie spécifique)
+        # Si target_category est None ou invalide, fallback sur "nouveaux"
+        if target_category is None or not isinstance(target_category, discord.CategoryChannel):
+            if guildJSON:
+                nouveaux_id = guildJSON.get('tickets', {}).get('categories', {}).get('nouveaux')
+                if nouveaux_id:
+                    nouveaux_category = guild.get_channel(nouveaux_id)
+                    if nouveaux_category and isinstance(nouveaux_category, discord.CategoryChannel):
+                        target_category = nouveaux_category
         
         # Créer le channel du ticket
         try:

@@ -205,16 +205,18 @@ class ticketSelectButton(Select):
                             read_message_history=True
                         )
 
-        # Vérifier si la catégorie "nouveaux" est configurée, sinon utiliser la catégorie par défaut
-        guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
+        # Utiliser la catégorie par défaut, fallback sur "nouveaux" si pas de catégorie
         target_category = self.category
         
-        if guildJSON:
-            nouveaux_id = guildJSON.get('tickets', {}).get('categories', {}).get('nouveaux')
-            if nouveaux_id:
-                nouveaux_category = interaction.guild.get_channel(nouveaux_id)
-                if nouveaux_category and isinstance(nouveaux_category, discord.CategoryChannel):
-                    target_category = nouveaux_category
+        # Si pas de catégorie définie, utiliser "nouveaux"
+        if target_category is None:
+            guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
+            if guildJSON:
+                nouveaux_id = guildJSON.get('tickets', {}).get('categories', {}).get('nouveaux')
+                if nouveaux_id:
+                    nouveaux_category = interaction.guild.get_channel(nouveaux_id)
+                    if nouveaux_category and isinstance(nouveaux_category, discord.CategoryChannel):
+                        target_category = nouveaux_category
         
         channel = await target_category.create_text_channel(
             name=expected_ticket_name,
