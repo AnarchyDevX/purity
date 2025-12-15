@@ -67,6 +67,9 @@ class TicketEmbedEditView(View):
         if not guildJSON:
             return await err_embed(interaction, title="Erreur", description="Configuration introuvable.")
         
+        if 'tickets' not in guildJSON or 'embed_template' not in guildJSON['tickets']:
+            return await err_embed(interaction, title="Erreur", description="Le template d'embed n'est pas configuré. Utilisez `/ticket-embed-config` pour le configurer.")
+        
         template = guildJSON['tickets']['embed_template']
         
         # Créer un select menu pour choisir les champs à afficher
@@ -125,6 +128,10 @@ class TicketEmbedEditView(View):
         if not guildJSON:
             return await err_embed(interaction, title="Erreur", description="Configuration introuvable.", ephemeral=True)
         
+        # Initialiser la structure si nécessaire
+        if 'tickets' not in guildJSON:
+            guildJSON['tickets'] = {}
+        
         # Réinitialiser le template
         guildJSON['tickets']['embed_template'] = {
             "title": "🎫 Ticket - {category}",
@@ -179,6 +186,21 @@ class TicketEmbedEditView(View):
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         if not guildJSON:
             return
+        
+        # Initialiser la structure si nécessaire
+        if 'tickets' not in guildJSON:
+            guildJSON['tickets'] = {}
+        if 'embed_template' not in guildJSON['tickets']:
+            guildJSON['tickets']['embed_template'] = {
+                "title": "🎫 Ticket - {category}",
+                "description": "Un membre du staff va vous prendre en charge, merci de patienter.",
+                "color": None,
+                "footer": None,
+                "show_roblox": True,
+                "show_reason": True,
+                "show_category": True,
+                "show_user": True
+            }
         
         guildJSON['tickets']['embed_template'][key] = value
         
@@ -310,6 +332,12 @@ class FieldToggleSelect(Select):
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
         if not guildJSON:
             return await err_embed(interaction, title="Erreur", description="Configuration introuvable.")
+        
+        # Initialiser la structure si nécessaire
+        if 'tickets' not in guildJSON:
+            guildJSON['tickets'] = {}
+        if 'embed_template' not in guildJSON['tickets']:
+            return await err_embed(interaction, title="Erreur", description="Le template d'embed n'est pas configuré. Utilisez `/ticket-embed-config` pour le configurer.")
         
         # Mettre à jour les champs
         selected_values = self.values

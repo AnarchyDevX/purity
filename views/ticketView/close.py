@@ -256,7 +256,9 @@ class closeButtonTicket(Button):
                     )
         
         # Déplacer vers la catégorie "fermes" ou supprimer
-        category_fermes_id = guildJSON['tickets']['categories'].get('fermes')
+        category_fermes_id = None
+        if 'tickets' in guildJSON and 'categories' in guildJSON['tickets']:
+            category_fermes_id = guildJSON['tickets']['categories'].get('fermes')
         if category_fermes_id:
             category_fermes = interaction.guild.get_channel(category_fermes_id)
             if category_fermes and isinstance(category_fermes, discord.CategoryChannel):
