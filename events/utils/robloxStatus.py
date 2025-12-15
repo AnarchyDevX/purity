@@ -7,7 +7,8 @@ class robloxStatus(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot: commands.Bot = bot
         self.place_id = 88744853552411  # ID du jeu French Donations
-        self.update_status.start()
+        # DÉSACTIVÉ - Utilisez rotatingStatus.py à la place
+        # self.update_status.start()
 
     def cog_unload(self):
         self.update_status.cancel()
