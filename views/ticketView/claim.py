@@ -39,13 +39,34 @@ class claimButtonTicket(Button):
                 followup=True
             )
         
-        # Ne pas déplacer le ticket, juste l'indiquer comme pris en charge
+        # Charger la configuration pour récupérer la catégorie "pris_en_charge"
+        guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
+        if guildJSON is None:
+            return await err_embed(
+                interaction,
+                title="Configuration manquante",
+                description="La configuration du serveur n'existe pas.",
+                followup=True
+            )
+        
+        # Vérifier que la catégorie "pris_en_charge" est configurée
+        pris_en_charge_id = guildJSON.get('tickets', {}).get('categories', {}).get('pris_en_charge')
+        target_category = None
+        if pris_en_charge_id:
+            target_category = interaction.guild.get_channel(pris_en_charge_id)
+            if not target_category or not isinstance(target_category, discord.CategoryChannel):
+                target_category = None
+        
         try:
             # Ajouter les permissions pour le modérateur qui a claim le ticket
             overwrite = interaction.channel.overwrites_for(interaction.user)
             overwrite.view_channel = True
             overwrite.send_messages = True
             await interaction.channel.set_permissions(interaction.user, overwrite=overwrite)
+            
+            # Déplacer le ticket vers la catégorie "pris_en_charge" si configurée
+            if target_category:
+                await interaction.channel.edit(category=target_category, reason="Ticket pris en charge")
             
             # Envoyer un message visible pour indiquer la prise en charge
             embed = embedBuilder(
@@ -65,7 +86,11 @@ class claimButtonTicket(Button):
             # Envoyer le message dans le channel
             await interaction.channel.send(embed=embed, view=view)
             
-            await interaction.followup.send(f"✅ Ticket pris en charge avec succès !", ephemeral=True)
+            # Message de confirmation
+            if target_category:
+                await interaction.followup.send(f"✅ Ticket pris en charge et déplacé dans {target_category.mention} !", ephemeral=True)
+            else:
+                await interaction.followup.send(f"✅ Ticket pris en charge avec succès !", ephemeral=True)
         except discord.Forbidden:
             await err_embed(
                 interaction,
