@@ -132,6 +132,71 @@ class ready(commands.Cog):
                         except Exception as e:
                             print(f"{self.C.RED}[ERROR] {self.C.WHITE}Erreur lors du rechargement du captcha pour le serveur {guild_id}: {e}")
                             continue
+                
+                # Recharger les vues des tickets ouverts
+                if 'tickets' in guildJSON and 'categories' in guildJSON['tickets']:
+                    categories = guildJSON['tickets']['categories']
+                    ticket_categories = [
+                        categories.get('nouveaux'),
+                        categories.get('pris_en_charge'),
+                        categories.get('en_pause'),
+                        categories.get('fermes')
+                    ]
+                    ticket_categories = [cat_id for cat_id in ticket_categories if cat_id is not None]
+                    
+                    for cat_id in ticket_categories:
+                        try:
+                            category = guild.get_channel(cat_id)
+                            if not category or not isinstance(category, discord.CategoryChannel):
+                                continue
+                            
+                            # Scanner tous les canaux dans cette catégorie
+                            for channel in category.channels:
+                                if not isinstance(channel, discord.TextChannel):
+                                    continue
+                                
+                                try:
+                                    # Récupérer les messages récents qui pourraient contenir des boutons de tickets
+                                    async for message in channel.history(limit=5):
+                                        if message.author != self.bot.user:
+                                            continue
+                                        
+                                        # Vérifier si le message a des embeds de tickets
+                                        if message.embeds and len(message.embeds) > 0:
+                                            embed = message.embeds[0]
+                                            # Vérifier si c'est un embed de ticket (contient "Ticket" dans le titre)
+                                            if embed.title and ("Ticket" in embed.title or "ticket" in embed.title.lower()):
+                                                # Recréer la vue avec les boutons appropriés
+                                                view = discord.ui.View(timeout=None)
+                                                from views.ticketView.claim import claimButtonTicket
+                                                from views.ticketView.close import closeButtonTicket
+                                                from views.ticketView.pause import pauseButtonTicket
+                                                
+                                                # Vérifier le contenu de l'embed pour déterminer quels boutons afficher
+                                                # Si l'embed contient "pris en charge", on affiche pause et close
+                                                # Sinon, on affiche claim et close
+                                                embed_desc = embed.description or ""
+                                                if "pris en charge" in embed_desc.lower() or "pris en charge" in embed.title.lower():
+                                                    view.add_item(pauseButtonTicket(custom_id=f"ticket_pause_{channel.id}"))
+                                                    view.add_item(closeButtonTicket(custom_id=f"ticket_close_{channel.id}"))
+                                                else:
+                                                    view.add_item(claimButtonTicket(custom_id=f"ticket_claim_{channel.id}"))
+                                                    view.add_item(closeButtonTicket(custom_id=f"ticket_close_{channel.id}"))
+                                                
+                                                # Ajouter la vue au bot pour la persistance
+                                                self.bot.add_view(view, message_id=message.id)
+                                                reloaded_count += 1
+                                                break  # Un seul message par canal
+                                        
+                                except (discord.Forbidden, discord.NotFound):
+                                    continue
+                                except Exception as e:
+                                    print(f"{self.C.RED}[ERROR] {self.C.WHITE}Erreur lors du rechargement des vues pour {channel.name}: {e}")
+                                    continue
+                                
+                        except Exception as e:
+                            print(f"{self.C.RED}[ERROR] {self.C.WHITE}Erreur lors du scan de la catégorie {cat_id}: {e}")
+                            continue
                                 
                 if updated_buttons:
                     try:

@@ -9,7 +9,7 @@ class PreTicketHandler:
     
     def __init__(self, bot):
         self.bot = bot
-        self.active_pretickets = {}  # {user_id: {"channel": channel, "task": task}}
+        self.active_pretickets = {}  # {(guild_id, user_id): {"channel": channel, "task": task}}
     
     async def create_preticket(
         self, 
@@ -28,22 +28,24 @@ class PreTicketHandler:
             target_category: La catégorie Discord où créer le ticket final
         """
         
-        # Vérifier si l'utilisateur a déjà un pré-ticket actif
-        if interaction.user.id in self.active_pretickets:
-            existing_channel = self.active_pretickets[interaction.user.id].get("channel")
+        # Vérifier si l'utilisateur a déjà un pré-ticket actif sur ce serveur
+        preticket_key = (interaction.guild.id, interaction.user.id)
+        if preticket_key in self.active_pretickets:
+            existing_channel = self.active_pretickets[preticket_key].get("channel")
             if existing_channel:
                 try:
-                    # Vérifier que le channel existe toujours
-                    await existing_channel.fetch_message(existing_channel.last_message_id or 0)
-                    return await err_embed(
-                        interaction,
-                        title="Pré-ticket actif",
-                        description=f"Vous avez déjà un pré-ticket en cours: {existing_channel.mention}\n\nVeuillez le compléter ou attendre qu'il expire.",
-                        followup=True
-                    )
+                    # Vérifier que le channel existe toujours et qu'il est sur le même serveur
+                    if existing_channel.guild.id == interaction.guild.id:
+                        await existing_channel.fetch_message(existing_channel.last_message_id or 0)
+                        return await err_embed(
+                            interaction,
+                            title="Pré-ticket actif",
+                            description=f"Vous avez déjà un pré-ticket en cours: {existing_channel.mention}\n\nVeuillez le compléter ou attendre qu'il expire.",
+                            followup=True
+                        )
                 except (discord.NotFound, discord.HTTPException):
                     # Le channel n'existe plus, on peut continuer
-                    del self.active_pretickets[interaction.user.id]
+                    del self.active_pretickets[preticket_key]
         
         # Récupérer la configuration
         guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
@@ -116,7 +118,8 @@ class PreTicketHandler:
                 )
             )
             
-            self.active_pretickets[interaction.user.id] = {
+            preticket_key = (interaction.guild.id, interaction.user.id)
+            self.active_pretickets[preticket_key] = {
                 "channel": preticket_channel,
                 "task": task
             }
@@ -189,8 +192,9 @@ class PreTicketHandler:
                 await channel.delete(reason="Pré-ticket expiré - pas de réponse")
                 
                 # Nettoyer
-                if user.id in self.active_pretickets:
-                    del self.active_pretickets[user.id]
+                preticket_key = (guild.id, user.id)
+                if preticket_key in self.active_pretickets:
+                    del self.active_pretickets[preticket_key]
                 return
             
             # Question 2: Raison
@@ -221,8 +225,9 @@ class PreTicketHandler:
                 await channel.delete(reason="Pré-ticket expiré - pas de réponse")
                 
                 # Nettoyer
-                if user.id in self.active_pretickets:
-                    del self.active_pretickets[user.id]
+                preticket_key = (guild.id, user.id)
+                if preticket_key in self.active_pretickets:
+                    del self.active_pretickets[preticket_key]
                 return
             
             # Formulaire complété, créer le ticket officiel
@@ -250,8 +255,9 @@ class PreTicketHandler:
             await channel.delete(reason="Pré-ticket complété, ticket officiel créé")
             
             # Nettoyer
-            if user.id in self.active_pretickets:
-                del self.active_pretickets[user.id]
+            preticket_key = (guild.id, user.id)
+            if preticket_key in self.active_pretickets:
+                del self.active_pretickets[preticket_key]
         
         except Exception as e:
             print(f"[PRETICKET ERROR] Erreur dans le formulaire: {e}")
@@ -269,8 +275,9 @@ class PreTicketHandler:
                 pass
             
             # Nettoyer
-            if user.id in self.active_pretickets:
-                del self.active_pretickets[user.id]
+            preticket_key = (guild.id, user.id)
+            if preticket_key in self.active_pretickets:
+                del self.active_pretickets[preticket_key]
     
     async def _create_official_ticket(
         self,
@@ -426,18 +433,20 @@ class PreTicketHandler:
             role_id = category_data.get('role_id')
             role_mention = f"<@&{role_id}>" if role_id else ""
             
-            # Vue avec boutons
+            # Vue avec boutons avec custom_id basé sur le channel
             view = discord.ui.View(timeout=None)
             from views.ticketView.claim import claimButtonTicket
-            view.add_item(claimButtonTicket())
-            view.add_item(closeButtonTicket())
+            view.add_item(claimButtonTicket(custom_id=f"ticket_claim_{ticket_channel.id}"))
+            view.add_item(closeButtonTicket(custom_id=f"ticket_close_{ticket_channel.id}"))
             
             # Envoyer le message avec mention du rôle
             content = f"{user.mention}"
             if role_mention:
                 content += f" {role_mention}"
             
-            await ticket_channel.send(content=content, embed=summary_embed, view=view)
+            message = await ticket_channel.send(content=content, embed=summary_embed, view=view)
+            # Ajouter la vue au bot pour la persistance
+            self.bot.add_view(view, message_id=message.id)
             
             # Envoyer un message en DM à l'utilisateur
             try:

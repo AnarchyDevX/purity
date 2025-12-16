@@ -5,11 +5,14 @@ from core.embedBuilder import embedBuilder
 import json
 
 class claimButtonTicket(Button):
-    def __init__(self):
+    def __init__(self, custom_id: str = None):
+        if custom_id is None:
+            custom_id = "ticket_claim"
         super().__init__(
             style=discord.ButtonStyle.green,
             label="Prendre en charge",
-            emoji="✋"
+            emoji="✋",
+            custom_id=custom_id
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -76,15 +79,17 @@ class claimButtonTicket(Button):
                 footer=footer()
             )
             
-            # Créer les nouveaux boutons (pause et close)
+            # Créer les nouveaux boutons (pause et close) avec custom_id basé sur le channel
             view = discord.ui.View(timeout=None)
             from views.ticketView.pause import pauseButtonTicket
             from views.ticketView.close import closeButtonTicket
-            view.add_item(pauseButtonTicket())
-            view.add_item(closeButtonTicket())
+            view.add_item(pauseButtonTicket(custom_id=f"ticket_pause_{interaction.channel.id}"))
+            view.add_item(closeButtonTicket(custom_id=f"ticket_close_{interaction.channel.id}"))
             
             # Envoyer le message dans le channel
-            await interaction.channel.send(embed=embed, view=view)
+            message = await interaction.channel.send(embed=embed, view=view)
+            # Ajouter la vue au bot pour la persistance
+            self.bot.add_view(view, message_id=message.id)
             
             # Message de confirmation
             if target_category:

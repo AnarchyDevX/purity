@@ -5,11 +5,14 @@ from core.embedBuilder import embedBuilder
 import json
 
 class pauseButtonTicket(Button):
-    def __init__(self):
+    def __init__(self, custom_id: str = None):
+        if custom_id is None:
+            custom_id = "ticket_pause"
         super().__init__(
             style=discord.ButtonStyle.gray,
             label="Mettre en pause",
-            emoji="⏸️"
+            emoji="⏸️",
+            custom_id=custom_id
         )
 
     async def callback(self, interaction: discord.Interaction):
@@ -70,9 +73,11 @@ class pauseButtonTicket(Button):
                     view = discord.ui.View(timeout=None)
                     from views.ticketView.claim import claimButtonTicket
                     from views.ticketView.close import closeButtonTicket
-                    view.add_item(claimButtonTicket())
-                    view.add_item(closeButtonTicket())
+                    view.add_item(claimButtonTicket(custom_id=f"ticket_claim_{interaction.channel.id}"))
+                    view.add_item(closeButtonTicket(custom_id=f"ticket_close_{interaction.channel.id}"))
                     await message.edit(embed=embed, view=view)
+                    # Ajouter la vue au bot pour la persistance
+                    self.bot.add_view(view, message_id=message.id)
                     break
             
             await interaction.followup.send(f"⏸️ Ticket mis en pause et déplacé dans {target_category.mention}", ephemeral=True)

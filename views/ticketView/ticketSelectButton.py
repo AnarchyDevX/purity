@@ -81,12 +81,13 @@ class ticketSelectButton(Select):
             if 'discord_category_id' in category_data:
                 categories_to_check.append(category_data['discord_category_id'])
             
-            # Vérifier dans toutes ces catégories
+            # Vérifier dans toutes ces catégories (uniquement sur ce serveur)
             for cat_id in categories_to_check:
                 cat = interaction.guild.get_channel(cat_id)
-                if cat and isinstance(cat, discord.CategoryChannel):
+                if cat and isinstance(cat, discord.CategoryChannel) and cat.guild.id == interaction.guild.id:
                     for existing_channel in cat.channels:
-                        if existing_channel.permissions_for(interaction.user).view_channel:
+                        # Vérifier que le channel appartient bien au même serveur
+                        if existing_channel.guild.id == interaction.guild.id and existing_channel.permissions_for(interaction.user).view_channel:
                             if existing_channel.name == expected_ticket_name:
                                 return await err_embed(
                                     interaction,
@@ -137,12 +138,13 @@ class ticketSelectButton(Select):
         # Ajouter aussi la catégorie par défaut
         categories_to_check.append(self.category.id)
         
-        # Vérifier dans toutes ces catégories
+        # Vérifier dans toutes ces catégories (uniquement sur ce serveur)
         for cat_id in categories_to_check:
             cat = interaction.guild.get_channel(cat_id)
-            if cat and isinstance(cat, discord.CategoryChannel):
+            if cat and isinstance(cat, discord.CategoryChannel) and cat.guild.id == interaction.guild.id:
                 for existing_channel in cat.channels:
-                    if existing_channel.permissions_for(interaction.user).view_channel:
+                    # Vérifier que le channel appartient bien au même serveur
+                    if existing_channel.guild.id == interaction.guild.id and existing_channel.permissions_for(interaction.user).view_channel:
                         # Vérifier si c'est exactement le même type de ticket
                         if existing_channel.name == expected_ticket_name:
                             return await err_embed(
@@ -223,9 +225,11 @@ class ticketSelectButton(Select):
             overwrites=overwrites
         )
         view = discord.ui.View(timeout=None)
-        # Ajouter le bouton claim pour les nouveaux tickets
+        # Ajouter le bouton claim pour les nouveaux tickets avec custom_id basé sur le channel
         from views.ticketView.claim import claimButtonTicket
-        view.add_item(claimButtonTicket())
-        view.add_item(closeButtonTicket())
-        await channel.send(embed=embed, content=interaction.user.mention, view=view)
+        view.add_item(claimButtonTicket(custom_id=f"ticket_claim_{channel.id}"))
+        view.add_item(closeButtonTicket(custom_id=f"ticket_close_{channel.id}"))
+        message = await channel.send(embed=embed, content=interaction.user.mention, view=view)
+        # Ajouter la vue au bot pour la persistance
+        self.bot.add_view(view, message_id=message.id)
         await interaction.followup.send(f"Votre ticket a été ouvert {channel.mention}", ephemeral=True)

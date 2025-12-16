@@ -10,11 +10,14 @@ import json
 
 
 class closeButtonTicket(Button):
-    def __init__(self):
+    def __init__(self, custom_id: str = None):
+        if custom_id is None:
+            custom_id = "ticket_close"
         super().__init__(
             style=discord.ButtonStyle.red,
             label="Fermer",
-            emoji="🔒"
+            emoji="🔒",
+            custom_id=custom_id
         )
 
     async def callback(self, interaction: discord.Interaction):
