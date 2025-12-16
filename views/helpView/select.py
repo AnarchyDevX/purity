@@ -123,16 +123,8 @@ class selectHelp(Select):
                             "*Afficher l'embed de configuration des salons vocaux temporaires*",
                             False
                         ),
-                        "`/ticket-config`": (
-                            "*Configurer et envoyer un panel de tickets*\n-# /ticket-config [salon] [catégorie]",
-                            False
-                        ),
                         "`/ticket-category-add`": (
                             "*Ajouter une catégorie de ticket dynamique*\n-# /ticket-category-add [nom] (emoji) (role) (category)",
-                            False
-                        ),
-                        "`/ticket-category-list`": (
-                            "*Lister toutes les catégories de tickets dynamiques*",
                             False
                         ),
                         "`/ticket-category-remove`": (

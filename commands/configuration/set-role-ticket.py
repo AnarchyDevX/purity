@@ -42,7 +42,7 @@ class setRoleTicket(commands.Cog):
             return await err_embed(
                 interaction,
                 title="Catégorie inexistante",
-                description=f"La catégorie **{category}** n'existe pas.\n\n**Catégories disponibles :**\n{categories_list}\n\nUtilisez `/ticket-category-list` pour voir toutes les catégories."
+                description=f"La catégorie **{category}** n'existe pas.\n\n**Catégories disponibles :**\n{categories_list}\n\nUtilisez `/tickets-config` pour gérer les catégories de tickets."
             )
         
         # Mettre à jour le rôle

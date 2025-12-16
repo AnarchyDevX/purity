@@ -157,10 +157,13 @@ class ticketCategoryManage(commands.Cog):
             )
         
         if name not in guildJSON['tickets']['ticket_categories']:
+            available_categories = list(guildJSON['tickets']['ticket_categories'].keys())
+            categories_list = '\n'.join([f"• {cat}" for cat in available_categories]) if available_categories else "*Aucune*"
+            
             return await err_embed(
                 interaction,
                 title="Catégorie inexistante",
-                description=f"La catégorie **{name}** n'existe pas.\n\nUtilisez `/ticket-category-list` pour voir les catégories disponibles."
+                description=f"La catégorie **{name}** n'existe pas.\n\n**Catégories disponibles :**\n{categories_list}\n\nUtilisez `/tickets-config` pour gérer les catégories de tickets."
             )
         
         # Récupérer les infos avant de supprimer
@@ -217,50 +220,6 @@ class ticketCategoryManage(commands.Cog):
             )
             await interaction.response.send_message(embed=embed, ephemeral=True)
     
-    @app_commands.command(name="ticket-category-list", description="Lister toutes les catégories de tickets dynamiques")
-    async def ticketCategoryList(self, interaction: discord.Interaction):
-        if not await check_perms(interaction, 2):
-            return
-        
-        guildJSON = load_json_file(f"./configs/{interaction.guild.id}.json")
-        if guildJSON is None:
-            return await err_embed(
-                interaction,
-                title="Configuration manquante",
-                description="La configuration du serveur n'existe pas."
-            )
-        
-        # Vérifier s'il y a des catégories
-        if 'tickets' not in guildJSON or 'ticket_categories' not in guildJSON['tickets'] or not guildJSON['tickets']['ticket_categories']:
-            return await err_embed(
-                interaction,
-                title="Aucune catégorie",
-                description="Aucune catégorie de ticket n'a été configurée.\n\nUtilisez `/ticket-category-add` pour en créer une."
-            )
-        
-        embed = embedBuilder(
-            title="`📋`・Catégories de tickets",
-            description="Voici toutes les catégories de tickets configurées :",
-            color=embed_color(),
-            footer=footer()
-        )
-        
-        for cat_name, cat_data in guildJSON['tickets']['ticket_categories'].items():
-            emoji = cat_data.get('emoji', '📁')
-            category_id = cat_data.get('discord_category_id')
-            role_id = cat_data.get('role_id')
-            
-            category_mention = f"<#{category_id}>" if category_id else "*Non configurée*"
-            role_mention = f"<@&{role_id}>" if role_id else "*Aucun*"
-            
-            embed.add_field(
-                name=f"{emoji} {cat_name}",
-                value=f"**Catégorie:** {category_mention}\n**Rôle:** {role_mention}",
-                inline=False
-            )
-        
-        await interaction.response.send_message(embed=embed, ephemeral=True)
-
 async def setup(bot):
     await bot.add_cog(ticketCategoryManage(bot))
 
