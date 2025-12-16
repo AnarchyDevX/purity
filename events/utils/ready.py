@@ -211,6 +211,48 @@ class ready(commands.Cog):
         if reloaded_count > 0:
             print(f"{self.C.GREEN}[SUCCESS] {self.C.WHITE}Vues persistantes rechargées: {reloaded_count}")
 
+    async def ensure_guild_owner_in_ownerlist(self):
+        """S'assure que tous les propriétaires de serveurs sont dans l'ownerlist"""
+        configs_dir = "./configs"
+        if not os.path.exists(configs_dir):
+            return
+        
+        updated_count = 0
+        for filename in os.listdir(configs_dir):
+            if not filename.endswith('.json'):
+                continue
+            
+            try:
+                guild_id = int(filename[:-5])  # Enlever .json
+                guild = self.bot.get_guild(guild_id)
+                if guild is None:
+                    continue
+                
+                guildJSON = load_json_file(f"{configs_dir}/{filename}")
+                if guildJSON is None:
+                    continue
+                
+                # Vérifier si le propriétaire est dans l'ownerlist
+                if guild.owner and guild.owner.id not in guildJSON.get('ownerlist', []):
+                    if 'ownerlist' not in guildJSON:
+                        guildJSON['ownerlist'] = []
+                    guildJSON['ownerlist'].append(guild.owner.id)
+                    
+                    # Sauvegarder
+                    try:
+                        with open(f"{configs_dir}/{filename}", 'w', encoding='utf-8') as f:
+                            json.dump(guildJSON, f, indent=4, ensure_ascii=False)
+                        updated_count += 1
+                        print(f"{self.C.GREEN}[OWNERLIST] {self.C.WHITE}Propriétaire de {guild.name} ajouté à l'ownerlist")
+                    except Exception as e:
+                        print(f"{self.C.RED}[ERROR] {self.C.WHITE}Impossible de sauvegarder l'ownerlist pour {guild.name}: {e}")
+                        
+            except (ValueError, KeyError) as e:
+                continue
+        
+        if updated_count > 0:
+            print(f"{self.C.GREEN}[SUCCESS] {self.C.WHITE}{updated_count} propriétaire(s) ajouté(s) à l'ownerlist")
+
     @commands.Cog.listener()
     async def on_ready(self) -> None:
         print(f"{self.C.YELLOW}[UPDATING] {self.C.WHITE}Loading commands...")
@@ -229,6 +271,8 @@ class ready(commands.Cog):
             except Exception as e:
                 print(f"{self.C.RED}[ERROR] {self.C.WHITE}Failed to sync for {guild.name}: {e}")
         print(f"{self.C.GREEN}[SUCCESS] {self.C.WHITE}Commands synced globally and for {synced_guilds} guilds!")
+        print(f"{self.C.YELLOW}[UPDATING] {self.C.WHITE}Vérification des propriétaires dans l'ownerlist...")
+        await self.ensure_guild_owner_in_ownerlist()
         print(f"{self.C.YELLOW}[UPDATING] {self.C.WHITE}Initialisation du système de pré-tickets...")
         # Initialiser le PreTicketHandler
         from functions.preticketHandler import PreTicketHandler

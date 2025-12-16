@@ -31,12 +31,18 @@ class createConfig(commands.Cog):
         
         # Créer la configuration
         try:
+            # Ajouter le propriétaire du serveur à l'ownerlist automatiquement
+            config_copy = configuration.copy()
+            guild_owner_id = interaction.guild.owner.id if interaction.guild.owner else None
+            if guild_owner_id and guild_owner_id not in config_copy['ownerlist']:
+                config_copy['ownerlist'].append(guild_owner_id)
+            
             with open(config_path, 'w', encoding='utf-8') as f:
-                json.dump(configuration, f, indent=4, ensure_ascii=False)
+                json.dump(config_copy, f, indent=4, ensure_ascii=False)
             
             embed = embedBuilder(
                 title="`✅`・Configuration créée",
-                description=f"*La configuration du serveur **{interaction.guild.name}** a été créée avec succès.*",
+                description=f"*La configuration du serveur **{interaction.guild.name}** a été créée avec succès.*\n\n**Note :** Le propriétaire du serveur a été automatiquement ajouté à l'ownerlist.",
                 color=embed_color(),
                 footer=footer()
             )

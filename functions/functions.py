@@ -59,9 +59,26 @@ async def check_perms(interaction: discord.Interaction, number: int) -> bool:
     if guildConfig is None:
         await unauthorized(interaction)
         return False  # Config n'existe pas
+    
     interactionUser: int = interaction.user.id
-    isOwner: bool = interactionUser in guildConfig['ownerlist']
-    isWhitelist: bool = interactionUser in guildConfig['whitelist']
+    guildOwner: discord.Member | None = interaction.guild.owner
+    
+    # Vérifier si l'utilisateur est le propriétaire du serveur
+    isGuildOwner: bool = guildOwner is not None and interactionUser == guildOwner.id
+    
+    # Si c'est le propriétaire du serveur, l'ajouter automatiquement à l'ownerlist s'il n'y est pas
+    if isGuildOwner and interactionUser not in guildConfig.get('ownerlist', []):
+        guildConfig['ownerlist'].append(interactionUser)
+        # Sauvegarder la config
+        try:
+            with open(f"./configs/{interaction.guild.id}.json", 'w', encoding='utf-8') as f:
+                json.dump(guildConfig, f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            print(f"[ERROR] Impossible de sauvegarder l'ownerlist pour {interaction.guild.id}: {e}")
+    
+    isOwner: bool = interactionUser in guildConfig.get('ownerlist', []) or isGuildOwner
+    isWhitelist: bool = interactionUser in guildConfig.get('whitelist', [])
+    
     if number == 1:
         if interactionUser not in config['buyer'] and not isOwner and not isWhitelist:
             await unauthorized(interaction)
@@ -155,9 +172,26 @@ async def check_id_perms(member: discord.Member | discord.User, guild: discord.G
     config: Dict[str, Any] = load_json()
     guildConfig = load_json_file(f"./configs/{guild.id}.json")
     if guildConfig is None: return False  # Config n'existe pas
+    
     memberId: int = member.id
-    isOwner: bool = memberId in guildConfig['ownerlist']
-    isWhitelist: bool = memberId in guildConfig['whitelist']
+    guildOwner: discord.Member | None = guild.owner
+    
+    # Vérifier si le membre est le propriétaire du serveur
+    isGuildOwner: bool = guildOwner is not None and memberId == guildOwner.id
+    
+    # Si c'est le propriétaire du serveur, l'ajouter automatiquement à l'ownerlist s'il n'y est pas
+    if isGuildOwner and memberId not in guildConfig.get('ownerlist', []):
+        guildConfig['ownerlist'].append(memberId)
+        # Sauvegarder la config
+        try:
+            with open(f"./configs/{guild.id}.json", 'w', encoding='utf-8') as f:
+                json.dump(guildConfig, f, indent=4, ensure_ascii=False)
+        except Exception as e:
+            print(f"[ERROR] Impossible de sauvegarder l'ownerlist pour {guild.id}: {e}")
+    
+    isOwner: bool = memberId in guildConfig.get('ownerlist', []) or isGuildOwner
+    isWhitelist: bool = memberId in guildConfig.get('whitelist', [])
+    
     if number == 1:
         if memberId not in config['buyer'] and not isOwner and not isWhitelist:
             return False
