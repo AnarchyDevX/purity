@@ -89,7 +89,7 @@ class claimButtonTicket(Button):
             # Envoyer le message dans le channel
             message = await interaction.channel.send(embed=embed, view=view)
             # Ajouter la vue au bot pour la persistance
-            self.bot.add_view(view, message_id=message.id)
+            interaction.client.add_view(view, message_id=message.id)
             
             # Message de confirmation
             if target_category:

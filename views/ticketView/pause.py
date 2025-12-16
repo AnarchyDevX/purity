@@ -77,7 +77,7 @@ class pauseButtonTicket(Button):
                     view.add_item(closeButtonTicket(custom_id=f"ticket_close_{interaction.channel.id}"))
                     await message.edit(embed=embed, view=view)
                     # Ajouter la vue au bot pour la persistance
-                    self.bot.add_view(view, message_id=message.id)
+                    interaction.client.add_view(view, message_id=message.id)
                     break
             
             await interaction.followup.send(f"⏸️ Ticket mis en pause et déplacé dans {target_category.mention}", ephemeral=True)
