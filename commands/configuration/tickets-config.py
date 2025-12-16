@@ -82,8 +82,19 @@ class TicketsConfigMainView(View):
         if interaction.user.id != self.user_id:
             return await unauthorized(interaction)
         
-        # Utiliser la commande existante
-        from commands.configuration.tickets_roles_config import ticketsRolesConfig
+        # Utiliser la commande existante (gérer l'import avec tirets dans le nom)
+        import importlib.util
+        import sys
+        
+        spec = importlib.util.spec_from_file_location(
+            "tickets_roles_config",
+            "commands/configuration/tickets-roles-config.py"
+        )
+        tickets_roles_module = importlib.util.module_from_spec(spec)
+        sys.modules["tickets_roles_config"] = tickets_roles_module
+        spec.loader.exec_module(tickets_roles_module)
+        
+        ticketsRolesConfig = tickets_roles_module.ticketsRolesConfig
         cog = ticketsRolesConfig(self.bot)
         await cog.ticketsRolesConfig(interaction)
     
@@ -135,7 +146,7 @@ class TicketsConfigMainView(View):
         
         embed.add_field(
             name="ℹ️ Information",
-            value="Utilisez `/setstaffrole @role` pour définir le rôle staff.",
+            value="Utilisez `/tickets-config` et cliquez sur le bouton **👑 Staff Role** pour configurer le rôle staff.",
             inline=False
         )
         
@@ -181,7 +192,7 @@ class TicketsConfigMainView(View):
         
         embed.add_field(
             name="ℹ️ Configuration",
-            value="Utilisez `/tickets-transcripts-config` pour configurer les transcripts.",
+            value="Utilisez `/tickets-config` et cliquez sur le bouton **📄 Transcripts** pour configurer les transcripts.",
             inline=False
         )
         
@@ -235,7 +246,7 @@ class TicketsConfigMainView(View):
         
         embed.add_field(
             name="ℹ️ Configuration",
-            value="Utilisez `/ticket-preticket-category-config` pour configurer la catégorie des pré-tickets.",
+            value="Utilisez `/tickets-config` et cliquez sur le bouton **📝 Pré-tickets** pour configurer la catégorie des pré-tickets.",
             inline=False
         )
         
@@ -289,7 +300,7 @@ class TicketsConfigMainView(View):
         
         embed.add_field(
             name="ℹ️ Configuration",
-            value="Utilisez `/ticket-adduser-role-config @role` pour configurer ce rôle.",
+            value="Utilisez `/tickets-config` et cliquez sur le bouton **➕ Rôle Add User** pour configurer ce rôle.",
             inline=False
         )
         

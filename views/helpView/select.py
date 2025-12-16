@@ -147,28 +147,12 @@ class selectHelp(Select):
                             "*Personnaliser l'embed des tickets (titre, description, couleur, champs)*",
                             False
                         ),
-                        "`/ticket-preticket-category-config`": (
-                            "*Définir où les pré-tickets temporaires seront créés*\n-# /ticket-preticket-category-config (category)",
-                            False
-                        ),
-                        "`/ticket-adduser-role-config`": (
-                            "*Définir le rôle autorisé à utiliser /add user*\n-# /ticket-adduser-role-config (role)",
-                            False
-                        ),
-                        "`/ticket-categories-config`": (
-                            "*Configurer les catégories de tickets (nouveaux, en cours, pause, fermés)*\n-# /ticket-categories-config [type] [category]",
+                        "`/tickets-config`": (
+                            "*Configuration principale des tickets (catégories, rôles, staff, transcripts, pré-tickets, etc.)*",
                             False
                         ),
                         "`/tickets-roles-config`": (
                             "*Configurer les rôles de support pour les tickets*",
-                            False
-                        ),
-                        "`/tickets-staff-config`": (
-                            "*Configurer le rôle staff des tickets*",
-                            False
-                        ),
-                        "`/tickets-transcripts-config`": (
-                            "*Configurer les transcripts des tickets*",
                             False
                         )
                     }

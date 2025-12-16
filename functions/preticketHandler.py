@@ -63,7 +63,7 @@ class PreTicketHandler:
             return await err_embed(
                 interaction,
                 title="Catégorie non configurée",
-                description="La catégorie des pré-tickets n'a pas été configurée.\n\nUtilisez `/ticket-preticket-category-config` pour la configurer.",
+                description="La catégorie des pré-tickets n'a pas été configurée.\n\nUtilisez `/tickets-config` et cliquez sur le bouton **📝 Pré-tickets** pour la configurer.",
                 followup=True
             )
         
@@ -72,7 +72,7 @@ class PreTicketHandler:
             return await err_embed(
                 interaction,
                 title="Catégorie introuvable",
-                description="La catégorie des pré-tickets configurée n'existe plus.\n\nUtilisez `/ticket-preticket-category-config` pour la reconfigurer.",
+                description="La catégorie des pré-tickets configurée n'existe plus.\n\nUtilisez `/tickets-config` et cliquez sur le bouton **📝 Pré-tickets** pour la reconfigurer.",
                 followup=True
             )
         

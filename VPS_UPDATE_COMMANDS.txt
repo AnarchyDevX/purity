@@ -1,0 +1,76 @@
+═══════════════════════════════════════════════════════════════
+  🚀 COMMANDES POUR METTRE À JOUR LE BOT SUR LE VPS
+═══════════════════════════════════════════════════════════════
+
+📋 Commandes à exécuter sur le VPS :
+═══════════════════════════════════════════════════════════════
+
+1. Se connecter au VPS (si pas déjà connecté)
+ssh user@vps-ip
+
+2. Aller dans le dossier du bot
+cd /chemin/vers/purity
+(ou le chemin où se trouve votre bot)
+
+3. Récupérer les dernières modifications
+git pull
+
+4. Redémarrer le bot (selon votre méthode)
+   Option A - Si vous utilisez PM2 :
+   pm2 restart purity
+   (ou le nom de votre processus)
+
+   Option B - Si vous utilisez systemd :
+   sudo systemctl restart purity
+   (ou le nom de votre service)
+
+   Option C - Si vous utilisez screen/tmux :
+   # Trouver la session
+   screen -ls
+   # ou
+   tmux ls
+   
+   # Attacher à la session
+   screen -r purity
+   # ou
+   tmux attach -t purity
+   
+   # Arrêter le bot (Ctrl+C)
+   # Relancer
+   python3 main.py
+   # ou
+   python main.py
+
+═══════════════════════════════════════════════════════════════
+⚡ Commande rapide (tout en une ligne) :
+═══════════════════════════════════════════════════════════════
+
+cd /chemin/vers/purity && git pull && pm2 restart purity
+
+═══════════════════════════════════════════════════════════════
+🔍 Vérifier que tout fonctionne :
+═══════════════════════════════════════════════════════════════
+
+# Voir les logs du bot
+pm2 logs purity
+
+# Voir le statut
+pm2 status
+
+# Vérifier que le statut rotatif fonctionne
+# Le bot devrait afficher des stats qui changent toutes les 30s
+
+═══════════════════════════════════════════════════════════════
+📝 Notes importantes :
+═══════════════════════════════════════════════════════════════
+
+- Assurez-vous d'être dans le bon dossier avant de faire git pull
+- Si vous avez des modifications locales non commitées, git pull peut échouer
+- En cas de conflit, utilisez : git stash puis git pull puis git stash pop
+- Le nouveau système de statut rotatif se chargera automatiquement
+
+═══════════════════════════════════════════════════════════════
+
+
+
+

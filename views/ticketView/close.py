@@ -197,7 +197,7 @@ class closeButtonTicket(Button):
                     await interaction.followup.send(
                         embed=embedBuilder(
                             title="`⚠️`・Canal de logs introuvable",
-                            description=f"Le canal de logs des transcripts (ID: {logs_channel_id}) est configuré mais n'existe plus ou n'est pas accessible.\n\n**Solution :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** et sélectionnez un canal valide.",
+                            description=f"Le canal de logs des transcripts (ID: {logs_channel_id}) est configuré mais n'existe plus ou n'est pas accessible.\n\n**Solution :** Utilisez `/tickets-config` et cliquez sur le bouton **📄 Transcripts** pour configurer un canal valide.",
                             color=0xfaa61a,
                             footer=footer()
                         ),
@@ -216,7 +216,7 @@ class closeButtonTicket(Button):
                     )
                     embed_dm = embedBuilder(
                         title="📄 Transcript de ticket",
-                        description=f"Transcript du ticket **{channel.name}**\n\n⚠️ **Note :** Le canal de logs n'est pas configuré sur le serveur. Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** pour configurer un canal.",
+                        description=f"Transcript du ticket **{channel.name}**\n\n⚠️ **Note :** Le canal de logs n'est pas configuré sur le serveur. Utilisez `/tickets-config` et cliquez sur le bouton **📄 Transcripts** pour configurer un canal.",
                         color=0xfaa61a,
                         footer=footer()
                     )
@@ -229,7 +229,7 @@ class closeButtonTicket(Button):
                         await interaction.followup.send(
                             embed=embedBuilder(
                                 title="`✅`・Transcript envoyé en MP",
-                                description=f"Le transcript a été envoyé dans vos messages privés car aucun canal de logs n'est configuré.\n\n**Pour configurer un canal :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'**.",
+                                description=f"Le transcript a été envoyé dans vos messages privés car aucun canal de logs n'est configuré.\n\n**Pour configurer un canal :** Utilisez `/tickets-config` et cliquez sur le bouton **📄 Transcripts**.",
                                 color=embed_color(),
                                 footer=footer()
                             ),
@@ -240,7 +240,7 @@ class closeButtonTicket(Button):
                         await interaction.followup.send(
                             embed=embedBuilder(
                                 title="`⚠️`・Canal de logs non configuré",
-                                description=f"Les transcripts sont activés mais aucun canal de logs n'est configuré.\n\n**Solution :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** et sélectionnez un canal où envoyer les transcripts.\n\n*Note : Impossible d'envoyer le transcript en MP (messages privés désactivés).*",
+                                description=f"Les transcripts sont activés mais aucun canal de logs n'est configuré.\n\n**Solution :** Utilisez `/tickets-config` et cliquez sur le bouton **📄 Transcripts** pour configurer un canal.\n\n*Note : Impossible d'envoyer le transcript en MP (messages privés désactivés).*",
                                 color=0xfaa61a,
                                 footer=footer()
                             ),
@@ -251,7 +251,7 @@ class closeButtonTicket(Button):
                     await interaction.followup.send(
                         embed=embedBuilder(
                             title="`⚠️`・Canal de logs non configuré",
-                            description=f"Les transcripts sont activés mais aucun canal de logs n'est configuré.\n\n**Solution :** Utilisez `/tickets-transcripts-config` avec l'action **'Configurer le canal de logs'** et sélectionnez un canal où envoyer les transcripts.\n\n*Erreur lors de la génération du transcript : {str(e)}*",
+                            description=f"Les transcripts sont activés mais aucun canal de logs n'est configuré.\n\n**Solution :** Utilisez `/tickets-config` et cliquez sur le bouton **📄 Transcripts** pour configurer un canal.\n\n*Erreur lors de la génération du transcript : {str(e)}*",
                             color=0xfaa61a,
                             footer=footer()
                         ),

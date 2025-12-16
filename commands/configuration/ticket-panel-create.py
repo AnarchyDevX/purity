@@ -52,7 +52,7 @@ class ticketPanelCreate(commands.Cog):
             return await err_embed(
                 interaction,
                 title="Catégorie manquante",
-                description="Vous devez configurer la catégorie 'nouveaux' avant de créer un panel.\n\nUtilisez `/tickets-categories-config` pour la configurer.",
+                description="Vous devez configurer la catégorie 'nouveaux' avant de créer un panel.\n\nUtilisez `/tickets-config` pour la configurer.",
                 followup=True
             )
         
@@ -63,7 +63,7 @@ class ticketPanelCreate(commands.Cog):
             return await err_embed(
                 interaction,
                 title="Catégorie introuvable",
-                description="La catégorie 'nouveaux' configurée n'existe plus.\n\nUtilisez `/tickets-categories-config` pour la reconfigurer.",
+                description="La catégorie 'nouveaux' configurée n'existe plus.\n\nUtilisez `/tickets-config` pour la reconfigurer.",
                 followup=True
             )
         

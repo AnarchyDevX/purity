@@ -69,3 +69,6 @@ self.update_status.start()
 - ✅ Gestion des erreurs
 - ✅ Pas de conflit avec d'autres systèmes
 
+
+
+
