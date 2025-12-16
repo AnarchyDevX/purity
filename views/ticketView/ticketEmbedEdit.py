@@ -148,8 +148,13 @@ class TicketEmbedEditView(View):
             json.dump(guildJSON, f, indent=4, ensure_ascii=False)
         
         # Mettre à jour l'aperçu
-        from commands.configuration.ticket_embed_config import ticketEmbedConfig
-        cog = ticketEmbedConfig(self.bot)
+        import importlib.util
+        import sys
+        spec = importlib.util.spec_from_file_location("ticket_embed_config", "commands/configuration/ticket-embed-config.py")
+        ticket_embed_module = importlib.util.module_from_spec(spec)
+        sys.modules["ticket_embed_config"] = ticket_embed_module
+        spec.loader.exec_module(ticket_embed_module)
+        cog = ticket_embed_module.ticketEmbedConfig(self.bot)
         preview = cog._create_preview_embed(guildJSON['tickets']['embed_template'], interaction.user)
         
         await interaction.response.edit_message(
@@ -208,8 +213,13 @@ class TicketEmbedEditView(View):
             json.dump(guildJSON, f, indent=4, ensure_ascii=False)
         
         # Mettre à jour l'aperçu
-        from commands.configuration.ticket_embed_config import ticketEmbedConfig
-        cog = ticketEmbedConfig(self.bot)
+        import importlib.util
+        import sys
+        spec = importlib.util.spec_from_file_location("ticket_embed_config", "commands/configuration/ticket-embed-config.py")
+        ticket_embed_module = importlib.util.module_from_spec(spec)
+        sys.modules["ticket_embed_config"] = ticket_embed_module
+        spec.loader.exec_module(ticket_embed_module)
+        cog = ticket_embed_module.ticketEmbedConfig(self.bot)
         preview = cog._create_preview_embed(guildJSON['tickets']['embed_template'], interaction.user)
         
         # Récupérer le message original
