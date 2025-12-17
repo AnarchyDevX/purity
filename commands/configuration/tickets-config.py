@@ -146,7 +146,7 @@ class TicketsConfigMainView(View):
         
         embed.add_field(
             name="ℹ️ Information",
-            value="Utilisez `/tickets-config` et cliquez sur le bouton **👑 Staff Role** pour configurer le rôle staff.",
+            value="Utilisez `/ticket-config` et cliquez sur le bouton **👑 Staff Role** pour configurer le rôle staff.",
             inline=False
         )
         
@@ -192,7 +192,7 @@ class TicketsConfigMainView(View):
         
         embed.add_field(
             name="ℹ️ Configuration",
-            value="Utilisez `/tickets-config` et cliquez sur le bouton **📄 Transcripts** pour configurer les transcripts.",
+            value="Utilisez `/ticket-config` et cliquez sur le bouton **📄 Transcripts** pour configurer les transcripts.",
             inline=False
         )
         
@@ -246,7 +246,7 @@ class TicketsConfigMainView(View):
         
         embed.add_field(
             name="ℹ️ Configuration",
-            value="Utilisez `/tickets-config` et cliquez sur le bouton **📝 Pré-tickets** pour configurer la catégorie des pré-tickets.",
+            value="Utilisez `/ticket-config` et cliquez sur le bouton **📝 Pré-tickets** pour configurer la catégorie des pré-tickets.",
             inline=False
         )
         
@@ -300,7 +300,7 @@ class TicketsConfigMainView(View):
         
         embed.add_field(
             name="ℹ️ Configuration",
-            value="Utilisez `/tickets-config` et cliquez sur le bouton **➕ Rôle Add User** pour configurer ce rôle.",
+            value="Utilisez `/ticket-config` et cliquez sur le bouton **➕ Rôle Add User** pour configurer ce rôle.",
             inline=False
         )
         
@@ -451,7 +451,7 @@ class ticketsConfig(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @app_commands.command(name="tickets-config", description="Configuration principale des tickets via un menu interactif")
+    @app_commands.command(name="ticket-config", description="Configuration principale des tickets via un menu interactif")
     async def ticketsConfig(self, interaction: discord.Interaction):
         if not await check_perms(interaction, 2):
             return
