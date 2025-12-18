@@ -82,7 +82,7 @@ class TicketsConfigMainView(View):
         if interaction.user.id != self.user_id:
             return await unauthorized(interaction)
         
-        # Utiliser la commande existante (gérer l'import avec tirets dans le nom)
+        # Utiliser la logique existante (gérer l'import avec tirets dans le nom)
         import importlib.util
         import sys
         
@@ -94,9 +94,8 @@ class TicketsConfigMainView(View):
         sys.modules["tickets_roles_config"] = tickets_roles_module
         spec.loader.exec_module(tickets_roles_module)
         
-        ticketsRolesConfig = tickets_roles_module.ticketsRolesConfig
-        cog = ticketsRolesConfig(self.bot)
-        await cog.ticketsRolesConfig(interaction)
+        # Appeler la fonction utilitaire partagée pour ouvrir le panel
+        await tickets_roles_module.open_tickets_roles_config(self.bot, interaction, self.user_id)
     
     @discord.ui.button(label="👑 Staff Role", style=discord.ButtonStyle.primary, row=0)
     async def staff_role_button(self, interaction: discord.Interaction, button: Button):
